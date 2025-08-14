@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "749535489425",
+    "project_id": "hydrocore-ea8c1",
+    "storage_bucket": "hydrocore-ea8c1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:749535489425:android:01cb702ea7a763f1bafe30",
+        "android_client_info": {
+          "package_name": "com.vireya.hydrocore"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCb9dBMOLZhbCvxTkaWn5_7WRjSkX-nNhs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

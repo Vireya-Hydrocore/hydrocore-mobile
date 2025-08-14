@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+
 }
 
 android {
@@ -45,6 +46,7 @@ dependencies {
     implementation(libs.navigation.ui)
     implementation(libs.activity)
     implementation(libs.annotation)
+    implementation(libs.firebase.auth)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
