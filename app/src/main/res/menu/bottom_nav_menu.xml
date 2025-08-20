@@ -2,24 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_home"
+        android:id="@+id/navigation_calculadora"
         android:icon="@drawable/ic_home_black_24dp"
-        android:title="calculadora" />
+        android:title="Calculadora" />
 
     <item
-        android:id="@+id/navigation_stock"
+        android:id="@+id/navigation_tarefas"
         android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="tarefas" />
-
+        android:title="Tarefas" />
     <item
         android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="home" />
+        android:title="Home" />
     <item
-        android:id="@+id/navigation_stock"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="estoque" />
+        android:id="@+id/navigation_estoque"
+        android:title="Estoque" />
+    <item
+        android:id="@+id/navigation_perfil"
+        android:title="Perfil" />
 
 </menu>
