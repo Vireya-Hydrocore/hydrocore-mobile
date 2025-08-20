@@ -13,6 +13,7 @@ navigationUi = "2.9.0"
 activity = "1.10.1"
 annotation = "1.9.1"
 firebaseAuth = "24.0.1"
+googleGmsGoogleServices = "4.4.3"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -31,4 +32,5 @@ firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
 
