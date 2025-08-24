@@ -3,12 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/home2">
+    app:startDestination="@id/navigation_calculadora">
 
     <fragment
         android:id="@+id/home2"
         android:name="com.vireya.hydrocore.Home"
         android:label="fragment_home2"
         tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/navigation_calculadora"
+        android:name="com.vireya.hydrocore.Calculadora"
+        android:label="navigation_calculadora"
+        tools:layout="@layout/fragment_calculadora" />
+    <fragment
+        android:id="@+id/navigation_tarefas"
+        android:name="com.vireya.hydrocore.Tarefas"
+        android:label="fragment_tarefas"
+        tools:layout="@layout/fragment_tarefas" />
 
 </navigation>
