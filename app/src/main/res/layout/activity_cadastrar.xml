@@ -219,7 +219,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/btnCalcular"
             android:layout_width="match_parent"
             android:layout_height="57dp"
             android:layout_marginTop="20dp"
@@ -241,7 +241,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.559"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button2">
+            app:layout_constraintTop_toBottomOf="@+id/btnCalcular">
 
             <TextView
                 android:id="@+id/textView3"

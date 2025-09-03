@@ -6,7 +6,10 @@
     <color name="white">#FFFFFFFF</color>
     <color name="dark_blue">#2B6D8C</color>
     <color name="blue">#2995B2</color>
+    <color name="dark_green">#207B72</color>
     <color name="medium_green">#3EA58F</color>
     <color name="light_green">#61C4A4</color>
     <color name="light_blue">#61D0C8</color>
+    <color name="gray">#808080</color>
+    <color name="greenzinho">#42B4AC</color>
 </resources>
