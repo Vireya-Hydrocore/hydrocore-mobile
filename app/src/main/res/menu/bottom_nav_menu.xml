@@ -12,12 +12,15 @@
         android:title="Tarefas" />
     <item
         android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_home_black_24dp"
         android:title="Home" />
     <item
-        android:id="@+id/navigation_estoque"
+        android:id="@+id/navigation_relatorio"
+        android:icon="@drawable/baseline_all_inbox_24"
         android:title="Estoque" />
     <item
         android:id="@+id/navigation_perfil"
+        android:icon="@drawable/baseline_how_to_reg_24"
         android:title="Perfil" />
 
 </menu>

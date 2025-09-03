@@ -6,9 +6,9 @@
     app:startDestination="@id/navigation_calculadora">
 
     <fragment
-        android:id="@+id/home2"
+        android:id="@+id/navigation_home"
         android:name="com.vireya.hydrocore.Home"
-        android:label="fragment_home2"
+        android:label="navigation_home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/navigation_calculadora"
@@ -20,5 +20,30 @@
         android:name="com.vireya.hydrocore.Tarefas"
         android:label="fragment_tarefas"
         tools:layout="@layout/fragment_tarefas" />
+    <fragment
+        android:id="@+id/navigation_relatorio"
+        android:name="com.vireya.hydrocore.Estoque"
+        android:label="navigation_estoque"
+        tools:layout="@layout/fragment_estoque" />
+    <fragment
+        android:id="@+id/navigation_perfil"
+        android:name="com.vireya.hydrocore.Perfil"
+        android:label="navigation_perfil"
+        tools:layout="@layout/fragment_perfil" />
+    <fragment
+        android:id="@+id/navigation_relatorio"
+        android:name="com.vireya.hydrocore.Graficos"
+        android:label="fragment_graficos"
+        tools:layout="@layout/fragment_graficos" />
+    <fragment
+        android:id="@+id/navigation_relatorio"
+        android:name="com.vireya.hydrocore.ui.Configuracoes"
+        android:label="fragment_configuracoes"
+        tools:layout="@layout/fragment_configuracoes" />
+    <fragment
+        android:id="@+id/navigation_relatorio"
+        android:name="com.vireya.hydrocore.Relatorio"
+        android:label="navigation_relatorio"
+        tools:layout="@layout/fragment_relatorio" />
 
 </navigation>

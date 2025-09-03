@@ -1,289 +1,121 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    tools:context=".Calculadora">
+    android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".Calculadora">
+        <TextView
+            android:id="@+id/txtEtapa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="36dp"
+            android:text="Etapa"
+            android:textColor="#2995B2"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputEtapa"
+            style="@style/DropDownPadrao"
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:endIconMode="dropdown_menu"
+            app:endIconTint="@color/blue"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtEtapa">
+
+            <AutoCompleteTextView
+                android:id="@+id/cbEtapa"
+                style="@style/DropDownTexto"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:outlineAmbientShadowColor="#000000">
+                android:layout_height="wrap_content"
+                android:textSize="12sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <TextView
-                    android:id="@+id/txtCor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="30dp"
-                    android:text="Cor"
-                    android:textColor="#2995B2"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+        <!-- Cards -->
+        <include
+            android:id="@+id/cardCoagulacao"
+            layout="@layout/card_coagulacao"
+            android:layout_width="390dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/inputEtapa" />
 
-                <TextView
-                    android:id="@+id/txtProdutosQuimicos"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="36dp"
-                    android:layout_marginTop="12dp"
-                    android:text="Produtos Químicos"
-                    android:textColor="#2995B2"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/inputTurbidez" />
+        <include
+            android:id="@+id/cardFloculacao"
+            layout="@layout/card_floculacao"
+            android:layout_width="390dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/inputEtapa" />
 
-                <TextView
-                    android:id="@+id/txtEtapa"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="36dp"
-                    android:layout_marginTop="12dp"
-                    android:text="Etapa"
-                    android:textColor="#2995B2"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/inputProdutosQuimicos" />
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrierCards"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="cardCoagulacao,cardFloculacao" />
 
-                <TextView
-                    android:id="@+id/txtTemperatura"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="Temperatura"
-                    android:textColor="#2995B2"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@+id/txtCor"
-                    app:layout_constraintTop_toBottomOf="@+id/inputCor" />
+        <TextView
+            android:id="@+id/txtProdutosQuimicos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="12dp"
+            android:text="Produtos Químicos"
+            android:textColor="#2995B2"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/barrierCards" />
 
-                <TextView
-                    android:id="@+id/txtTurbidez"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="Turbidez"
-                    android:textColor="#2995B2"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@+id/inputTemperatura"
-                    app:layout_constraintTop_toBottomOf="@+id/inputTemperatura" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputProdutosQuimicos"
+            style="@style/DropDownPadrao"
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            app:endIconMode="dropdown_menu"
+            app:endIconTint="@color/blue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtProdutosQuimicos">
 
-                <TextView
-                    android:id="@+id/txtVolume"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="Volume"
-                    android:textColor="#2995B2"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@+id/inputPh"
-                    app:layout_constraintTop_toBottomOf="@+id/inputPh" />
+            <AutoCompleteTextView
+                android:id="@+id/cbProdutosQuimicos"
+                style="@style/DropDownTexto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <TextView
-                    android:id="@+id/txtPh"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="pH"
-                    android:textColor="#2995B2"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@+id/inputOdor"
-                    app:layout_constraintTop_toBottomOf="@+id/inputOdor" />
-
-                <TextView
-                    android:id="@+id/txtOdor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="212dp"
-                    android:layout_marginTop="28dp"
-                    android:text="Odor"
-                    android:textColor="#2995B2"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/inputCor"
-                    style="@style/DropDownPadrao"
-                    android:layout_width="160dp"
-                    android:layout_height="59dp"
-                    android:layout_marginTop="10dp"
-                    android:outlineSpotShadowColor="#000000"
-                    app:endIconMode="dropdown_menu"
-                    app:endIconTint="@color/blue"
-                    app:layout_constraintStart_toStartOf="@+id/txtCor"
-                    app:layout_constraintTop_toBottomOf="@+id/txtCor">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/cbCor"
-                        style="@style/DropDownTexto"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="12sp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/inputOdor"
-                    style="@style/DropDownPadrao"
-                    android:layout_width="160dp"
-                    android:layout_height="59dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="10dp"
-                    android:outlineSpotShadowColor="#000000"
-                    app:endIconMode="dropdown_menu"
-                    app:endIconTint="@color/blue"
-                    app:layout_constraintStart_toEndOf="@+id/inputCor"
-                    app:layout_constraintTop_toBottomOf="@+id/txtCor">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/cbOdor"
-                        style="@style/DropDownTexto"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="12sp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/inputTemperatura"
-                    style="@style/DropDownPadrao"
-                    android:layout_width="160dp"
-                    android:layout_height="59dp"
-                    android:layout_marginTop="10dp"
-                    android:outlineSpotShadowColor="#000000"
-                    app:endIconMode="none"
-                    app:layout_constraintStart_toStartOf="@+id/txtTemperatura"
-                    app:layout_constraintTop_toBottomOf="@+id/txtTemperatura">
-
-                    <EditText
-                        android:id="@+id/editTxtTemperatura"
-                        style="@style/DropDownTexto"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="10ºC"
-                        android:inputType="text"
-                        android:textSize="12sp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/inputPh"
-                    style="@style/DropDownPadrao"
-                    android:layout_width="160dp"
-                    android:layout_height="59dp"
-                    android:layout_marginTop="10dp"
-                    android:outlineSpotShadowColor="#000000"
-                    app:endIconMode="none"
-                    app:layout_constraintStart_toStartOf="@+id/txtPh"
-                    app:layout_constraintTop_toBottomOf="@+id/txtPh">
-
-                    <EditText
-                        android:id="@+id/editTxtPh"
-                        style="@style/DropDownTexto"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="7,0"
-                        android:inputType="text"
-                        android:textSize="12sp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/inputTurbidez"
-                    style="@style/DropDownPadrao"
-                    android:layout_width="160dp"
-                    android:layout_height="59dp"
-                    android:layout_marginTop="10dp"
-                    android:outlineSpotShadowColor="#000000"
-                    app:endIconMode="none"
-                    app:layout_constraintStart_toStartOf="@+id/txtTurbidez"
-                    app:layout_constraintTop_toBottomOf="@+id/txtTurbidez">
-
-                    <EditText
-                        android:id="@+id/editTxtTurbidez"
-                        style="@style/DropDownTexto"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="80 NTU"
-                        android:inputType="text"
-                        android:textSize="12sp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/inputVolume"
-                    style="@style/DropDownPadrao"
-                    android:layout_width="160dp"
-                    android:layout_height="59dp"
-                    android:layout_marginTop="10dp"
-                    android:outlineSpotShadowColor="#000000"
-                    app:endIconMode="none"
-                    app:layout_constraintStart_toStartOf="@+id/txtVolume"
-                    app:layout_constraintTop_toBottomOf="@+id/txtVolume">
-
-                    <EditText
-                        android:id="@+id/editTxtVolume"
-                        style="@style/DropDownTexto"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="500 m³"
-                        android:inputType="text"
-                        android:textSize="12sp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/inputProdutosQuimicos"
-                    style="@style/DropDownPadrao"
-                    android:layout_width="340dp"
-                    android:layout_height="59dp"
-                    android:layout_marginTop="10dp"
-                    android:outlineSpotShadowColor="#000000"
-                    app:endIconMode="dropdown_menu"
-                    app:endIconTint="@color/blue"
-                    app:layout_constraintStart_toStartOf="@+id/txtProdutosQuimicos"
-                    app:layout_constraintTop_toBottomOf="@+id/txtProdutosQuimicos">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/cbProdutosQuimicos"
-                        style="@style/DropDownTexto"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="12sp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/inputEtapa"
-                    style="@style/DropDownPadrao"
-                    android:layout_width="340dp"
-                    android:layout_height="59dp"
-                    android:layout_marginTop="10dp"
-                    android:outlineSpotShadowColor="#000000"
-                    app:endIconMode="dropdown_menu"
-                    app:endIconTint="@color/blue"
-                    app:layout_constraintStart_toStartOf="@+id/txtEtapa"
-                    app:layout_constraintTop_toBottomOf="@+id/txtEtapa">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/cbEtapa"
-                        style="@style/DropDownTexto"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="12sp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </FrameLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCalcular"
+            style="@style/BotaoPadraoAzul"
+            android:layout_width="360dp"
+            android:layout_marginTop="12dp"
+            android:text="Confirmar"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/inputProdutosQuimicos" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
-

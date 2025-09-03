@@ -1,0 +1,37 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    card_view:cardCornerRadius="20dp"
+    card_view:cardElevation="6dp"
+    card_view:cardBackgroundColor="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/textTitulo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Maio 2025"
+            android:textSize="18sp"
+            android:textColor="@color/blue"
+            android:fontFamily="@font/poppins_semibold" />
+
+        <ImageButton
+            android:id="@+id/btnDownload"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@android:drawable/stat_sys_download_done"
+            android:tint="@color/blue"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Baixar relatório" />
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

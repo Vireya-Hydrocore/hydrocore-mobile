@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.Configuracoes">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:layout_gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:scaleType="centerCrop"
+            />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:paddingStart="15dp"
+            android:paddingTop="8dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Joana Aparecida"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Operator"
+                android:textColor="#888"
+                android:textSize="14sp" />
+
+
+        </LinearLayout>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="30dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Modo escuro"
+                android:layout_weight="1"
+                android:paddingStart="15dp"
+                android:fontFamily="@font/poppins" />
+
+            <LinearLayout
+                android:id="@+id/toggleWifi"
+                android:layout_width="40dp"
+                android:layout_height="25dp"
+                android:background="@drawable/toggle_background"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="2dp">
+
+                <View
+                    android:id="@+id/thumbWifi"
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:background="@drawable/toggle_tumb"
+                    android:elevation="4dp"
+                    android:layout_marginTop="1dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E0E0E0" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Notificação"
+                android:layout_weight="1"
+                android:paddingStart="15dp"
+                android:fontFamily="@font/poppins" />
+
+            <LinearLayout
+                android:id="@+id/toggleBluetooth"
+                android:layout_width="40dp"
+                android:layout_height="25dp"
+                android:background="@drawable/toggle_background"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="2dp">
+
+                <View
+                    android:id="@+id/thumbBluetooth"
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:background="@drawable/toggle_tumb"
+                    android:elevation="4dp"
+                    android:layout_marginTop="1dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E0E0E0" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Inforamação de login"
+                android:layout_weight="1"
+                android:paddingStart="15dp"
+                android:fontFamily="@font/poppins" />
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E0E0E0" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Offline Mode"
+                android:layout_weight="1"
+                android:paddingStart="15dp"
+                android:fontFamily="@font/poppins" />
+
+            <LinearLayout
+                android:id="@+id/toggleOffline"
+                android:layout_width="40dp"
+                android:layout_height="25dp"
+                android:background="@drawable/toggle_background"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="2dp">
+
+                <View
+                    android:id="@+id/thumbOffline"
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:background="@drawable/toggle_tumb"
+                    android:elevation="4dp"
+                    android:layout_marginTop="1dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E0E0E0" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Sair"
+                android:layout_weight="1"
+                android:paddingStart="15dp"
+                android:fontFamily="@font/poppins" />
+
+
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
