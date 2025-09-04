@@ -21,7 +21,7 @@
         android:label="fragment_tarefas"
         tools:layout="@layout/fragment_tarefas" />
     <fragment
-        android:id="@+id/navigation_relatorio"
+        android:id="@+id/navigation_agenda"
         android:name="com.vireya.hydrocore.Estoque"
         android:label="navigation_estoque"
         tools:layout="@layout/fragment_estoque" />
@@ -31,12 +31,12 @@
         android:label="navigation_perfil"
         tools:layout="@layout/fragment_perfil" />
     <fragment
-        android:id="@+id/navigation_relatorio"
+        android:id="@+id/navigation_graficos"
         android:name="com.vireya.hydrocore.Graficos"
         android:label="fragment_graficos"
         tools:layout="@layout/fragment_graficos" />
     <fragment
-        android:id="@+id/navigation_relatorio"
+        android:id="@+id/navigation_configuracoes"
         android:name="com.vireya.hydrocore.ui.Configuracoes"
         android:label="fragment_configuracoes"
         tools:layout="@layout/fragment_configuracoes" />
@@ -45,5 +45,10 @@
         android:name="com.vireya.hydrocore.Relatorio"
         android:label="navigation_relatorio"
         tools:layout="@layout/fragment_relatorio" />
+    <fragment
+        android:id="@+id/navigation_agenda"
+        android:name="com.vireya.hydrocore.Agenda"
+        android:label="fragment_agenda2"
+        tools:layout="@layout/fragment_agenda2" />
 
 </navigation>
