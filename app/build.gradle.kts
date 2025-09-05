@@ -56,5 +56,7 @@ dependencies {
     implementation ("com.github.sundeepk:compact-calendar-view:3.0.0")
     implementation ("com.github.sundeepk:compact-calendar-view:3.0.0") {
         exclude(group = "com.android.support", module = "support-compat")
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     }
 }
