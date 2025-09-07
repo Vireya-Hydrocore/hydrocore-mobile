@@ -1,5 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="Home" />
 
     <item
         android:id="@+id/navigation_calculadora"
@@ -12,18 +15,26 @@
         android:title="Tarefas" />
 
     <item
-        android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="Home" />
-
-    <item
         android:id="@+id/navigation_estoque"
         android:icon="@drawable/estoque"
         android:title="Estoque" />
+
+    <item
+        android:id="@+id/navigation_agenda"
+        android:icon="@drawable/baseline_calendar_month_24"
+        android:title="Agenda" />
+    <item
+        android:id="@+id/navigation_relatorio"
+        android:icon="@drawable/relatorio"
+        android:title="Relatório" />
 
     <item
         android:id="@+id/navigation_perfil"
         android:icon="@drawable/perfil"
         android:title="Perfil" />
 
+    <item
+        android:id="@+id/navigation_configuracoes"
+        android:icon="@drawable/configuracoes_branco"
+        android:title="Configurações" />
 </menu>

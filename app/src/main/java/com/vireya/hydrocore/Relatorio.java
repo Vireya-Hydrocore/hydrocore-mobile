@@ -4,14 +4,21 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +54,40 @@ public class Relatorio extends Fragment {
 
         recyclerView.setAdapter(adapter);
 
+        // Botões
+        ImageView btnVireya = view.findViewById(R.id.imgHydrocore);
+        ImageView btnAgenda = view.findViewById((R.id.imgAgenda));
+        ImageView btnConfig = view.findViewById((R.id.imgConfig));
+
+        //Ações Botão
+        btnVireya.setOnClickListener(v -> {
+            DrawerLayout drawer = getActivity().findViewById(R.id.drawerLayout);
+            if (drawer != null) {
+                drawer.openDrawer(GravityCompat.START);
+            }
+        });
+
+        btnAgenda.setOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+            navController.navigate(R.id.navigation_agenda, null,
+                    new androidx.navigation.NavOptions.Builder()
+                            .setPopUpTo(R.id.navigation_relatorio, true) // limpa até a Home
+                            .build()
+            );
+
+        });
+
+        btnConfig.setOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+            navController.navigate(R.id.navigation_configuracoes, null,
+                    new androidx.navigation.NavOptions.Builder()
+                            .setPopUpTo(R.id.navigation_relatorio, true)
+                            .build()
+            );
+
+        });
+
         return view;
     }
+
 }
