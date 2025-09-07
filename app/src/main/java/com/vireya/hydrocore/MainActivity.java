@@ -9,6 +9,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.material.navigation.NavigationView;
 import com.vireya.hydrocore.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,7 +27,11 @@ public class MainActivity extends AppCompatActivity {
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
 
-        // conecta o BottomNavigationView ao NavController
-        NavigationUI.setupWithNavController(navView, navController);
+        // bottom navigation
+        NavigationUI.setupWithNavController(binding.navView, navController);
+
+        // drawer navigation
+        NavigationView navigationView = findViewById(R.id.navigationView);
+        NavigationUI.setupWithNavController(navigationView, navController);
     }
 }

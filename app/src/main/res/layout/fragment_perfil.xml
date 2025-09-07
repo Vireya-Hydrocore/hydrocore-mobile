@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="Rodrigo Alex Moreira dos Santos"
+            android:text="Rodrigo Santos"
             android:textColor="#FFFFFF"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -45,15 +45,18 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgPerfil"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="170dp"
+            android:layout_height="161dp"
             android:layout_marginTop="28dp"
+            android:elevation="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtCargo"
             app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
-            app:srcCompat="@drawable/rodrigo_perfil" />
+            app:srcCompat="@drawable/rodrigo_perfil"
+            app:strokeColor="#3FBFD8"
+            app:strokeWidth="4dp" />
 
         <LinearLayout
             android:id="@+id/cardStats"
