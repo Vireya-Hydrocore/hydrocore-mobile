@@ -1,4 +1,4 @@
-package com.vireya.hydrocore;
+package com.vireya.hydrocore.tarefas;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

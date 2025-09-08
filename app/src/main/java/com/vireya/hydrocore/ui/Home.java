@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.vireya.hydrocore.Agenda;
 import com.vireya.hydrocore.R;
 
 /**

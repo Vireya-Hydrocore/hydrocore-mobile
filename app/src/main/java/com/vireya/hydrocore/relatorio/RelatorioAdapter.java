@@ -1,4 +1,4 @@
-package com.vireya.hydrocore;
+package com.vireya.hydrocore.relatorio;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.vireya.hydrocore.R;
 
 import java.util.List;
 

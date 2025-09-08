@@ -1,4 +1,4 @@
-package com.vireya.hydrocore;
+package com.vireya.hydrocore.entrada;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -19,6 +19,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.vireya.hydrocore.R;
 
 public class RedefinirSenha extends AppCompatActivity {
     FirebaseAuth objAuth = FirebaseAuth.getInstance();

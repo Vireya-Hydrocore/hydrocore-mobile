@@ -1,4 +1,4 @@
-package com.vireya.hydrocore;
+package com.vireya.hydrocore.tarefas;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 import android.widget.TextView;
+
+import com.vireya.hydrocore.R;
 
 
 public class TarefasAdapter extends RecyclerView.Adapter<TarefasAdapter.ViewHolder> {

@@ -12,12 +12,12 @@
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/navigation_calculadora"
-        android:name="com.vireya.hydrocore.Calculadora"
+        android:name="com.vireya.hydrocore.calculadora.Calculadora"
         android:label="navigation_calculadora"
         tools:layout="@layout/fragment_calculadora" />
     <fragment
         android:id="@+id/navigation_tarefas"
-        android:name="com.vireya.hydrocore.Tarefas"
+        android:name="com.vireya.hydrocore.tarefas.Tarefas"
         android:label="fragment_tarefas"
         tools:layout="@layout/fragment_tarefas" />
     <fragment
@@ -27,7 +27,7 @@
         tools:layout="@layout/fragment_estoque" />
     <fragment
         android:id="@+id/navigation_perfil"
-        android:name="com.vireya.hydrocore.Perfil"
+        android:name="com.vireya.hydrocore.ui.Perfil"
         android:label="navigation_perfil"
         tools:layout="@layout/fragment_perfil" />
     <fragment
@@ -42,12 +42,12 @@
         tools:layout="@layout/fragment_configuracoes" />
     <fragment
         android:id="@+id/navigation_relatorio"
-        android:name="com.vireya.hydrocore.Relatorio"
+        android:name="com.vireya.hydrocore.relatorio.Relatorio"
         android:label="navigation_relatorio"
         tools:layout="@layout/fragment_relatorio" />
     <fragment
         android:id="@+id/navigation_agenda"
-        android:name="com.vireya.hydrocore.Agenda"
+        android:name="com.vireya.hydrocore.agenda.Agenda"
         android:label="fragment_agenda2"
         tools:layout="@layout/fragment_agenda2" />
 

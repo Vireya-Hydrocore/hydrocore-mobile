@@ -17,16 +17,16 @@
         android:theme="@style/Theme.Hydrocore"
         tools:targetApi="31">
         <activity
-            android:name=".RedefinirSenha"
+            android:name=".entrada.RedefinirSenha"
             android:exported="true">
         </activity>
 
 
         <activity
-            android:name=".EsqueceuSenha"
+            android:name=".entrada.EsqueceuSenha"
             android:exported="false" />
         <activity
-            android:name=".Login"
+            android:name=".entrada.Login"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
