@@ -1,4 +1,4 @@
-package com.vireya.hydrocore;
+package com.vireya.hydrocore.ui;
 
 import android.os.Bundle;
 
@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.button.MaterialButton;
+import com.vireya.hydrocore.R;
 
 public class Perfil extends Fragment {
     @Override

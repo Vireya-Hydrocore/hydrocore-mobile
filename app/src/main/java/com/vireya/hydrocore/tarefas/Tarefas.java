@@ -1,4 +1,4 @@
-package com.vireya.hydrocore;
+package com.vireya.hydrocore.tarefas;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -15,7 +15,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.vireya.hydrocore.R;
 import com.vireya.hydrocore.databinding.FragmentTarefasBinding;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

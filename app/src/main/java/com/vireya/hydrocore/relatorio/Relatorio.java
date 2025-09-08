@@ -1,4 +1,4 @@
-package com.vireya.hydrocore;
+package com.vireya.hydrocore.relatorio;
 
 import android.os.Bundle;
 
@@ -18,7 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.vireya.hydrocore.R;
 
 import java.util.ArrayList;
 import java.util.List;
