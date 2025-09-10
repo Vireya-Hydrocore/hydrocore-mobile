@@ -45,6 +45,10 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
+    <style name="SmallText" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textSize">12sp</item>
+    </style>
+
 </resources>
 
 

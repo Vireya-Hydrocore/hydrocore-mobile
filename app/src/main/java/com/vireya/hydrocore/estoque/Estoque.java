@@ -96,10 +96,6 @@ public class Estoque extends Fragment {
 
         //tabs
         TabLayout tabLayout = view.findViewById(R.id.tabLayout);
-        tabLayout.addTab(tabLayout.newTab().setText("Todos"));
-        tabLayout.addTab(tabLayout.newTab().setText("Suficiente"));
-        tabLayout.addTab(tabLayout.newTab().setText("Próx. ao fim"));
-        tabLayout.addTab(tabLayout.newTab().setText("Insuficiente"));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
 
