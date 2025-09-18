@@ -19,16 +19,6 @@ public class Perfil extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_perfil, container, false);
 
-        // Botão "Histórico de Tarefas"
-        MaterialButton btnHistorico = view.findViewById(R.id.btnHistorico);
-
-        btnHistorico.setOnClickListener(v -> {
-            // Pega o Drawer da Activity
-            DrawerLayout drawer = getActivity().findViewById(R.id.drawerLayout);
-            if (drawer != null) {
-                drawer.openDrawer(GravityCompat.START); // abre o menu lateral
-            }
-        });
 
         return view;
     }

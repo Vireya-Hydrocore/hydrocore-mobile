@@ -79,7 +79,7 @@
                 style="@style/DropDownTexto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12sp" />
+                android:textSize="16sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Cards -->
@@ -143,15 +143,15 @@
                 style="@style/DropDownTexto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12sp" />
+                android:textSize="16sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnCalcular"
+            android:id="@+id/btnCalcularDosagem"
             style="@style/BotaoPadraoAzul"
             android:layout_width="360dp"
             android:layout_marginTop="12dp"
-            android:text="Confirmar"
+            android:text="Calcular Dosagem"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
