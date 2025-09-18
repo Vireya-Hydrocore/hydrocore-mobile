@@ -1,7 +1,10 @@
 package com.vireya.hydrocore.calculadora;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -20,6 +23,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
@@ -29,28 +33,55 @@ import com.vireya.hydrocore.R;
 
 public class Calculadora extends Fragment {
 
+    //Varíáveis
+    String etapaSelecionada;
+    private AutoCompleteTextView cbEtapa;
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (cbEtapa != null) {
+            cbEtapa.setText("", false); // limpa o campo sem disparar filtro
+            cbEtapa.clearListSelection();
+        }
+    }
+
+
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        cbEtapa = view.findViewById(R.id.cbEtapa);
+
+        //ComboBox
+        gerarComboEtapa(view, cbEtapa);
+    }
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         //Variáveis
         View view = inflater.inflate(R.layout.fragment_calculadora, container, false);
-        AutoCompleteTextView cbEtapa = view.findViewById(R.id.cbEtapa);
         TextView txtProdutosQuimicos = view.findViewById(R.id.txtProdutosQuimicos);
         TextInputLayout inputProdutosQuimicos = view.findViewById(R.id.inputProdutosQuimicos);
-        Button btnCalcular = view.findViewById(R.id.btnCalcular);
+        Button btnCalcularDosagem = view.findViewById(R.id.btnCalcularDosagem);
 
+        AutoCompleteTextView cbProdutosQuimicos = view.findViewById(R.id.cbProdutosQuimicos);
 
         //Cards
         CardView cardCoagulacao = view.findViewById(R.id.cardCoagulacao);
         CardView cardFloculacao = view.findViewById(R.id.cardFloculacao);
 
         //Variáveis Coagulação
-        TextInputLayout turbidezLayout = cardCoagulacao.findViewById(R.id.turbidezLayout);
-        TextInputEditText turbidez = cardCoagulacao.findViewById(R.id.inputTurbidez);
+        TextInputLayout turbidezLayoutCoagulacao = cardCoagulacao.findViewById(R.id.turbidezLayout);
+        TextInputEditText turbidezCoagulacao = cardCoagulacao.findViewById(R.id.inputTurbidez);
 
-        TextInputLayout phLayout = cardCoagulacao.findViewById(R.id.phLayout);
-        TextInputEditText ph = cardCoagulacao.findViewById(R.id.inputPh);
+        TextInputLayout phLayoutCoagulacao = cardCoagulacao.findViewById(R.id.phLayout);
+        TextInputEditText phCoagulacao = cardCoagulacao.findViewById(R.id.inputPh);
 
         TextInputLayout volumeLayout = cardCoagulacao.findViewById(R.id.volumeLayout);
         TextInputEditText volume = cardCoagulacao.findViewById(R.id.inputVolume);
@@ -61,18 +92,80 @@ public class Calculadora extends Fragment {
         TextInputLayout alcalinidadeLayout = cardCoagulacao.findViewById(R.id.alcalinidadeLayout);
         TextInputEditText alcalinidade = cardCoagulacao.findViewById(R.id.inputAlcalinidade);
 
+        AutoCompleteTextView cbCorCoagulacao = cardCoagulacao.findViewById(R.id.cbCor);
+
+        //Variáveis Floculação
+        TextInputLayout turbidezLayoutFloculacao = cardFloculacao.findViewById(R.id.turbidezLayout);
+        TextInputEditText turbidezFloculacao = cardFloculacao.findViewById(R.id.inputTurbidez);
+
+        TextInputLayout phLayoutFloculacao = cardFloculacao.findViewById(R.id.phLayout);
+        TextInputEditText phFloculacao = cardFloculacao.findViewById(R.id.inputPh);
+
+        AutoCompleteTextView cbCorFloculacao = cardFloculacao.findViewById(R.id.cbCor);
+
+
+
+        //Cores
+        String[] cores = {"Marrom", "Amarelada", "Esverdeada", "Amarelada", "Cinza"};
+        ArrayAdapter<String> adapterCores = new ArrayAdapter<>(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                cores
+        );
+
+        cbCorCoagulacao.setAdapter(adapterCores);
+        cbCorFloculacao.setAdapter(adapterCores);
+
+        //Produtos
+        String[] produtos = {"Produto 1", "Produto 2", "Produto 3"};
+        ArrayAdapter<String> adapterProdutos = new ArrayAdapter<>(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                produtos
+        );
+
+        cbProdutosQuimicos.setAdapter(adapterProdutos);
+
+        //ComboBox
+        cbEtapa = view.findViewById(R.id.cbEtapa);
+
+        cbEtapa.setOnClickListener(v -> {
+            // força resetar o filtro
+            cbEtapa.setText("", false);
+            cbEtapa.showDropDown();
+        });
+
+
+        cbEtapa.setOnItemClickListener((parent, view1, position, id) -> {
+            DefineVisibilidadeCombo(parent, position, cardCoagulacao, cardFloculacao, txtProdutosQuimicos, inputProdutosQuimicos, btnCalcularDosagem);
+            etapaSelecionada = parent.getItemAtPosition(position).toString();
+        });
+
         //Configurar Botões do Topo da tela
         ConfigurarBotõesTopo(view);
 
+        //Configurar botão de Calculador Dosagem
 
-        //ComboBox
-        gerarComboEtapa(view, cbEtapa);
-        cbEtapa.setOnItemClickListener((parent, view1, position, id) -> {
-            DefineVisibilidadeCombo(parent, position, cardCoagulacao, cardFloculacao, txtProdutosQuimicos, inputProdutosQuimicos, btnCalcular);
+
+
+
+        //Validações
+        ValidarCalculadora(turbidezCoagulacao, turbidezLayoutCoagulacao, phCoagulacao, phLayoutCoagulacao, volume, volumeLayout, aluminaResidual, aluminaResidualLayout, alcalinidade, alcalinidadeLayout);
+        ValidarCalculadora(turbidezFloculacao, turbidezLayoutFloculacao, phFloculacao, phLayoutFloculacao);
+
+
+
+        //Habilitar Botão
+        btnCalcularDosagem.setOnClickListener(v -> {
+
         });
 
-        //Campos Coagulação
+        return view;
+    }
 
+
+    //Validação Coagulação
+    private static void ValidarCalculadora(TextInputEditText turbidez, TextInputLayout turbidezLayout, TextInputEditText ph, TextInputLayout phLayout, TextInputEditText volume, TextInputLayout volumeLayout, TextInputEditText aluminaResidual, TextInputLayout aluminaResidualLayout, TextInputEditText alcalinidade, TextInputLayout alcalinidadeLayout) {
         //Turbidez
         turbidez.addTextChangedListener(new TextWatcher() {
             @Override
@@ -97,6 +190,7 @@ public class Calculadora extends Fragment {
                 else{
                     turbidezLayout.setError(null);
                 }
+
             }
         });
 
@@ -213,16 +307,66 @@ public class Calculadora extends Fragment {
             }
 
         });
-
-
-
-
-
-
-
-
-        return view;
     }
+
+    //Validar Floculação
+    private static void ValidarCalculadora(TextInputEditText turbidezFloculacao, TextInputLayout turbidezLayoutFloculacao, TextInputEditText phFloculacao, TextInputLayout phLayoutFloculacao) {
+        //Turbidez
+        turbidezFloculacao.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.toString().isEmpty()){
+                    turbidezLayoutFloculacao.setError(null);
+                    return;
+                }
+
+                int valor = Integer.parseInt(s.toString());
+                if(valor > 500){
+                    turbidezLayoutFloculacao.setError("Turbidez máxima: 500 NTU.");
+                } else if(valor <= 0){
+                    turbidezLayoutFloculacao.setError("Turbidez mínima 0 NTU.");
+                }
+                else{
+                    turbidezLayoutFloculacao.setError(null);
+                }
+            }
+        });
+
+        //pH
+        phFloculacao.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.toString().isEmpty()){
+                    phLayoutFloculacao.setError(null);
+                    return;
+                }
+
+                int valor = Integer.parseInt(s.toString());
+                if(valor > 14){
+                    phLayoutFloculacao.setError("pH máximo: 14 pH.");
+                } else if(valor <= 0){
+                    phLayoutFloculacao.setError("pH mínimo: 1 pH.");
+                }
+                else{
+                    phLayoutFloculacao.setError(null);
+                }
+            }
+
+        });
+    }
+
 
     private static void DefineVisibilidadeCombo(AdapterView<?> parent, int position, CardView cardCoagulacao, CardView cardFloculacao, TextView txtProdutosQuimicos, TextInputLayout inputProdutosQuimicos, Button btnCalcular) {
         String selecionado = (String) parent.getItemAtPosition(position);

@@ -51,7 +51,12 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:layout_marginTop="32dp"
-            android:backgroundTint="@android:color/white">
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            android:backgroundTint="@android:color/transparent"
+            android:clickable="true"
+            android:focusable="true"
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -113,7 +118,12 @@
             android:layout_width="380dp"
             android:layout_height="315dp"
             android:layout_marginStart="16dp"
-            android:backgroundTint="@android:color/white"/>
+            android:backgroundTint="@android:color/white"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            android:clickable="true"
+            android:focusable="true"
+            />
 
     </LinearLayout>
 

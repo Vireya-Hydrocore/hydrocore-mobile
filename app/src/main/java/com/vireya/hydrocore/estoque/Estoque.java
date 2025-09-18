@@ -87,12 +87,12 @@ public class Estoque extends Fragment {
 
         adapter = new ProdutoAdapter(productList);
         recyclerView.setAdapter(adapter);
-
-        //configurando o retrofit
-        apiService = ApiClient.getClient().create(ApiService.class);
-
-        //buscando os dados da api
-        loadProdutos();
+//
+//        //configurando o retrofit
+//        apiService = ApiClient.getClient().create(ApiService.class);
+//
+//        //buscando os dados da api
+//        loadProdutos();
 
         //tabs
         TabLayout tabLayout = view.findViewById(R.id.tabLayout);

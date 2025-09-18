@@ -143,10 +143,12 @@
                         android:id="@+id/cbCor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="   Cor"
-                        android:paddingTop="12dp"
-                        android:paddingBottom="12dp"
-                        android:textSize="12sp" />
+                        android:ellipsize="end"
+                        android:paddingStart="16dp"
+                        android:paddingTop="14dp"
+                        android:paddingBottom="14dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
