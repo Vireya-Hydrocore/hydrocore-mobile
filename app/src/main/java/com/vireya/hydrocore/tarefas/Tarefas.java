@@ -16,16 +16,21 @@ import android.widget.ImageView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vireya.hydrocore.R;
+import com.vireya.hydrocore.RetrofitConfig;
 import com.vireya.hydrocore.databinding.FragmentTarefasBinding;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Tarefas extends Fragment {
 
     private FragmentTarefasBinding binding;
     private final List<Tarefa> tarefas = new ArrayList<>();
+    private TarefasAdapter tarefasAdapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -33,33 +38,22 @@ public class Tarefas extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentTarefasBinding.inflate(inflater, container, false);
 
-        // Botões
         ImageView btnVireya = binding.getRoot().findViewById(R.id.imgHydrocore);
         ImageView btnAgenda = binding.getRoot().findViewById(R.id.imgAgenda);
         ImageView btnConfig = binding.getRoot().findViewById(R.id.imgConfig);
+
         btnVireya.setOnClickListener(v -> {
             DrawerLayout drawer = requireActivity().findViewById(R.id.drawerLayout);
-            if (drawer != null) {
-                drawer.openDrawer(GravityCompat.START);
-            }
-        });
-
-        //Ações Botão
-        btnVireya.setOnClickListener(v -> {
-            DrawerLayout drawer = getActivity().findViewById(R.id.drawerLayout);
-            if (drawer != null) {
-                drawer.openDrawer(GravityCompat.START);
-            }
+            if (drawer != null) drawer.openDrawer(GravityCompat.START);
         });
 
         btnAgenda.setOnClickListener(v -> {
             NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
             navController.navigate(R.id.navigation_agenda, null,
                     new androidx.navigation.NavOptions.Builder()
-                            .setPopUpTo(R.id.navigation_tarefas, true) // limpa até a Home
+                            .setPopUpTo(R.id.navigation_tarefas, true)
                             .build()
             );
-
             DesmarcarTarefas();
         });
 
@@ -70,7 +64,6 @@ public class Tarefas extends Fragment {
                             .setPopUpTo(R.id.navigation_tarefas, true)
                             .build()
             );
-
             DesmarcarTarefas();
         });
 
@@ -82,15 +75,29 @@ public class Tarefas extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         binding.rvTarefas.setLayoutManager(new LinearLayoutManager(requireContext()));
-
-        tarefas.add(new Tarefa("Tarefa 1", "Descrição 1", new Date(2025, 8, 23)));
-        tarefas.add(new Tarefa("Tarefa 2", "Descrição 2", new Date(2025, 8, 23)));
-        tarefas.add(new Tarefa("Tarefa 3", "Descrição 3", new Date(2025, 8, 23)));
-        tarefas.add(new Tarefa("Tarefa 4", "Descrição 4", new Date(2025, 8, 23)));
-        tarefas.add(new Tarefa("Tarefa 5", "Descrição 5", new Date(2025, 8, 23)));
-
-        TarefasAdapter tarefasAdapter = new TarefasAdapter(tarefas);
+        tarefasAdapter = new TarefasAdapter(tarefas);
         binding.rvTarefas.setAdapter(tarefasAdapter);
+
+        carregarTarefas("Ana Costa");
+    }
+
+    private void carregarTarefas(String nome) {
+        TarefasApi api = RetrofitConfig.getTarefasApi();
+        api.listarTarefasPorNome(nome).enqueue(new Callback<List<Tarefa>>() {
+            @Override
+            public void onResponse(Call<List<Tarefa>> call, Response<List<Tarefa>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    tarefas.clear();
+                    tarefas.addAll(response.body());
+                    tarefasAdapter.setTarefas(tarefas);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Tarefa>> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
     }
 
     @Override

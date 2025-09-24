@@ -9,7 +9,7 @@
     android:padding="16dp">
 
 
-<LinearLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -144,11 +144,19 @@
                         android:id="@+id/cbCor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="   Cor"
-                        android:paddingTop="12dp"
-                        android:paddingBottom="12dp"
-                        android:textSize="12sp" />
+                        android:ellipsize="end"
+                        android:hint="Selecione"
+                        android:paddingStart="16dp"
+                        android:paddingTop="14dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="14dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"
+                        android:focusable="false"
+                        android:inputType="none"
+                        android:cursorVisible="false" />
                 </com.google.android.material.textfield.TextInputLayout>
+
 
             </LinearLayout>
 
@@ -281,5 +289,5 @@
         </LinearLayout>
 
 
-</LinearLayout>
+    </LinearLayout>
 </androidx.cardview.widget.CardView>

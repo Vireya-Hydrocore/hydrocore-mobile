@@ -14,7 +14,6 @@
         android:orientation="horizontal"
         android:padding="16dp">
 
-        <!-- Coluna da esquerda com textos -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -43,26 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="6dp">
-
-                <TextView
-                    android:id="@+id/txtPrazo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Prazo:"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/teal_700"/>
-
-                <TextView
-                    android:id="@+id/txtPrazoData"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:text="25/08/2025"
-                    android:textSize="13sp"
-                    android:textColor="@android:color/darker_gray"/>
-            </LinearLayout>
+                android:layout_marginTop="6dp"/>
 
         </LinearLayout>
 
