@@ -18,19 +18,18 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="#F5F2F2"
             app:tabGravity="fill"
-            app:tabIndicatorColor="#8B0000"
-            app:tabIndicatorFullWidth="false"
-            app:tabIndicatorHeight="2dp"
             app:tabMode="fixed"
+            app:tabIndicatorColor="#8B0000"
+            app:tabIndicatorHeight="2dp"
             app:tabRippleColor="@android:color/transparent"
             app:tabSelectedTextColor="@android:color/black"
-            app:tabTextAppearance="@style/CustomTabText"
+            app:tabTextAppearance="@style/SmallText"
             app:tabTextColor="@android:color/black"
-
-            >
+            app:tabPaddingStart="8dp"
+            app:tabPaddingEnd="8dp" >
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
@@ -55,7 +54,7 @@
                 android:text="Insuficiente" />
 
         </com.google.android.material.tabs.TabLayout>
-</androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
     <Button
         android:id="@+id/button"
