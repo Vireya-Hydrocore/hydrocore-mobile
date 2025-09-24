@@ -72,4 +72,5 @@ public class TarefasAdapter extends RecyclerView.Adapter<TarefasAdapter.ViewHold
             checkBox = itemView.findViewById(R.id.tarefaCheck);
         }
     }
+
 }

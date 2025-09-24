@@ -35,6 +35,17 @@ public class Tarefa {
         this.nivel = nivel;
     }
 
+    //Getters e Setters
+    public String getTitulo(){return this.titulo;}
+    public String getDescricao(){return this.descricao;}
+    public String getPrazo() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(prazo);
+    }
+    public void setTitulo(String titulo){this.titulo = titulo;}
+    public void setDescricao(String descricao){this.descricao = descricao;}
+    public void setPrazo(Date prazo){this.prazo = prazo;}
+
     public int getIdTarefa() { return idTarefa; }
     public void setIdTarefa(int idTarefa) { this.idTarefa = idTarefa; }
 

@@ -155,7 +155,6 @@ public class Calculadora extends Fragment {
         //Configurar Botões do Topo da tela
         ConfigurarBotõesTopo(view);
 
-
         //Validações
         ValidarCalculadora(turbidezCoagulacao, turbidezLayoutCoagulacao, phCoagulacao, phLayoutCoagulacao, volume, volumeLayout, aluminaResidual, aluminaResidualLayout, alcalinidade, alcalinidadeLayout);
         ValidarCalculadora(turbidezFloculacao, turbidezLayoutFloculacao, phFloculacao, phLayoutFloculacao);
