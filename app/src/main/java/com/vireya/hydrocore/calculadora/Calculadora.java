@@ -148,7 +148,6 @@ public class Calculadora extends Fragment {
 
 
 
-
         //Validações
         ValidarCalculadora(turbidezCoagulacao, turbidezLayoutCoagulacao, phCoagulacao, phLayoutCoagulacao, volume, volumeLayout, aluminaResidual, aluminaResidualLayout, alcalinidade, alcalinidadeLayout);
         ValidarCalculadora(turbidezFloculacao, turbidezLayoutFloculacao, phFloculacao, phLayoutFloculacao);

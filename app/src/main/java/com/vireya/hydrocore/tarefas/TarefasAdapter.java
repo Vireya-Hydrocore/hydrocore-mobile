@@ -50,5 +50,6 @@ public class TarefasAdapter extends RecyclerView.Adapter<TarefasAdapter.ViewHold
             data = itemView.findViewById(R.id.txtPrazoData);
         }
     }
+
 }
 

@@ -63,6 +63,7 @@ public class Tarefas extends Fragment {
             DesmarcarTarefas();
         });
 
+
         btnConfig.setOnClickListener(v -> {
             NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
             navController.navigate(R.id.navigation_configuracoes, null,

@@ -16,6 +16,7 @@ public class Tarefa {
         this.prazo = prazo;
     }
 
+
     //Getters e Setters
     public String getTitulo(){return this.titulo;}
     public String getDescricao(){return this.descricao;}
