@@ -151,7 +151,10 @@
                         android:paddingEnd="16dp"
                         android:paddingBottom="14dp"
                         android:textColor="@android:color/black"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:focusable="false"
+                        android:inputType="none"
+                        android:cursorVisible="false" />
                 </com.google.android.material.textfield.TextInputLayout>
 
 

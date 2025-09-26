@@ -2,86 +2,64 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:mcv="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    >
+    android:background="@color/white"
+    android:padding="8dp">
 
+    <!-- Data selecionada -->
     <TextView
         android:id="@+id/selectedDateText"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:text="Quarta-feira, 16 de Junho"
+        android:textColor="@color/black"
+        android:fontFamily="@font/poppins_semibold"
+        android:letterSpacing="0.02" />
+
+    <!-- Card com calendário -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:layout_marginTop="15dp"
-        android:text="Wednesday 16, June"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        app:cardCornerRadius="20dp"
+        app:cardElevation="6dp"
+        app:cardBackgroundColor="@color/white">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/greenzinho"
-        android:padding="16dp"
-        android:layout_marginTop="10dp">
-
-        <androidx.cardview.widget.CardView
+        <com.github.sundeepk.compactcalendarview.CompactCalendarView
+            android:id="@+id/compactcalendar_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            app:cardCornerRadius="15dp"
-            app:cardElevation="4dp">
+            android:layout_height="300dp"
+            android:padding="12dp"
+            mcv:compactCalendarBackgroundColor="@color/white"
+            mcv:compactCalendarCurrentDayBackgroundColor="@color/teal_200"
+            mcv:compactCalendarCurrentSelectedDayBackgroundColor="@color/greenzinho"
+            mcv:compactCalendarTextColor="@color/black"
+            mcv:compactCalendarTextSize="14sp"
+            />
+    </androidx.cardview.widget.CardView>
 
-            <com.github.sundeepk.compactcalendarview.CompactCalendarView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/compactcalendar_view"
-                android:layout_width="fill_parent"
-                android:paddingRight="10dp"
-                android:paddingLeft="10dp"
-                android:layout_height="250dp"
-                app:compactCalendarTargetHeight="250dp"
-                app:compactCalendarTextSize="12sp"
-                app:compactCalendarBackgroundColor="@color/white"
-                app:compactCalendarCurrentSelectedDayBackgroundColor="@color/greenzinho"
-                app:compactCalendarCurrentDayBackgroundColor="@color/white"
-                app:compactCalendarMultiEventIndicatorColor="#fff"
-                />
+    <!-- Lista de eventos/agendamentos -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Seus eventos"
+        android:textColor="@color/black"
+        android:fontFamily="@font/poppins_semibold"
+        android:textSize="16sp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="8dp"/>
 
-        </androidx.cardview.widget.CardView>
-
-    </LinearLayout>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/blockContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="8dp"
-        android:layout_marginTop="25dp"
-        >
-
-        <TextView
-            android:id="@+id/time"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:text="09:00"
-            android:textSize="16sp"
-            android:textColor="#999999" />
-
-        <LinearLayout
-            android:id="@+id/blockContainer"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:background="@color/light_blue"
-            android:orientation="vertical"
-            android:padding="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:gravity="center_vertical"
-            android:clipToOutline="true"
-            android:clipChildren="false"
-            android:clipToPadding="false"
-
-            />
-
-    </LinearLayout>
-
+        android:clipToPadding="false"
+        android:paddingHorizontal="12dp"
+        tools:listitem="@layout/item_schedule"/>
 </LinearLayout>

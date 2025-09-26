@@ -1,32 +1,39 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardAviso"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="8dp">
-
-    <TextView
-        android:id="@+id/time"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
-        android:text="09:00"
-        android:textSize="16sp"
-        android:textColor="#999999" />
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="6dp">
 
     <LinearLayout
-        android:id="@+id/blockContainer"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_weight="1"
-        android:background="@color/light_blue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:gravity="center_vertical"
-        android:clipToOutline="true"
-        android:clipChildren="false"
-        android:clipToPadding="false"
+        android:padding="12dp">
 
-        />
+        <TextView
+            android:id="@+id/txtDescricao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Descrição do aviso"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:ellipsize="end"
+            android:maxLines="2" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/txtPrioridade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Prioridade"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

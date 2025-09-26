@@ -37,16 +37,22 @@ public class Calculadora extends Fragment {
     String etapaSelecionada;
     private AutoCompleteTextView cbEtapa;
 
-
     @Override
     public void onResume() {
         super.onResume();
         if (cbEtapa != null) {
-            cbEtapa.setText("", false); // limpa o campo sem disparar filtro
+            cbEtapa.setText("", false);
             cbEtapa.clearListSelection();
+
+            String[] etapas = {"Coagulação", "Floculação"};
+            ArrayAdapter<String> adapterEtapas = new ArrayAdapter<>(
+                    requireContext(),
+                    android.R.layout.simple_dropdown_item_1line,
+                    etapas
+            );
+            cbEtapa.setAdapter(adapterEtapas);
         }
     }
-
 
 
     @Override
@@ -64,19 +70,21 @@ public class Calculadora extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        //Variáveis
+        //region Variáveis
         View view = inflater.inflate(R.layout.fragment_calculadora, container, false);
         TextView txtProdutosQuimicos = view.findViewById(R.id.txtProdutosQuimicos);
         TextInputLayout inputProdutosQuimicos = view.findViewById(R.id.inputProdutosQuimicos);
         Button btnCalcularDosagem = view.findViewById(R.id.btnCalcularDosagem);
 
         AutoCompleteTextView cbProdutosQuimicos = view.findViewById(R.id.cbProdutosQuimicos);
+        //endregion
 
-        //Cards
+        //region Cards
         CardView cardCoagulacao = view.findViewById(R.id.cardCoagulacao);
         CardView cardFloculacao = view.findViewById(R.id.cardFloculacao);
+        //endregion
 
-        //Variáveis Coagulação
+        //region Variáveis Coagulação
         TextInputLayout turbidezLayoutCoagulacao = cardCoagulacao.findViewById(R.id.turbidezLayout);
         TextInputEditText turbidezCoagulacao = cardCoagulacao.findViewById(R.id.inputTurbidez);
 
@@ -93,8 +101,9 @@ public class Calculadora extends Fragment {
         TextInputEditText alcalinidade = cardCoagulacao.findViewById(R.id.inputAlcalinidade);
 
         AutoCompleteTextView cbCorCoagulacao = cardCoagulacao.findViewById(R.id.cbCor);
+        //endregion
 
-        //Variáveis Floculação
+        //region Variáveis Floculação
         TextInputLayout turbidezLayoutFloculacao = cardFloculacao.findViewById(R.id.turbidezLayout);
         TextInputEditText turbidezFloculacao = cardFloculacao.findViewById(R.id.inputTurbidez);
 
@@ -102,10 +111,9 @@ public class Calculadora extends Fragment {
         TextInputEditText phFloculacao = cardFloculacao.findViewById(R.id.inputPh);
 
         AutoCompleteTextView cbCorFloculacao = cardFloculacao.findViewById(R.id.cbCor);
+        //endregion
 
-
-
-        //Cores
+        //region Cores
         String[] cores = {"Marrom", "Amarelada", "Esverdeada", "Amarelada", "Cinza"};
         ArrayAdapter<String> adapterCores = new ArrayAdapter<>(
                 requireContext(),
@@ -115,8 +123,9 @@ public class Calculadora extends Fragment {
 
         cbCorCoagulacao.setAdapter(adapterCores);
         cbCorFloculacao.setAdapter(adapterCores);
+        //endregion
 
-        //Produtos
+        //region Produtos
         String[] produtos = {"Produto 1", "Produto 2", "Produto 3"};
         ArrayAdapter<String> adapterProdutos = new ArrayAdapter<>(
                 requireContext(),
@@ -125,8 +134,9 @@ public class Calculadora extends Fragment {
         );
 
         cbProdutosQuimicos.setAdapter(adapterProdutos);
+        //endregion
 
-        //ComboBox
+        //region ComboBox
         cbEtapa = view.findViewById(R.id.cbEtapa);
 
         cbEtapa.setOnClickListener(v -> {
@@ -140,12 +150,7 @@ public class Calculadora extends Fragment {
             DefineVisibilidadeCombo(parent, position, cardCoagulacao, cardFloculacao, txtProdutosQuimicos, inputProdutosQuimicos, btnCalcularDosagem);
             etapaSelecionada = parent.getItemAtPosition(position).toString();
         });
-
-        //Configurar Botões do Topo da tela
-        ConfigurarBotõesTopo(view);
-
-        //Configurar botão de Calculador Dosagem
-
+        //endregion
 
 
 
@@ -157,12 +162,36 @@ public class Calculadora extends Fragment {
 
         //Habilitar Botão
         btnCalcularDosagem.setOnClickListener(v -> {
+            boolean valido = false;
+            if (etapaSelecionada.equals("Coagulação")) {
+                valido = ValidarCamposCoagulacao(
+                        turbidezCoagulacao, turbidezLayoutCoagulacao,
+                        phCoagulacao, phLayoutCoagulacao,
+                        volume, volumeLayout,
+                        aluminaResidual, aluminaResidualLayout,
+                        alcalinidade, alcalinidadeLayout,
+                        cbProdutosQuimicos, inputProdutosQuimicos
+                );
+            }
 
+            else if (etapaSelecionada.equals("Floculação")) {
+                valido = validarCamposFloculacao(
+                        turbidezFloculacao, turbidezLayoutFloculacao,
+                        phFloculacao, phLayoutFloculacao,
+                        cbProdutosQuimicos, inputProdutosQuimicos
+                );
+            }
+
+            if (valido) {
+                Toast.makeText(requireContext(), "Cálculo realizado com sucesso!", Toast.LENGTH_SHORT).show();
+                // COLOCAR LÓGICA DE CÁLCULO
+            } else {
+                Toast.makeText(requireContext(), "Preencha todos os campos corretamente.", Toast.LENGTH_SHORT).show();
+            }
         });
 
         return view;
     }
-
 
     //Validação Coagulação
     private static void ValidarCalculadora(TextInputEditText turbidez, TextInputLayout turbidezLayout, TextInputEditText ph, TextInputLayout phLayout, TextInputEditText volume, TextInputLayout volumeLayout, TextInputEditText aluminaResidual, TextInputLayout aluminaResidualLayout, TextInputEditText alcalinidade, TextInputLayout alcalinidadeLayout) {
@@ -367,6 +396,58 @@ public class Calculadora extends Fragment {
         });
     }
 
+    //Validar Campos em Geral
+    private boolean ValidarCampo(TextInputEditText editText, TextInputLayout layout) {
+        String texto = editText.getText() != null ? editText.getText().toString().trim() : "";
+        return !texto.isEmpty() && layout.getError() == null;
+    }
+
+    private boolean ValidarCampo(AutoCompleteTextView autoText, TextInputLayout layout) {
+        String texto = autoText.getText() != null ? autoText.getText().toString().trim() : "";
+        if (texto.isEmpty()) {
+            layout.setError("Selecione um produto");
+            return false;
+        }
+        layout.setError(null);
+        return true;
+    }
+
+    private boolean ValidarCamposCoagulacao(
+            TextInputEditText turbidez, TextInputLayout turbidezLayout,
+            TextInputEditText ph, TextInputLayout phLayout,
+            TextInputEditText volume, TextInputLayout volumeLayout,
+            TextInputEditText aluminaResidual, TextInputLayout aluminaResidualLayout,
+            TextInputEditText alcalinidade, TextInputLayout alcalinidadeLayout,
+            AutoCompleteTextView produtos, TextInputLayout produtosLayout
+    ) {
+        return ValidarCampo(turbidez, turbidezLayout)
+                && ValidarCampo(ph, phLayout)
+                && ValidarCampo(volume, volumeLayout)
+                && ValidarCampo(aluminaResidual, aluminaResidualLayout)
+                && ValidarCampo(alcalinidade, alcalinidadeLayout)
+                && ValidarCampo(produtos, produtosLayout);
+    }
+
+    private boolean validarCamposFloculacao(
+            TextInputEditText turbidez, TextInputLayout turbidezLayout,
+            TextInputEditText ph, TextInputLayout phLayout,
+            AutoCompleteTextView produtos, TextInputLayout produtosLayout
+    ) {
+        return ValidarCampo(turbidez, turbidezLayout)
+                && ValidarCampo(ph, phLayout)
+                && ValidarCampo(produtos, produtosLayout);
+    }
+
+
+    private boolean ValidarCamposFloculacao(
+            TextInputEditText turbidez, TextInputLayout turbidezLayout,
+            TextInputEditText ph, TextInputLayout phLayout
+    ) {
+        return ValidarCampo(turbidez, turbidezLayout)
+                && ValidarCampo(ph, phLayout);
+    }
+    //endregion
+
 
     private static void DefineVisibilidadeCombo(AdapterView<?> parent, int position, CardView cardCoagulacao, CardView cardFloculacao, TextView txtProdutosQuimicos, TextInputLayout inputProdutosQuimicos, Button btnCalcular) {
         String selecionado = (String) parent.getItemAtPosition(position);
@@ -382,43 +463,6 @@ public class Calculadora extends Fragment {
         txtProdutosQuimicos.setVisibility(View.VISIBLE);
         inputProdutosQuimicos.setVisibility(View.VISIBLE);
         btnCalcular.setVisibility(View.VISIBLE);
-    }
-
-    private void ConfigurarBotõesTopo(View view) {
-        // Botões
-        ImageView btnVireya = view.findViewById(R.id.imgHydrocore);
-        ImageView btnAgenda = view.findViewById((R.id.imgAgenda));
-        ImageView btnConfig = view.findViewById((R.id.imgConfig));
-
-        //Ações Botão
-        btnVireya.setOnClickListener(v -> {
-            DrawerLayout drawer = getActivity().findViewById(R.id.drawerLayout);
-            if (drawer != null) {
-                drawer.openDrawer(GravityCompat.START);
-            }
-        });
-
-        btnAgenda.setOnClickListener(v -> {
-            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
-            navController.navigate(R.id.navigation_agenda, null,
-                    new androidx.navigation.NavOptions.Builder()
-                            .setPopUpTo(R.id.navigation_calculadora, true) // limpa até a Home
-                            .build()
-            );
-
-            DesmarcarCalculadora();
-        });
-
-        btnConfig.setOnClickListener(v -> {
-            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
-            navController.navigate(R.id.navigation_configuracoes, null,
-                    new androidx.navigation.NavOptions.Builder()
-                            .setPopUpTo(R.id.navigation_calculadora, true)
-                            .build()
-            );
-
-            DesmarcarCalculadora();
-        });
     }
 
     //Métodos GerarComboBox
@@ -438,14 +482,6 @@ public class Calculadora extends Fragment {
         });
     }
 
-    private void DesmarcarCalculadora() {
-        BottomNavigationView bottomNav = getActivity().findViewById(R.id.nav_view);
-        if (bottomNav != null) {
-            bottomNav.getMenu().setGroupCheckable(0, true, false);
-            bottomNav.getMenu().findItem(R.id.navigation_calculadora).setChecked(false);
-            bottomNav.getMenu().setGroupCheckable(0, true, true);
-        }
-    }
 
 
 }

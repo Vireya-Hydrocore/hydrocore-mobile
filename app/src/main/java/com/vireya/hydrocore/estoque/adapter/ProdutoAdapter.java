@@ -3,6 +3,7 @@ package com.vireya.hydrocore.estoque.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,15 +40,18 @@ public class ProdutoAdapter extends RecyclerView.Adapter<ProdutoAdapter.ProductV
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Produto produto = productList.get(position);
 
+
         holder.name.setText(produto.getNome());
         holder.quantity.setText(produto.getQuantidade() + "L");
+
+
 
         // Definir a cor da barrinha lateral conforme status
         switch (produto.getStatus()) {
             case "Suficiente":
                 holder.statusBar.setBackgroundColor(0xFF00796B); // Verde
                 break;
-            case "Prox": // Próximo ao fim
+            case "Próximo ao fim": // Próximo ao fim
                 holder.statusBar.setBackgroundColor(0xFFFBC02D); // Amarelo
                 break;
             case "Insuficiente":
@@ -67,12 +71,14 @@ public class ProdutoAdapter extends RecyclerView.Adapter<ProdutoAdapter.ProductV
     static class ProductViewHolder extends RecyclerView.ViewHolder {
         TextView name, quantity;
         View statusBar;
-
+        Button button;
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.nomeProduto);
             quantity = itemView.findViewById(R.id.textQuantidade);
             statusBar = itemView.findViewById(R.id.statusBar);
+            button = itemView.findViewById(R.id.button);
+
         }
     }
 }

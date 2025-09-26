@@ -10,57 +10,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:paddingHorizontal="16dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/imgHydrocore"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/logo"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/imgAgenda"
-                android:layout_width="20dp"
-                android:layout_height="40dp"
-                android:layout_marginEnd="16dp"
-                android:src="@drawable/agenda_top"
-                app:layout_constraintEnd_toStartOf="@+id/imgConfig"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/imgConfig"
-                android:layout_width="20dp"
-                android:layout_height="40dp"
-                android:src="@drawable/configuracoes_top"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
 
         <TextView
             android:id="@+id/txtEtapa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="40dp"
             android:text="Etapa"
             android:textColor="#2995B2"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/inputEtapa"

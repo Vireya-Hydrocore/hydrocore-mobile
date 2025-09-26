@@ -1,6 +1,9 @@
 package com.vireya.hydrocore.estoque.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Produto {
+    @SerializedName("nomeProduto")
     private String nome;
     private int quantidade;
     private String status;
