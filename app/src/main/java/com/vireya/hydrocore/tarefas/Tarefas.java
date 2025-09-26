@@ -3,11 +3,7 @@ package com.vireya.hydrocore.tarefas;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +13,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vireya.hydrocore.R;
 import com.vireya.hydrocore.databinding.FragmentTarefasBinding;
 import com.vireya.hydrocore.tarefas.adapter.TarefasAdapter;
-import com.vireya.hydrocore.tarefas.api.ApiClient;
+import com.vireya.hydrocore.core.network.RetrofitClient;
 import com.vireya.hydrocore.tarefas.api.TarefasApi;
 import com.vireya.hydrocore.tarefas.model.Tarefa;
 
@@ -54,7 +50,7 @@ public class Tarefas extends Fragment {
     }
 
     private void carregarTarefas(String nome) {
-        TarefasApi api = ApiClient.getTarefasApi();
+        TarefasApi api = RetrofitClient.getTarefasApi();
         api.listarTarefasPorNome(nome).enqueue(new Callback<List<Tarefa>>() {
             @Override
             public void onResponse(Call<List<Tarefa>> call, Response<List<Tarefa>> response) {
@@ -76,14 +72,5 @@ public class Tarefas extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-
-    private void DesmarcarTarefas() {
-        BottomNavigationView bottomNav = getActivity().findViewById(R.id.nav_view);
-        if (bottomNav != null) {
-            bottomNav.getMenu().setGroupCheckable(0, true, false);
-            bottomNav.getMenu().findItem(R.id.navigation_tarefas).setChecked(false);
-            bottomNav.getMenu().setGroupCheckable(0, true, true);
-        }
     }
 }
