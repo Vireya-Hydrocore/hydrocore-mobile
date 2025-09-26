@@ -84,7 +84,7 @@ public class Agenda extends Fragment {
 
     private void carregarAvisosDaApi() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://SEU_BACKEND_URL/")
+                .baseUrl("https://hydrocore-api-prod.onrender.com/v1/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -98,10 +98,10 @@ public class Agenda extends Fragment {
 
                     for (Aviso aviso : listaAvisos) {
                         try {
-                            Date data = sdf.parse(aviso.getData_ocorrencia());
+                            Date data = sdf.parse(aviso.getDataOcorrencia());
 
                             int cor;
-                            switch (aviso.getId_prioridade()) {
+                            switch (aviso.getIdPrioridade()) {
                                 case 1: cor = Color.RED; break;     // Alta
                                 case 2: cor = Color.YELLOW; break; // Média
                                 default: cor = Color.GREEN; break; // Baixa
@@ -131,7 +131,7 @@ public class Agenda extends Fragment {
         String dataFormatada = sdf.format(dataSelecionada);
 
         for (Aviso aviso : listaAvisos) {
-            if (aviso.getData_ocorrencia().equals(dataFormatada)) {
+            if (aviso.getDataOcorrencia().equals(dataFormatada)) {
                 avisosDoDia.add(aviso);
             }
         }

@@ -1,26 +1,52 @@
 package com.vireya.hydrocore.agenda.model;
 
 public class Aviso {
-    private int id_avisos;
+    private int idAvisos;
     private String descricao;
-    private String data_ocorrencia;
-    private int id_eta;
-    private int id_prioridade;
+    private String dataOcorrencia;
+    private int idEta;
+    private int idPrioridade;
 
     // getters e setters
-    public int getId_avisos() { return id_avisos; }
-    public void setId_avisos(int id_avisos) { this.id_avisos = id_avisos; }
 
-    public String getDescricao() { return descricao; }
-    public void setDescricao(String descricao) { this.descricao = descricao; }
+    public int getIdAvisos() {
+        return idAvisos;
+    }
 
-    public String getData_ocorrencia() { return data_ocorrencia; }
-    public void setData_ocorrencia(String data_ocorrencia) { this.data_ocorrencia = data_ocorrencia; }
+    public void setIdAvisos(int idAvisos) {
+        this.idAvisos = idAvisos;
+    }
 
-    public int getId_eta() { return id_eta; }
-    public void setId_eta(int id_eta) { this.id_eta = id_eta; }
+    public String getDescricao() {
+        return descricao;
+    }
 
-    public int getId_prioridade() { return id_prioridade; }
-    public void setId_prioridade(int id_prioridade) { this.id_prioridade = id_prioridade; }
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public String getDataOcorrencia() {
+        return dataOcorrencia;
+    }
+
+    public void setDataOcorrencia(String dataOcorrencia) {
+        this.dataOcorrencia = dataOcorrencia;
+    }
+
+    public int getIdEta() {
+        return idEta;
+    }
+
+    public void setIdEta(int idEta) {
+        this.idEta = idEta;
+    }
+
+    public int getIdPrioridade() {
+        return idPrioridade;
+    }
+
+    public void setIdPrioridade(int idPrioridade) {
+        this.idPrioridade = idPrioridade;
+    }
 }
 

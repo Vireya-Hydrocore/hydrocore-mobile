@@ -37,7 +37,7 @@ public class AvisoAdapter extends RecyclerView.Adapter<AvisoAdapter.AvisoViewHol
         holder.txtDescricao.setText(aviso.getDescricao());
 
         // Mostra só a prioridade como texto
-        switch (aviso.getId_prioridade()) {
+        switch (aviso.getIdPrioridade()) {
             case 1:
                 holder.cardAviso.setCardBackgroundColor(Color.parseColor("#FFCDD2")); // vermelho claro
                 holder.txtPrioridade.setText("Prioridade Alta");
