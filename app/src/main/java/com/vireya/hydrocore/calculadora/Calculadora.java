@@ -37,6 +37,7 @@ public class Calculadora extends Fragment {
     String etapaSelecionada;
     private AutoCompleteTextView cbEtapa;
 
+
     @Override
     public void onResume() {
         super.onResume();
@@ -482,6 +483,14 @@ public class Calculadora extends Fragment {
         });
     }
 
+    private void DesmarcarCalculadora() {
+        BottomNavigationView bottomNav = getActivity().findViewById(R.id.nav_view);
+        if (bottomNav != null) {
+            bottomNav.getMenu().setGroupCheckable(0, true, false);
+            bottomNav.getMenu().findItem(R.id.navigation_calculadora).setChecked(false);
+            bottomNav.getMenu().setGroupCheckable(0, true, true);
+        }
+    }
 
 
 }
