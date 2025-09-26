@@ -9,42 +9,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:paddingHorizontal="16dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp">
-
-            <ImageView
-                android:id="@+id/imgHydrocore"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/logo"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-            <ImageView
-                android:id="@+id/imgAgenda"
-                android:layout_width="20dp"
-                android:layout_height="40dp"
-                android:layout_marginEnd="16dp"
-                android:src="@drawable/agenda_top"
-                app:layout_constraintEnd_toStartOf="@+id/imgConfig"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/imgConfig"
-                android:layout_width="20dp"
-                android:layout_height="40dp"
-                android:src="@drawable/configuracoes_top"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        android:orientation="vertical"
+        android:layout_marginTop="20dp">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -55,8 +21,7 @@
             app:cardElevation="4dp"
             android:backgroundTint="@android:color/transparent"
             android:clickable="true"
-            android:focusable="true"
-            >
+            android:focusable="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -83,20 +48,18 @@
                         android:textColor="@android:color/white"
                         android:textSize="24sp"
                         android:textStyle="bold" />
-
                 </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="112dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/bg_bottom_rounded"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
                         android:text="Há 16h"
                         android:textColor="@android:color/black"
                         android:textSize="14sp" />
@@ -104,7 +67,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
                         android:layout_marginTop="4dp"
                         android:text="Recalibração de sensores: 07/06"
                         android:textColor="@android:color/black"
@@ -114,17 +76,48 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="380dp"
-            android:layout_height="315dp"
-            android:layout_marginStart="16dp"
-            android:backgroundTint="@android:color/white"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp"
-            android:clickable="true"
-            android:focusable="true"
-            />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp">
 
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/white"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="6dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_margin="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Gráficos"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Este é um exemplo de conteúdo que se adapta ao tamanho da tela. O CardView cresce conforme o texto e mantém margens em qualquer dispositivo."
+                        android:textColor="#555"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
-
 </FrameLayout>

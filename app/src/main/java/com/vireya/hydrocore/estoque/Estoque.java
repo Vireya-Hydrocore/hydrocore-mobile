@@ -1,14 +1,17 @@
 package com.vireya.hydrocore.estoque;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
@@ -35,6 +38,7 @@ public class Estoque extends Fragment {
     private ProdutoAdapter adapter;
     private List<Produto> productList = new ArrayList<>();
     private ApiService apiService;
+    Button button;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -74,6 +78,7 @@ public class Estoque extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
@@ -83,21 +88,21 @@ public class Estoque extends Fragment {
         View view = inflater.inflate(R.layout.fragment_estoque, container, false);
 
         recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
         adapter = new ProdutoAdapter(productList);
         recyclerView.setAdapter(adapter);
 //
-//        //configurando o retrofit
-//        apiService = ApiClient.getClient().create(ApiService.class);
-//
-//        //buscando os dados da api
-//        loadProdutos();
+        //configurando o retrofit
+        apiService = ApiClient.getClient().create(ApiService.class); //err0
+        button = view.findViewById(R.id.button);
+        //buscando os dados da api
+        loadProdutos();
 
         //tabs
         TabLayout tabLayout = view.findViewById(R.id.tabLayout);
 
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -106,22 +111,33 @@ public class Estoque extends Fragment {
             }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {}
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {}
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
         });
         return view;
 
     }
 
-    private void loadProdutos(){
+    private void loadProdutos() {
         apiService.getProdutos().enqueue(new Callback<List<Produto>>() {
             @Override
             public void onResponse(Call<List<Produto>> call, Response<List<Produto>> response) {
-                if (response.isSuccessful() && response.body() != null){
+                if (response.isSuccessful() && response.body() != null) {
                     productList.addAll(response.body());
                     adapter.updateList(productList);
+
+                    if (isAdded() && getView() != null && button != null) {
+                        button.setText(productList.size() + " produtos");
+                        button.setBackgroundColor(0xFF9E9E9E); // cinza "Todos"
+                        button.setTextColor(Color.WHITE);
+                    }
+
                 } else {
+                    Log.e("API_DEBUG", "Código HTTP: " + response.code());
                     Toast.makeText(getContext(), "Erro ao carregar os produtos", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -136,20 +152,57 @@ public class Estoque extends Fragment {
 
     private void filterList(int position) {
         List<Produto> filteredList = new ArrayList<>();
+        Button button = getActivity().findViewById(R.id.button);
+
+        String status = "";
+
         switch (position) {
             case 0:
                 adapter.updateList(productList);
-                return;
+                button.setText(productList.size() + " produtos");
+                status = "Todos";
+                break;
             case 1:
-                for (Produto p : productList) if (p.getStatus().equals("Suficiente")) filteredList.add(p);
+                for (Produto p : productList)
+                    if (p.getStatus().equals("Suficiente")) filteredList.add(p);
+                status = "Suficiente";
                 break;
             case 2:
-                for (Produto p : productList) if (p.getStatus().equals("Prox")) filteredList.add(p);
+                for (Produto p : productList)
+                    if (p.getStatus().equals("Próximo ao fim")) filteredList.add(p);
+                status = "Próximo ao fim";
                 break;
             case 3:
-                for (Produto p : productList) if (p.getStatus().equals("Insuficiente")) filteredList.add(p);
+                for (Produto p : productList)
+                    if (p.getStatus().equals("Insuficiente")) filteredList.add(p);
+                status = "Insuficiente";
                 break;
         }
-        adapter.updateList(filteredList);
+
+        if (position != 0) {
+            adapter.updateList(filteredList);
+            button.setText(filteredList.size() + " produtos");
+        }
+
+        // 🎨 muda a cor do botão conforme o status
+        switch (status) {
+            case "Suficiente":
+                button.setBackgroundColor(0xFF00796B); // Verde
+                button.setTextColor(Color.WHITE);
+                break;
+            case "Próximo ao fim":
+                button.setBackgroundColor(0xFFFBC02D); // Amarelo
+                button.setTextColor(Color.BLACK);
+                break;
+            case "Insuficiente":
+                button.setBackgroundColor(0xFFD32F2F); // Vermelho
+                button.setTextColor(Color.WHITE);
+                break;
+            default:
+                button.setBackgroundColor(0xFF9E9E9E); // Cinza fallback
+                button.setTextColor(Color.WHITE);
+                break;
+        }
     }
+
 }

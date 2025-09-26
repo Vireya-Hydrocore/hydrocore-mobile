@@ -37,6 +37,7 @@ public class Calculadora extends Fragment {
     String etapaSelecionada;
     private AutoCompleteTextView cbEtapa;
 
+
     @Override
     public void onResume() {
         super.onResume();
@@ -152,8 +153,7 @@ public class Calculadora extends Fragment {
         });
         //endregion
 
-        //Configurar Botões do Topo da tela
-        ConfigurarBotõesTopo(view);
+
 
         //Validações
         ValidarCalculadora(turbidezCoagulacao, turbidezLayoutCoagulacao, phCoagulacao, phLayoutCoagulacao, volume, volumeLayout, aluminaResidual, aluminaResidualLayout, alcalinidade, alcalinidadeLayout);
@@ -464,43 +464,6 @@ public class Calculadora extends Fragment {
         txtProdutosQuimicos.setVisibility(View.VISIBLE);
         inputProdutosQuimicos.setVisibility(View.VISIBLE);
         btnCalcular.setVisibility(View.VISIBLE);
-    }
-
-    private void ConfigurarBotõesTopo(View view) {
-        // Botões
-        ImageView btnVireya = view.findViewById(R.id.imgHydrocore);
-        ImageView btnAgenda = view.findViewById((R.id.imgAgenda));
-        ImageView btnConfig = view.findViewById((R.id.imgConfig));
-
-        //Ações Botão
-        btnVireya.setOnClickListener(v -> {
-            DrawerLayout drawer = getActivity().findViewById(R.id.drawerLayout);
-            if (drawer != null) {
-                drawer.openDrawer(GravityCompat.START);
-            }
-        });
-
-        btnAgenda.setOnClickListener(v -> {
-            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
-            navController.navigate(R.id.navigation_agenda, null,
-                    new androidx.navigation.NavOptions.Builder()
-                            .setPopUpTo(R.id.navigation_calculadora, true) // limpa até a Home
-                            .build()
-            );
-
-            DesmarcarCalculadora();
-        });
-
-        btnConfig.setOnClickListener(v -> {
-            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
-            navController.navigate(R.id.navigation_configuracoes, null,
-                    new androidx.navigation.NavOptions.Builder()
-                            .setPopUpTo(R.id.navigation_calculadora, true)
-                            .build()
-            );
-
-            DesmarcarCalculadora();
-        });
     }
 
     //Métodos GerarComboBox

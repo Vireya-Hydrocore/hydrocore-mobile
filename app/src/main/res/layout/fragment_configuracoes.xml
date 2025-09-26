@@ -83,7 +83,7 @@
                 android:id="@+id/toggleWifi"
                 android:layout_width="40dp"
                 android:layout_height="25dp"
-                android:background="@drawable/toggle_background"
+                android:background="@drawable/toggle_background_off"
                 android:clickable="true"
                 android:focusable="true"
                 android:padding="2dp">
@@ -209,7 +209,7 @@
                 android:id="@+id/toggleOffline"
                 android:layout_width="40dp"
                 android:layout_height="25dp"
-                android:background="@drawable/toggle_background"
+                android:background="@drawable/toggle_background_off"
                 android:clickable="true"
                 android:focusable="true"
                 android:padding="2dp">
@@ -218,9 +218,9 @@
                     android:id="@+id/thumbOffline"
                     android:layout_width="17dp"
                     android:layout_height="17dp"
+                    android:layout_marginTop="1dp"
                     android:background="@drawable/toggle_tumb"
-                    android:elevation="4dp"
-                    android:layout_marginTop="1dp"/>
+                    android:elevation="4dp" />
             </LinearLayout>
         </LinearLayout>
 

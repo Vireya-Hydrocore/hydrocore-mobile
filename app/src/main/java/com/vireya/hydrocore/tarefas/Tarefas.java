@@ -12,12 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vireya.hydrocore.R;
-import com.vireya.hydrocore.RetrofitConfig;
 import com.vireya.hydrocore.databinding.FragmentTarefasBinding;
+import com.vireya.hydrocore.tarefas.adapter.TarefasAdapter;
+import com.vireya.hydrocore.tarefas.api.ApiClient;
+import com.vireya.hydrocore.tarefas.api.TarefasApi;
+import com.vireya.hydrocore.tarefas.model.Tarefa;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,37 +39,6 @@ public class Tarefas extends Fragment {
                              ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentTarefasBinding.inflate(inflater, container, false);
-
-        ImageView btnVireya = binding.getRoot().findViewById(R.id.imgHydrocore);
-        ImageView btnAgenda = binding.getRoot().findViewById(R.id.imgAgenda);
-        ImageView btnConfig = binding.getRoot().findViewById(R.id.imgConfig);
-
-        btnVireya.setOnClickListener(v -> {
-            DrawerLayout drawer = requireActivity().findViewById(R.id.drawerLayout);
-            if (drawer != null) drawer.openDrawer(GravityCompat.START);
-        });
-
-        btnAgenda.setOnClickListener(v -> {
-            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
-            navController.navigate(R.id.navigation_agenda, null,
-                    new androidx.navigation.NavOptions.Builder()
-                            .setPopUpTo(R.id.navigation_tarefas, true)
-                            .build()
-            );
-            DesmarcarTarefas();
-        });
-
-
-        btnConfig.setOnClickListener(v -> {
-            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
-            navController.navigate(R.id.navigation_configuracoes, null,
-                    new androidx.navigation.NavOptions.Builder()
-                            .setPopUpTo(R.id.navigation_tarefas, true)
-                            .build()
-            );
-            DesmarcarTarefas();
-        });
-
         return binding.getRoot();
     }
 
@@ -79,11 +50,11 @@ public class Tarefas extends Fragment {
         tarefasAdapter = new TarefasAdapter(tarefas);
         binding.rvTarefas.setAdapter(tarefasAdapter);
 
-        carregarTarefas("Ana Costa");
+        carregarTarefas("Lucas Pereira");
     }
 
     private void carregarTarefas(String nome) {
-        TarefasApi api = RetrofitConfig.getTarefasApi();
+        TarefasApi api = ApiClient.getTarefasApi();
         api.listarTarefasPorNome(nome).enqueue(new Callback<List<Tarefa>>() {
             @Override
             public void onResponse(Call<List<Tarefa>> call, Response<List<Tarefa>> response) {

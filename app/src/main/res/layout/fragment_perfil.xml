@@ -9,72 +9,77 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="false"
         >
 
-
+        <!-- Fundo degrade azul -->
         <View
             android:id="@+id/fundoAzul"
             android:layout_width="match_parent"
             android:layout_height="220dp"
             android:background="@drawable/degrade_fundo_perfil"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgPerfil"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_marginTop="128dp"
+            android:elevation="6dp"
+            android:padding="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/perfil_default"
+            app:strokeColor="@color/teal_700"
+            app:strokeWidth="4dp"
+            app:shapeAppearanceOverlay="@style/CircularShapeAppearance" />
 
 
         <TextView
             android:id="@+id/txtNome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="12dp"
             android:text="Rodrigo Santos"
-            android:textColor="#FFFFFF"
+            android:textColor="@android:color/black"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imgPerfil"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/fundoAzul" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
+        <!-- Cargo -->
         <TextView
             android:id="@+id/txtCargo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="4dp"
             android:text="Operário de Produção"
-            android:textColor="#FFFFFF"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textColor="#666"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/txtNome"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtNome" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/imgPerfil"
-            android:layout_width="170dp"
-            android:layout_height="161dp"
-            android:layout_marginTop="28dp"
-            android:elevation="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtCargo"
-            app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
-            app:srcCompat="@drawable/rodrigo_perfil"
-            app:strokeColor="#3FBFD8"
-            app:strokeWidth="4dp" />
-
+        <!-- Card com estatísticas -->
         <LinearLayout
             android:id="@+id/cardStats"
-            android:layout_width="340dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:background="@drawable/bg_card_perfil"
+            android:elevation="4dp"
             android:orientation="horizontal"
-            android:padding="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:padding="16dp"
+            app:layout_constraintTop_toBottomOf="@id/txtCargo"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imgPerfil">
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginHorizontal="24dp"
+            android:gravity="center">
 
-
+            <!-- Diária -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -88,7 +93,7 @@
                     android:layout_height="wrap_content"
                     android:text="5"
                     android:textColor="@color/teal_700"
-                    android:textSize="22sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -96,17 +101,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Diária"
-                    android:textColor="@android:color/black"
-                    android:textSize="10sp" />
+                    android:textColor="#666"
+                    android:textSize="12sp" />
             </LinearLayout>
 
+            <!-- Separador -->
             <View
                 android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginVertical="8dp"
+                android:layout_height="40dp"
                 android:background="#3FBFD8" />
 
-
+            <!-- Realocadas -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -120,7 +125,7 @@
                     android:layout_height="wrap_content"
                     android:text="2"
                     android:textColor="@color/teal_700"
-                    android:textSize="22sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -128,17 +133,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Realocadas"
-                    android:textColor="@android:color/black"
-                    android:textSize="10sp" />
+                    android:textColor="#666"
+                    android:textSize="12sp" />
             </LinearLayout>
 
+            <!-- Separador -->
             <View
                 android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginVertical="8dp"
+                android:layout_height="40dp"
                 android:background="#3FBFD8" />
 
-
+            <!-- Não Feitas -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -152,7 +157,7 @@
                     android:layout_height="wrap_content"
                     android:text="0"
                     android:textColor="@color/teal_700"
-                    android:textSize="22sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -160,16 +165,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Não Feitas"
-                    android:textColor="@android:color/black"
-                    android:textSize="10sp" />
+                    android:textColor="#666"
+                    android:textSize="12sp" />
             </LinearLayout>
 
+            <!-- Separador -->
             <View
                 android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginVertical="8dp"
+                android:layout_height="40dp"
                 android:background="#3FBFD8" />
 
+            <!-- Totais -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -183,7 +189,7 @@
                     android:layout_height="wrap_content"
                     android:text="125"
                     android:textColor="@color/teal_700"
-                    android:textSize="22sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -191,33 +197,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Totais"
-                    android:textColor="@android:color/black"
-                    android:textSize="10sp" />
+                    android:textColor="#666"
+                    android:textSize="12sp" />
             </LinearLayout>
-
         </LinearLayout>
-
-        <WebView
-            android:id="@+id/webView"
-            android:layout_width="360dp"
-            android:layout_height="210dp"
-            android:layout_marginTop="20dp"
-            app:circularflow_radiusInDP="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardStats" />
-
-        <LinearLayout
-            android:id="@+id/containerButtons"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/webView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
