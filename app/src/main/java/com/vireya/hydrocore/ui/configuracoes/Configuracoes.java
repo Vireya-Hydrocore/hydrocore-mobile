@@ -161,7 +161,6 @@ public class Configuracoes extends Fragment {
         }
     }
 
-    // 🔹 Configura os botões de toggle
     private void setupToggle(@NonNull View parentView, int toggleId, int thumbId,
                              Runnable toggleStateCallback, StateCallback isActiveCallback) {
 
@@ -171,7 +170,7 @@ public class Configuracoes extends Fragment {
         toggle.post(() -> {
             final int deslocamento = toggle.getWidth() - thumb.getWidth() - 12;
 
-            // 🔹 Posição inicial
+            // Posição inicial
             boolean ativo = isActiveCallback.isActive();
             thumb.setTranslationX(ativo ? deslocamento : 0f);
             toggle.setBackgroundResource(

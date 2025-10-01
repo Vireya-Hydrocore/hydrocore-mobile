@@ -28,11 +28,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Estoque#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class Estoque extends Fragment {
     private RecyclerView recyclerView;
     private ProdutoAdapter adapter;
@@ -40,28 +35,15 @@ public class Estoque extends Fragment {
     private ApiService apiService;
     Button button;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     public Estoque() {
-        // Required empty public constructor
-    }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Estoque.
-     */
-    // TODO: Rename and change types and number of parameters
+    }
     public static Estoque newInstance(String param1, String param2) {
         Estoque fragment = new Estoque();
         Bundle args = new Bundle();
@@ -84,7 +66,6 @@ public class Estoque extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_estoque, container, false);
 
         recyclerView = view.findViewById(R.id.recyclerView);
@@ -92,14 +73,11 @@ public class Estoque extends Fragment {
 
         adapter = new ProdutoAdapter(productList);
         recyclerView.setAdapter(adapter);
-//
-        //configurando o retrofit
-        apiService = ApiClient.getClient().create(ApiService.class); //err0
+
+        apiService = ApiClient.getClient().create(ApiService.class);
         button = view.findViewById(R.id.button);
-        //buscando os dados da api
         loadProdutos();
 
-        //tabs
         TabLayout tabLayout = view.findViewById(R.id.tabLayout);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -184,7 +162,6 @@ public class Estoque extends Fragment {
             button.setText(filteredList.size() + " produtos");
         }
 
-        // 🎨 muda a cor do botão conforme o status
         switch (status) {
             case "Suficiente":
                 button.setBackgroundColor(0xFF00796B); // Verde

@@ -20,6 +20,7 @@ import com.vireya.hydrocore.R;
 import com.vireya.hydrocore.agenda.adapter.AvisoAdapter;
 import com.vireya.hydrocore.agenda.api.ApiClient;
 import com.vireya.hydrocore.agenda.model.Aviso;
+import com.vireya.hydrocore.core.network.NotificacaoHelper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -110,10 +111,12 @@ public class Agenda extends Fragment {
                             Event event = new Event(cor, data.getTime(), aviso);
                             compactCalendarView.addEvent(event);
 
+                            // 🔹 Mostra notificação local
+                            NotificacaoHelper.mostrarNotificacao(requireContext(), aviso);
+
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-
                     }
                 }
             }
