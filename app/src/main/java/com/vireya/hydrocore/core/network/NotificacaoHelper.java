@@ -40,7 +40,6 @@ public class NotificacaoHelper {
 
     // Mostra a notificação
     public static void mostrarNotificacao(Context context, Aviso aviso) {
-        // 🔹 Checa se notificações estão ativas
         boolean notificacaoAtiva = context
                 .getSharedPreferences("configuracoes", Context.MODE_PRIVATE)
                 .getBoolean("notificacaoAtivo", true);

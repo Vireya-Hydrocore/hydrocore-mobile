@@ -62,14 +62,14 @@ public class Configuracoes extends Fragment {
         loadImageFromInternalStorage();
 
         imgProfile.setOnClickListener(v -> showImageOptions());
+
+        // ✅ agora funciona corretamente
         seta.setOnClickListener(v -> showInformations());
 
-        // 🔹 Carrega estados salvos
         wifiAtivo = getSavedState("wifiAtivo", false);
         notificacaoAtivo = getSavedState("notificacaoAtivo", true);
         offlineAtivo = getSavedState("offlineAtivo", false);
 
-        // 🔹 Inicializa os toggles já na posição correta
         setupToggle(view, R.id.toggleWifi, R.id.thumbWifi,
                 () -> {
                     wifiAtivo = !wifiAtivo;
@@ -90,9 +90,13 @@ public class Configuracoes extends Fragment {
                     saveState("offlineAtivo", offlineAtivo);
                 },
                 () -> offlineAtivo);
+
+        // 🔹 mover para o Info
+        LinearLayout layoutInfo = view.findViewById(R.id.layoutInfo);
+        layoutInfo.setOnClickListener(v -> showInformations());
     }
 
-    private void showInformations(){
+    private void showInformations() {
         NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
         navController.navigate(R.id.informacoesConfig, null,
                 new androidx.navigation.NavOptions.Builder()
