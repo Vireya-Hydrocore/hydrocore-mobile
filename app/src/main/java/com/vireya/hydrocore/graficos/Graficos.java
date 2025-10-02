@@ -2,11 +2,15 @@ package com.vireya.hydrocore.graficos;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.vireya.hydrocore.R;
 
@@ -62,5 +66,22 @@ public class Graficos extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_graficos, container, false);
+    }
+
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        WebView webGrafico1 = view.findViewById(R.id.webGrafico1);
+        WebView webGrafico2 = view.findViewById(R.id.webGrafico2);
+
+        // Configura o WebView 1
+        webGrafico1.getSettings().setJavaScriptEnabled(true);
+        webGrafico1.setWebViewClient(new WebViewClient()); // garante abertura dentro do app
+        webGrafico1.loadUrl("https://app.powerbi.com/view?r=eyJrIjoiODlhOTZmMzUtY2VjMi00OTI4LWFiY2YtMzVjNmFhYTY3NDRhIiwidCI6ImIxNDhmMTRjLTIzOTctNDAyYy1hYjZhLTFiNDcxMTE3N2FjMCJ9dashboard1");
+
+        // Configura o WebView 2
+        webGrafico2.getSettings().setJavaScriptEnabled(true);
+        webGrafico2.setWebViewClient(new WebViewClient());
+        webGrafico2.loadUrl("https://meu-servidor.com/dashboard2");
     }
 }
