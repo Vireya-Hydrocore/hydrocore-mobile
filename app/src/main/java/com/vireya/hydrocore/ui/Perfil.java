@@ -11,8 +11,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.vireya.hydrocore.R;
 import com.vireya.hydrocore.core.network.RetrofitClient;
@@ -40,9 +42,15 @@ public class Perfil extends Fragment {
         TextView tarDiariaValor = view.findViewById(R.id.tarDiariaValor);
         TextView tarNaoFeitasValor = view.findViewById(R.id.tarNaoFeitasValor);
         TextView tarTotaisValor = view.findViewById(R.id.tarTotaisValor);
+
+        LinearLayout layoutNaoFeitas = view.findViewById(R.id.layoutNaoFeitas);
+        layoutNaoFeitas.setOnClickListener(v -> {
+            BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
+            bottomNavigationView.setSelectedItemId(R.id.navigation_tarefas);
+        });
+
         loadProfileImage();
         loadTarefasStats(tarDiariaValor, tarNaoFeitasValor, tarTotaisValor);
-
     }
 
     private void loadProfileImage() {
@@ -83,7 +91,6 @@ public class Perfil extends Fragment {
 
                     int totais = tarefas.size();
 
-                    // Atualiza os TextView
                     tarDiariaValor.setText(String.valueOf(feitas));
                     tarNaoFeitasValor.setText(String.valueOf(naoFeitas));
                     tarTotaisValor.setText(String.valueOf(totais));
@@ -96,7 +103,4 @@ public class Perfil extends Fragment {
             }
         });
     }
-
-
-
 }
