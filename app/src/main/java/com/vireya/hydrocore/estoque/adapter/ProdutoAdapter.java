@@ -22,7 +22,6 @@ public class ProdutoAdapter extends RecyclerView.Adapter<ProdutoAdapter.ProductV
         this.productList = productList;
     }
 
-    // Atualizar lista quando fizer filtro ou carregar da API
     public void updateList(List<Produto> newList) {
         this.productList = newList;
         notifyDataSetChanged();
@@ -44,21 +43,18 @@ public class ProdutoAdapter extends RecyclerView.Adapter<ProdutoAdapter.ProductV
         holder.name.setText(produto.getNome());
         holder.quantity.setText(produto.getQuantidade() + "L");
 
-
-
-        // Definir a cor da barrinha lateral conforme status
         switch (produto.getStatus()) {
             case "Suficiente":
-                holder.statusBar.setBackgroundColor(0xFF00796B); // Verde
+                holder.statusBar.setBackgroundColor(0xFF00796B);
                 break;
-            case "Próximo ao fim": // Próximo ao fim
-                holder.statusBar.setBackgroundColor(0xFFFBC02D); // Amarelo
+            case "Próximo ao fim":
+                holder.statusBar.setBackgroundColor(0xFFFBC02D);
                 break;
             case "Insuficiente":
-                holder.statusBar.setBackgroundColor(0xFFD32F2F); // Vermelho
+                holder.statusBar.setBackgroundColor(0xFFD32F2F);
                 break;
             default:
-                holder.statusBar.setBackgroundColor(0xFF9E9E9E); // Cinza fallback
+                holder.statusBar.setBackgroundColor(0xFF9E9E9E);
                 break;
         }
     }

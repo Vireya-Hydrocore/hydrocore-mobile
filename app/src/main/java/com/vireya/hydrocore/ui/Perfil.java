@@ -11,11 +11,18 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.vireya.hydrocore.R;
+import com.vireya.hydrocore.core.network.RetrofitClient;
+import com.vireya.hydrocore.tarefas.api.TarefasApi;
+import com.vireya.hydrocore.tarefas.model.Tarefa;
 
 import java.io.FileInputStream;
+import java.util.List;
 
 public class Perfil extends Fragment {
 
@@ -32,9 +39,18 @@ public class Perfil extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         imgPerfil = view.findViewById(R.id.imgPerfil);
+        TextView tarDiariaValor = view.findViewById(R.id.tarDiariaValor);
+        TextView tarNaoFeitasValor = view.findViewById(R.id.tarNaoFeitasValor);
+        TextView tarTotaisValor = view.findViewById(R.id.tarTotaisValor);
 
-        // 👉 carrega a imagem salva no internal storage
+        LinearLayout layoutNaoFeitas = view.findViewById(R.id.layoutNaoFeitas);
+        layoutNaoFeitas.setOnClickListener(v -> {
+            BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
+            bottomNavigationView.setSelectedItemId(R.id.navigation_tarefas);
+        });
+
         loadProfileImage();
+        loadTarefasStats(tarDiariaValor, tarNaoFeitasValor, tarTotaisValor);
     }
 
     private void loadProfileImage() {
@@ -52,5 +68,39 @@ public class Perfil extends Fragment {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void loadTarefasStats(TextView tarDiariaValor, TextView tarNaoFeitasValor, TextView tarTotaisValor) {
+        TarefasApi api = RetrofitClient.getTarefasApi();
+        api.listarTarefasPorNome("Lucas Pereira").enqueue(new retrofit2.Callback<List<Tarefa>>() {
+            @Override
+            public void onResponse(retrofit2.Call<List<Tarefa>> call, retrofit2.Response<List<Tarefa>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Tarefa> tarefas = response.body();
+
+                    int feitas = 0;
+                    int naoFeitas = 0;
+
+                    for (Tarefa t : tarefas) {
+                        if ("CONCLUIDA".equalsIgnoreCase(t.getStatus())) {
+                            feitas++;
+                        } else {
+                            naoFeitas++;
+                        }
+                    }
+
+                    int totais = tarefas.size();
+
+                    tarDiariaValor.setText(String.valueOf(feitas));
+                    tarNaoFeitasValor.setText(String.valueOf(naoFeitas));
+                    tarTotaisValor.setText(String.valueOf(totais));
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<List<Tarefa>> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
     }
 }

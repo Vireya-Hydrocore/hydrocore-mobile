@@ -26,28 +26,26 @@ public class AvisoAdapter extends RecyclerView.Adapter<AvisoAdapter.AvisoViewHol
     @Override
     public AvisoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_schedule, parent, false); // usa seu layout
+                .inflate(R.layout.item_schedule, parent, false);
         return new AvisoViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull AvisoViewHolder holder, int position) {
         Aviso aviso = listaAvisos.get(position);
-
         holder.txtDescricao.setText(aviso.getDescricao());
 
-        // Mostra só a prioridade como texto
         switch (aviso.getIdPrioridade()) {
             case 1:
-                holder.cardAviso.setCardBackgroundColor(Color.parseColor("#FFCDD2")); // vermelho claro
+                holder.cardAviso.setCardBackgroundColor(Color.parseColor("#FFCDD2"));
                 holder.txtPrioridade.setText("Prioridade Alta");
                 break;
             case 2:
-                holder.cardAviso.setCardBackgroundColor(Color.parseColor("#FFF9C4")); // amarelo claro
+                holder.cardAviso.setCardBackgroundColor(Color.parseColor("#FFF9C4"));
                 holder.txtPrioridade.setText("Prioridade Média");
                 break;
             default:
-                holder.cardAviso.setCardBackgroundColor(Color.parseColor("#C8E6C9")); // verde claro
+                holder.cardAviso.setCardBackgroundColor(Color.parseColor("#C8E6C9"));
                 holder.txtPrioridade.setText("Prioridade Baixa");
                 break;
         }
