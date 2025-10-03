@@ -7,8 +7,6 @@ public class Aviso {
     private int idEta;
     private int idPrioridade;
 
-    // getters e setters
-
     public int getIdAvisos() {
         return idAvisos;
     }
