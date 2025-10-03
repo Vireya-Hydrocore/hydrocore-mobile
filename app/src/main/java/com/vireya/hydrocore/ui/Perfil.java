@@ -20,12 +20,18 @@ import com.vireya.hydrocore.R;
 import com.vireya.hydrocore.core.network.RetrofitClient;
 import com.vireya.hydrocore.tarefas.api.TarefasApi;
 import com.vireya.hydrocore.tarefas.model.Tarefa;
+import com.vireya.hydrocore.ui.configuracoes.api.ApiService;
+import com.vireya.hydrocore.ui.configuracoes.model.Funcionario;
 
 import java.io.FileInputStream;
 import java.util.List;
 
-public class Perfil extends Fragment {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
+public class Perfil extends Fragment {
+    private TextView tarDiariaValor, tarNaoFeitasValor, tarTotaisValor, txtNome, txtCargo;
     private ShapeableImageView imgPerfil;
 
     @Override
@@ -39,9 +45,11 @@ public class Perfil extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         imgPerfil = view.findViewById(R.id.imgPerfil);
-        TextView tarDiariaValor = view.findViewById(R.id.tarDiariaValor);
-        TextView tarNaoFeitasValor = view.findViewById(R.id.tarNaoFeitasValor);
-        TextView tarTotaisValor = view.findViewById(R.id.tarTotaisValor);
+        tarDiariaValor = view.findViewById(R.id.tarDiariaValor);
+        tarNaoFeitasValor = view.findViewById(R.id.tarNaoFeitasValor);
+        tarTotaisValor = view.findViewById(R.id.tarTotaisValor);
+        txtNome = view.findViewById(R.id.txtNome);
+        txtCargo = view.findViewById(R.id.txtCargo);
 
         LinearLayout layoutNaoFeitas = view.findViewById(R.id.layoutNaoFeitas);
         layoutNaoFeitas.setOnClickListener(v -> {
@@ -50,6 +58,7 @@ public class Perfil extends Fragment {
         });
 
         loadProfileImage();
+        loadFuncionarioInfo();
         loadTarefasStats(tarDiariaValor, tarNaoFeitasValor, tarTotaisValor);
     }
 
@@ -103,4 +112,25 @@ public class Perfil extends Fragment {
             }
         });
     }
+    public void loadFuncionarioInfo() {
+        RetrofitClient retrofit = new RetrofitClient();
+        ApiService apiService = retrofit.getRetrofit().create(ApiService.class);
+
+        apiService.getFuncionarios().enqueue(new Callback<List<Funcionario>>() {
+            @Override
+            public void onResponse(Call<List<Funcionario>> call, Response<List<Funcionario>> response) {
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    Funcionario funcionario = response.body().get(0);
+                    txtNome.setText(funcionario.getNome());
+                    txtCargo.setText(String.valueOf(funcionario.getCargo()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Funcionario>> call, Throwable t) {
+
+            }
+        });
+    }
+
 }

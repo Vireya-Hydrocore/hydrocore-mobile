@@ -12,12 +12,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vireya.hydrocore.R;
+import com.vireya.hydrocore.core.network.RetrofitClient;
 import com.vireya.hydrocore.entrada.EsqueceuSenha;
+import com.vireya.hydrocore.ui.configuracoes.api.ApiService;
+import com.vireya.hydrocore.ui.configuracoes.model.Funcionario;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class InformacoesConfig extends Fragment {
-    TextView senha;
+    TextView senha, tvNome, tvEmail, tvCargo;
     ImageView setaEsquerda;
 
     @Override
@@ -27,6 +38,10 @@ public class InformacoesConfig extends Fragment {
 
         senha = view.findViewById(R.id.esqueceuSenha);
         setaEsquerda = view.findViewById(R.id.seta_esquerda);
+
+        tvNome = view.findViewById(R.id.textView7);
+        tvEmail = view.findViewById(R.id.textView9);
+        tvCargo = view.findViewById(R.id.textView11);
 
         senha.setOnClickListener(new View.OnClickListener() {
 
@@ -48,10 +63,34 @@ public class InformacoesConfig extends Fragment {
                                 .build()
                 );
             }
-
-
         });
 
+        carregarInfosApi();
         return view;
+    }
+
+    public void carregarInfosApi(){
+        RetrofitClient retrofit = new RetrofitClient();
+        ApiService apiService = retrofit.getRetrofit().create(ApiService.class);
+
+        apiService.getFuncionarios().enqueue(new Callback<List<Funcionario>>() {
+            @Override
+            public void onResponse(Call<List<Funcionario>> call, Response<List<Funcionario>> response) {
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    Funcionario funcionario = response.body().get(0);
+
+                    tvNome.setText(funcionario.getNome());
+                    tvEmail.setText(funcionario.getEmail());
+                    tvCargo.setText(String.valueOf(funcionario.getCargo()));
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Funcionario>> call, Throwable t) {
+                Toast.makeText(getContext(), "Erro ao carregar informações", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 }
