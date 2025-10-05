@@ -1,8 +1,14 @@
 package com.vireya.hydrocore.estoque.model;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 
+@Entity(tableName = "produtos")
 public class Produto {
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     @SerializedName("nomeProduto")
     private String nome;
     private int quantidade;
@@ -12,6 +18,14 @@ public class Produto {
         this.nome = nome;
         this.quantidade = quantidade;
         this.status = status;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNome() {
