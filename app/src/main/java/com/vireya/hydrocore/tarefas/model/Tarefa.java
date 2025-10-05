@@ -1,8 +1,13 @@
 package com.vireya.hydrocore.tarefas.model;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.util.Date;
 
+@Entity(tableName = "tarefas")
 public class Tarefa {
+    @PrimaryKey(autoGenerate = true)
     private int idTarefa;
 
     private String descricao;
@@ -19,6 +24,7 @@ public class Tarefa {
 
     // Construtor vazio para o Gson
     public Tarefa() {}
+
 
     public int getIdTarefa() { return idTarefa; }
     public String getDescricao() { return descricao; }
