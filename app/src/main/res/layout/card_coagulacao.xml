@@ -1,26 +1,27 @@
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
+    android:padding="16dp"
     app:cardCornerRadius="16dp"
     app:cardElevation="0dp"
-    android:padding="16dp">
+    app:cardBackgroundColor="?attr/colorSurface">
 
-
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="8dp">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/rowTurbidezPh"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="2"
-            android:layout_marginBottom="12dp">
+            android:layout_marginBottom="12dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -44,10 +45,10 @@
                     android:layout_marginTop="6dp"
                     app:boxBackgroundColor="@android:color/white"
                     app:boxBackgroundMode="outline"
-                    app:boxCornerRadiusTopStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
                     app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusTopStart="12dp"
                     app:boxStrokeColor="#2995B2"
                     app:endIconMode="clear_text">
 
@@ -84,10 +85,10 @@
                     android:layout_marginTop="6dp"
                     app:boxBackgroundColor="@android:color/white"
                     app:boxBackgroundMode="outline"
-                    app:boxCornerRadiusTopStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
                     app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusTopStart="12dp"
                     app:boxStrokeColor="@color/blue"
                     app:endIconMode="clear_text">
 
@@ -104,11 +105,14 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/rowCorVolume"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="2"
-            android:layout_marginBottom="12dp">
+            android:layout_marginBottom="12dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rowTurbidezPh">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -132,10 +136,10 @@
                     android:layout_marginTop="6dp"
                     app:boxBackgroundColor="@android:color/white"
                     app:boxBackgroundMode="outline"
-                    app:boxCornerRadiusTopStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
                     app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusTopStart="12dp"
                     app:boxStrokeColor="@color/blue"
                     app:endIconMode="dropdown_menu"
                     app:endIconTint="@color/blue">
@@ -144,20 +148,18 @@
                         android:id="@+id/cbCor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:cursorVisible="false"
                         android:ellipsize="end"
+                        android:focusable="false"
                         android:hint="Selecione"
+                        android:inputType="none"
                         android:paddingStart="16dp"
                         android:paddingTop="14dp"
                         android:paddingEnd="16dp"
                         android:paddingBottom="14dp"
                         android:textColor="@android:color/black"
-                        android:textSize="16sp"
-                        android:focusable="false"
-                        android:inputType="none"
-                        android:cursorVisible="false" />
+                        android:textSize="16sp" />
                 </com.google.android.material.textfield.TextInputLayout>
-
-
             </LinearLayout>
 
             <LinearLayout
@@ -182,10 +184,10 @@
                     android:layout_marginTop="6dp"
                     app:boxBackgroundColor="@android:color/white"
                     app:boxBackgroundMode="outline"
-                    app:boxCornerRadiusTopStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
                     app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusTopStart="12dp"
                     app:boxStrokeColor="@color/blue"
                     app:endIconMode="clear_text">
 
@@ -202,10 +204,13 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/rowAluminaAlcalinidade"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="2">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rowCorVolume">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -222,7 +227,6 @@
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
                     android:textColor="#2995B2" />
 
-
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/aluminaResidualLayout"
                     android:layout_width="match_parent"
@@ -230,10 +234,10 @@
                     android:layout_marginTop="6dp"
                     app:boxBackgroundColor="@android:color/white"
                     app:boxBackgroundMode="outline"
-                    app:boxCornerRadiusTopStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
                     app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusTopStart="12dp"
                     app:boxStrokeColor="@color/blue"
                     app:endIconMode="clear_text">
 
@@ -270,10 +274,10 @@
                     android:layout_marginTop="6dp"
                     app:boxBackgroundColor="@android:color/white"
                     app:boxBackgroundMode="outline"
-                    app:boxCornerRadiusTopStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
                     app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusTopStart="12dp"
                     app:boxStrokeColor="@color/blue"
                     app:endIconMode="clear_text">
 
@@ -288,7 +292,5 @@
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
         </LinearLayout>
-
-
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

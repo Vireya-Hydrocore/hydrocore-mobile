@@ -8,15 +8,13 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
+        android:layout_height="wrap_content"
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/txtEtapa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="40dp"
             android:text="Etapa"
             android:textColor="#2995B2"
             android:textStyle="bold"
@@ -26,7 +24,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/inputEtapa"
             style="@style/DropDownPadrao"
-            android:layout_width="360dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:endIconMode="dropdown_menu"
@@ -43,27 +41,26 @@
                 android:textSize="16sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Cards -->
         <include
             android:id="@+id/cardCoagulacao"
             layout="@layout/card_coagulacao"
-            android:layout_width="390dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/inputEtapa" />
 
         <include
             android:id="@+id/cardFloculacao"
             layout="@layout/card_floculacao"
-            android:layout_width="390dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/inputEtapa" />
 
         <androidx.constraintlayout.widget.Barrier
@@ -77,8 +74,6 @@
             android:id="@+id/txtProdutosQuimicos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="36dp"
-            android:layout_marginTop="12dp"
             android:text="Produtos Químicos"
             android:textColor="#2995B2"
             android:textStyle="bold"
@@ -89,14 +84,14 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/inputProdutosQuimicos"
             style="@style/DropDownPadrao"
-            android:layout_width="360dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:visibility="gone"
             app:endIconMode="dropdown_menu"
             app:endIconTint="@color/blue"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txtProdutosQuimicos">
 
             <AutoCompleteTextView
@@ -110,12 +105,13 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCalcularDosagem"
             style="@style/BotaoPadraoAzul"
-            android:layout_width="360dp"
-            android:layout_marginTop="12dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:text="Calcular Dosagem"
             android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/inputProdutosQuimicos" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

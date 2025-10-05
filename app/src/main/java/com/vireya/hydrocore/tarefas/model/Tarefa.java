@@ -42,17 +42,16 @@ public class Tarefa {
     public void setIdFuncionario(int idFuncionario) { this.idFuncionario = idFuncionario; }
     public void setNivel(String nivel) { this.nivel = nivel; }
 
-    // Helper para saber se está concluída
     public boolean isConcluida() {
-        return status != null && status.equalsIgnoreCase("concluído");
+        return status != null && status.equalsIgnoreCase("concluída");
     }
 
-    // Helper para alternar status
     public void alternarStatus() {
         if (isConcluida()) {
             this.status = "pendente";
         } else {
-            this.status = "concluído";
+            this.status = "concluída";
         }
     }
+
 }

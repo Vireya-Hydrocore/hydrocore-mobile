@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.vireya.hydrocore.R;
 import com.vireya.hydrocore.tarefas.model.Tarefa;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TarefasAdapter extends RecyclerView.Adapter<TarefasAdapter.ViewHolder> {
@@ -38,18 +39,20 @@ public class TarefasAdapter extends RecyclerView.Adapter<TarefasAdapter.ViewHold
         holder.descricao.setText(tarefa.getDescricao());
 
         boolean concluido = tarefa.getStatus() != null &&
-                tarefa.getStatus().equalsIgnoreCase("concluído");
+                tarefa.getStatus().equalsIgnoreCase("concluída");
 
         holder.checkBox.setOnCheckedChangeListener(null);
         holder.checkBox.setChecked(concluido);
 
         holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                tarefa.setStatus("concluído");
+                tarefa.setStatus("concluída");
             } else {
                 tarefa.setStatus("pendente");
             }
+
         });
+
     }
 
     @Override
@@ -73,4 +76,17 @@ public class TarefasAdapter extends RecyclerView.Adapter<TarefasAdapter.ViewHold
             checkBox = itemView.findViewById(R.id.tarefaCheck);
         }
     }
+
+    public List<Tarefa> getTarefasSelecionadas() {
+        List<Tarefa> selecionadas = new ArrayList<>();
+        for (Tarefa t : tarefas) {
+            if (t.getStatus() != null && t.getStatus().equalsIgnoreCase("concluída")) {
+                selecionadas.add(t);
+            }
+        }
+        return selecionadas;
+    }
+
+
+
 }

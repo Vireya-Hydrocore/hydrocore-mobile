@@ -1,5 +1,8 @@
 package com.vireya.hydrocore.tarefas;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,7 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import com.vireya.hydrocore.R;
 import com.vireya.hydrocore.databinding.FragmentTarefasBinding;
 import com.vireya.hydrocore.tarefas.adapter.TarefasAdapter;
 import com.vireya.hydrocore.tarefas.api.TarefasApi;
@@ -57,12 +62,69 @@ public class Tarefas extends Fragment {
         tarefaRepository = new TarefaRepository(db.getTarefaDao(), tarefasApi);
 
         carregarTarefas();
+
+        Button btnAtualizarTarefa = view.findViewById(R.id.btnAtualizarStatus);
+
+        btnAtualizarTarefa.setOnClickListener(v -> {
+            List<Tarefa> selecionadas = tarefasAdapter.getTarefasSelecionadas();
+            if (selecionadas.isEmpty()) return;
+
+            final Dialog dialog = new Dialog(requireContext());
+            dialog.setContentView(R.layout.card_concluir_tarefa);
+            dialog.setCancelable(true);
+            Button btnSim = dialog.findViewById(R.id.btnSim);
+            Button btnNao = dialog.findViewById(R.id.btnNao);
+
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+            btnNao.setOnClickListener(v1 -> dialog.dismiss());
+
+
+            btnSim.setOnClickListener(v1 -> {
+
+
+                for (Tarefa t : selecionadas) {
+                    t.setStatus("concluída"); // atualiza localmente
+
+                    // atualiza no adapter
+                    tarefasAdapter.notifyItemChanged(tarefas.indexOf(t));
+
+                    // atualiza na API
+                    if (NetworkUtils.temConexao(requireContext())) {
+                        tarefasApi.atualizarStatus(
+                                new TarefasApi.AtualizarStatusRequest(t.getIdTarefa(), t.getStatus())
+                        ).enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                if (!response.isSuccessful()) {
+                                    System.err.println("Erro API: " + response.code());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+                                t.printStackTrace();
+                            }
+                        });
+                    }
+                }
+                dialog.dismiss();
+            });
+
+
+
+
+            dialog.show();
+        });
+
+
     }
+
 
     private void carregarTarefas() {
         SessionManager session = new SessionManager(requireContext());
-        String nomeFuncionario = session.getUsuarioNome();
-
+//        String nomeFuncionario = session.getUsuarioNome();
+        String nomeFuncionario = "Lucas Pereira";
         if (NetworkUtils.temConexao(requireContext())) {
             // Online: pega da API
             tarefasApi.listarTarefasPorNome(nomeFuncionario).enqueue(new Callback<List<Tarefa>>() {
