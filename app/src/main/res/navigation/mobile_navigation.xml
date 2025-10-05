@@ -15,6 +15,12 @@
         android:name="com.vireya.hydrocore.calculadora.Calculadora"
         android:label="navigation_calculadora"
         tools:layout="@layout/fragment_calculadora" />
+
+    <fragment
+        android:id="@+id/navigation_potabilidade"
+        android:name="com.vireya.hydrocore.potabilidade.Potabilidade"
+        android:label="navigation_potabilidade"
+        tools:layout="@layout/fragment_potabilidade" />
     <fragment
         android:id="@+id/navigation_tarefas"
         android:name="com.vireya.hydrocore.tarefas.Tarefas"
@@ -60,5 +66,6 @@
         android:name="com.vireya.hydrocore.graficos.Graficos"
         android:label="fragment_graficos"
         tools:layout="@layout/fragment_graficos" />
+
 
 </navigation>

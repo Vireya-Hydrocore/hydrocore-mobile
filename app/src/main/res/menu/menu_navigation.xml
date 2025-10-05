@@ -10,6 +10,11 @@
         android:title="Calculadora" />
 
     <item
+        android:id="@+id/navigation_potabilidade"
+        android:icon="@drawable/calculadora"
+        android:title="Potabilidade" />
+
+    <item
         android:id="@+id/navigation_tarefas"
         android:icon="@drawable/verdadeiro"
         android:title="Tarefas" />
