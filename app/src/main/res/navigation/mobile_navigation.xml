@@ -67,5 +67,11 @@
         android:label="fragment_graficos"
         tools:layout="@layout/fragment_graficos" />
 
+    <fragment
+        android:id="@+id/navigation_chatbot"
+        android:name="com.vireya.hydrocore.chatbot.ChatBot"
+        android:label="navigation_chatbot"
+        tools:layout="@layout/fragment_chat_bot" />
+
 
 </navigation>

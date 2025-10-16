@@ -1,5 +1,6 @@
 package com.vireya.hydrocore.calculadora;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -15,8 +16,10 @@ import androidx.navigation.Navigation;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -135,13 +138,33 @@ public class Calculadora extends Fragment {
         );
 
         cbProdutosQuimicos.setAdapter(adapterProdutos);
+
+        //Impedir teclado de abrir no produto químico
+        cbProdutosQuimicos.setInputType(0);
+        cbProdutosQuimicos.setKeyListener(null);
+        cbProdutosQuimicos.setFocusable(false);
+
+        cbProdutosQuimicos.setFocusableInTouchMode(true);
+
+        cbProdutosQuimicos.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                InputMethodManager imm = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+
+                cbProdutosQuimicos.showDropDown();
+            }
+        });
+
+
+
         //endregion
 
         //region ComboBox
         cbEtapa = view.findViewById(R.id.cbEtapa);
 
         cbEtapa.setOnClickListener(v -> {
-            // força resetar o filtro
             cbEtapa.setText("", false);
             cbEtapa.showDropDown();
         });
@@ -151,6 +174,9 @@ public class Calculadora extends Fragment {
             DefineVisibilidadeCombo(parent, position, cardCoagulacao, cardFloculacao, txtProdutosQuimicos, inputProdutosQuimicos, btnCalcularDosagem);
             etapaSelecionada = parent.getItemAtPosition(position).toString();
         });
+
+
+
         //endregion
 
 

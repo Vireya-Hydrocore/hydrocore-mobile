@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -122,43 +124,55 @@ public class Tarefas extends Fragment {
 
 
     private void carregarTarefas() {
-        SessionManager session = new SessionManager(requireContext());
-//        String nomeFuncionario = session.getUsuarioNome();
         String nomeFuncionario = "Lucas Pereira";
-        if (NetworkUtils.temConexao(requireContext())) {
-            // Online: pega da API
-            tarefasApi.listarTarefasPorNome(nomeFuncionario).enqueue(new Callback<List<Tarefa>>() {
-                @Override
-                public void onResponse(Call<List<Tarefa>> call, Response<List<Tarefa>> response) {
-                    if (response.isSuccessful() && response.body() != null) {
-                        tarefas.clear();
-                        tarefas.addAll(response.body());
-                        tarefasAdapter.setTarefas(tarefas);
 
-                        Executors.newSingleThreadExecutor().execute(() -> {
-                            tarefaRepository.getTarefaDao().deleteAll();
-                            tarefaRepository.getTarefaDao().insertAll(tarefas);
-                        });
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<List<Tarefa>> call, Throwable t) {
-                    t.printStackTrace();
-                }
-            });
-        } else {
-            // Offline: pega do banco local
+        // Confirma que está online
+        if (!NetworkUtils.temConexao(requireContext())) {
+            // Offline: pegar do banco local
             Executors.newSingleThreadExecutor().execute(() -> {
                 List<Tarefa> tarefasLocais = tarefaRepository.getAllTarefas();
                 requireActivity().runOnUiThread(() -> {
                     tarefas.clear();
                     tarefas.addAll(tarefasLocais);
-                    tarefasAdapter.setTarefas(tarefas);
+                    tarefasAdapter.notifyDataSetChanged();
                 });
             });
+            return;
         }
+
+        // Online: pegar da API
+        tarefasApi.listarTarefasPorNome(nomeFuncionario)
+                .enqueue(new Callback<List<Tarefa>>() {
+                    @Override
+                    public void onResponse(Call<List<Tarefa>> call, Response<List<Tarefa>> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            List<Tarefa> tarefasRecebidas = response.body();
+
+                            // Atualiza lista do Adapter
+                            tarefas.clear();
+                            tarefas.addAll(tarefasRecebidas);
+                            tarefasAdapter.notifyDataSetChanged();
+
+                            // Salva localmente no Room
+                            Executors.newSingleThreadExecutor().execute(() -> {
+                                tarefaRepository.getTarefaDao().deleteAll();
+                                tarefaRepository.getTarefaDao().insertAll(tarefasRecebidas);
+                            });
+
+                        } else {
+                            // Loga o erro se a API não retornou sucesso
+                            Log.e("API", "Erro na resposta: " + response.code());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Tarefa>> call, Throwable t) {
+                        t.printStackTrace();
+                        Log.e("API", "Falha ao carregar tarefas: " + t.getMessage());
+                    }
+                });
     }
+
 
     @Override
     public void onDestroyView() {

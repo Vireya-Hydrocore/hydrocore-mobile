@@ -11,7 +11,7 @@
 
     <item
         android:id="@+id/navigation_potabilidade"
-        android:icon="@drawable/calculadora"
+        android:icon="@drawable/water"
         android:title="Potabilidade" />
 
     <item
@@ -34,6 +34,16 @@
         android:title="Relatório" />
 
     <item
+        android:id="@+id/navigation_graficos"
+        android:icon="@drawable/grafico"
+        android:title="Gráficos" />
+
+    <item
+        android:id="@+id/navigation_chatbot"
+        android:icon="@drawable/grafico"
+        android:title="ChatBot" />
+
+    <item
         android:id="@+id/navigation_perfil"
         android:icon="@drawable/perfil"
         android:title="Perfil" />
@@ -42,8 +52,5 @@
         android:id="@+id/navigation_configuracoes"
         android:icon="@drawable/configuracoes_branco"
         android:title="Configurações" />
-    <item
-        android:id="@+id/navigation_graficos"
-        android:icon="@drawable/grafico"
-        android:title="Gráficos" />
+
 </menu>
