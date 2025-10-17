@@ -17,7 +17,6 @@
         android:clipToPadding="false"
         android:clipChildren="false">
 
-        <!-- pH e Dureza -->
         <LinearLayout
             android:id="@+id/rowPhDureza"
             android:layout_width="match_parent"
@@ -25,7 +24,6 @@
             android:layout_marginBottom="12dp"
             android:orientation="horizontal">
 
-            <!-- pH -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -66,7 +64,6 @@
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
-            <!-- Dureza -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -108,7 +105,6 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Sólidos e Cloraminas -->
         <LinearLayout
             android:id="@+id/rowSolidosCloraminas"
             android:layout_width="match_parent"
@@ -116,7 +112,6 @@
             android:layout_marginBottom="12dp"
             android:orientation="horizontal">
 
-            <!-- Sólidos Totais -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -157,7 +152,6 @@
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
-            <!-- Cloraminas -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -199,7 +193,6 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Sulfato e Condutividade -->
         <LinearLayout
             android:id="@+id/rowSulfatoCondutividade"
             android:layout_width="match_parent"
@@ -207,7 +200,6 @@
             android:layout_marginBottom="12dp"
             android:orientation="horizontal">
 
-            <!-- Sulfato -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -248,7 +240,6 @@
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
-            <!-- Condutividade -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -290,7 +281,6 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Carbono Orgânico e Trihalometanos -->
         <LinearLayout
             android:id="@+id/rowCarbonoTrihalometanos"
             android:layout_width="match_parent"
@@ -298,7 +288,6 @@
             android:layout_marginBottom="12dp"
             android:orientation="horizontal">
 
-            <!-- Carbono Orgânico -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -339,7 +328,6 @@
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
-            <!-- Trihalometanos -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -381,7 +369,6 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- TURBIDEZ -->
         <LinearLayout
             android:id="@+id/layoutTurbidez"
             android:layout_width="match_parent"
@@ -422,7 +409,6 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-        <!-- Botão e Resultado -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCalcularPotabilidade"
             style="@style/BotaoPadraoAzul"

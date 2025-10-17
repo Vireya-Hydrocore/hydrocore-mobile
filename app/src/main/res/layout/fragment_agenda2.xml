@@ -9,7 +9,6 @@
     android:background="@color/white"
     android:padding="8dp">
 
-    <!-- Data selecionada -->
     <TextView
         android:id="@+id/selectedDateText"
         style="@style/TextAppearance.MaterialComponents.Headline6"
@@ -22,7 +21,6 @@
         android:fontFamily="@font/poppins_semibold"
         android:letterSpacing="0.02" />
 
-    <!-- Card com calendário -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,7 +42,6 @@
             />
     </androidx.cardview.widget.CardView>
 
-    <!-- Lista de eventos/agendamentos -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

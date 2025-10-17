@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -14,6 +15,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -32,6 +34,16 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.vireya.hydrocore.R;
+import com.vireya.hydrocore.calculadora.api.CalculadoraApi;
+import com.vireya.hydrocore.calculadora.model.CalculoCoagulacaoRequest;
+import com.vireya.hydrocore.calculadora.model.CalculoFloculacaoRequest;
+import com.vireya.hydrocore.calculadora.model.CalculoResponse;
+import com.vireya.hydrocore.core.network.RetrofitClient;
+import com.vireya.hydrocore.estoque.api.ApiService;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class Calculadora extends Fragment {
@@ -185,12 +197,14 @@ public class Calculadora extends Fragment {
         ValidarCalculadora(turbidezCoagulacao, turbidezLayoutCoagulacao, phCoagulacao, phLayoutCoagulacao, volume, volumeLayout, aluminaResidual, aluminaResidualLayout, alcalinidade, alcalinidadeLayout);
         ValidarCalculadora(turbidezFloculacao, turbidezLayoutFloculacao, phFloculacao, phLayoutFloculacao);
 
-
-
         //Habilitar Botão
         btnCalcularDosagem.setOnClickListener(v -> {
             boolean valido = false;
+            Call<CalculoResponse> call = null;
+
             if (etapaSelecionada.equals("Coagulação")) {
+
+                // Validação
                 valido = ValidarCamposCoagulacao(
                         turbidezCoagulacao, turbidezLayoutCoagulacao,
                         phCoagulacao, phLayoutCoagulacao,
@@ -199,229 +213,242 @@ public class Calculadora extends Fragment {
                         alcalinidade, alcalinidadeLayout,
                         cbProdutosQuimicos, inputProdutosQuimicos
                 );
-            }
 
-            else if (etapaSelecionada.equals("Floculação")) {
+                if (!valido) {
+                    Toast.makeText(requireContext(), "Preencha todos os campos corretamente.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Captura dos dados
+                double turbidez = Double.parseDouble(turbidezCoagulacao.getText().toString());
+                double ph = Double.parseDouble(phCoagulacao.getText().toString());
+                String cor = cbCorCoagulacao.getText().toString();
+                double vol = Double.parseDouble(volume.getText().toString());
+                double alumina = Double.parseDouble(aluminaResidual.getText().toString());
+                double alcalinidadeVal = Double.parseDouble(alcalinidade.getText().toString());
+                String produto = cbProdutosQuimicos.getText().toString();
+
+                CalculoCoagulacaoRequest request = new CalculoCoagulacaoRequest(
+                        turbidez, ph, cor, vol, alumina, alcalinidadeVal, produto
+                );
+
+                // Chamada da API
+                CalculadoraApi api = RetrofitClient.getRetrofit().create(CalculadoraApi.class);
+                call = api.calcularCoagulacao(request);
+
+                call.enqueue(new Callback<CalculoResponse>() {
+                    @Override
+                    public void onResponse(Call<CalculoResponse> call, Response<CalculoResponse> response) {
+                        executarCalculo(response);
+                    }
+
+                    @Override
+                    public void onFailure(Call<CalculoResponse> call, Throwable t) {
+                        Toast.makeText(requireContext(), "Falha na conexão: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+            } else if (etapaSelecionada.equals("Floculação")) {
                 valido = validarCamposFloculacao(
                         turbidezFloculacao, turbidezLayoutFloculacao,
                         phFloculacao, phLayoutFloculacao,
                         cbProdutosQuimicos, inputProdutosQuimicos
                 );
+
+                if (valido) {
+                    // Monta request para floculação (você deve criar classe FloculacaoRequest)
+                    double turbidez = Double.parseDouble(turbidezFloculacao.getText().toString());
+                    double ph = Double.parseDouble(phFloculacao.getText().toString());
+                    String produto = cbProdutosQuimicos.getText().toString();
+
+                    CalculoFloculacaoRequest request = new CalculoFloculacaoRequest(
+                            Double.parseDouble(turbidezFloculacao.getText().toString()),
+                            Double.parseDouble(phFloculacao.getText().toString()),
+                            cbCorFloculacao.getText().toString(),
+                            cbProdutosQuimicos.getText().toString()
+                    );
+
+                    CalculadoraApi api = RetrofitClient.getRetrofit().create(CalculadoraApi.class);
+                    call = api.calcularFloculacao(request);
+                    call.enqueue(new Callback<CalculoResponse>() {
+                        @Override
+                        public void onResponse(Call<CalculoResponse> call, Response<CalculoResponse> response) {
+                            executarCalculo(response);
+                        }
+
+                        @Override
+                        public void onFailure(Call<CalculoResponse> call, Throwable t) {
+                            Toast.makeText(requireContext(), "Falha na conexão: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                }
             }
 
-            if (valido) {
-                Toast.makeText(requireContext(), "Cálculo realizado com sucesso!", Toast.LENGTH_SHORT).show();
-                // COLOCAR LÓGICA DE CÁLCULO
-            } else {
-                Toast.makeText(requireContext(), "Preencha todos os campos corretamente.", Toast.LENGTH_SHORT).show();
-            }
         });
+
+
 
         return view;
     }
 
     //Validação Coagulação
-    private static void ValidarCalculadora(TextInputEditText turbidez, TextInputLayout turbidezLayout, TextInputEditText ph, TextInputLayout phLayout, TextInputEditText volume, TextInputLayout volumeLayout, TextInputEditText aluminaResidual, TextInputLayout aluminaResidualLayout, TextInputEditText alcalinidade, TextInputLayout alcalinidadeLayout) {
-        //Turbidez
-        turbidez.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+    private static void ValidarCalculadora(TextInputEditText turbidez, TextInputLayout turbidezLayout,
+                                           TextInputEditText ph, TextInputLayout phLayout,
+                                           TextInputEditText volume, TextInputLayout volumeLayout,
+                                           TextInputEditText aluminaResidual, TextInputLayout aluminaResidualLayout,
+                                           TextInputEditText alcalinidade, TextInputLayout alcalinidadeLayout) {
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(s.toString().isEmpty()){
-                    turbidezLayout.setError(null);
-                    return;
-                }
-
-                int valor = Integer.parseInt(s.toString());
-                if(valor > 500){
-                    turbidezLayout.setError("Turbidez máxima: 500 NTU.");
-                } else if(valor <= 0){
-                    turbidezLayout.setError("Turbidez mínima 0 NTU.");
-                }
-                else{
-                    turbidezLayout.setError(null);
-                }
-
+        // Turbidez
+        turbidez.addTextChangedListener(new SimpleTextWatcher(s -> {
+            if(s.isEmpty()) return null;
+            try {
+                double valor = Double.parseDouble(s);
+                if(valor > 500) return "Turbidez máxima: 500 NTU.";
+                if(valor <= 0) return "Turbidez mínima: 0 NTU.";
+            } catch(NumberFormatException e){
+                return "Número inválido";
             }
-        });
+            return null;
+        }, turbidezLayout));
 
-        //pH
-        ph.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(s.toString().isEmpty()){
-                    phLayout.setError(null);
-                    return;
-                }
-
-                int valor = Integer.parseInt(s.toString());
-                if(valor > 14){
-                    phLayout.setError("pH máximo: 14 pH.");
-                } else if(valor <= 0){
-                    phLayout.setError("pH mínimo: 1 pH.");
-                }
-                else{
-                    phLayout.setError(null);
-                }
+        // pH
+        ph.addTextChangedListener(new SimpleTextWatcher(s -> {
+            if(s.isEmpty()) return null;
+            try {
+                double valor = Double.parseDouble(s);
+                if(valor > 14) return "pH máximo: 14";
+                if(valor <= 0) return "pH mínimo: 1";
+            } catch(NumberFormatException e){
+                return "Número inválido";
             }
+            return null;
+        }, phLayout));
 
-        });
+        // Volume
+        volume.addTextChangedListener(new SimpleTextWatcher(s -> {
+            if(s.isEmpty()) return null;
+            try {
+                double valor = Double.parseDouble(s);
+                if(valor > 500000) return "Volume Máximo: 500.000 m³";
+                if(valor <= 0) return "Volume Mínimo: 0 m³";
+            } catch(NumberFormatException e){
+                return "Número inválido";
+            }
+            return null;
+        }, volumeLayout));
 
-        //Volume
-        volume.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+        // Alumina Residual
+        aluminaResidual.addTextChangedListener(new SimpleTextWatcher(s -> {
+            if(s.isEmpty()) return null;
+            try {
+                double valor = Double.parseDouble(s);
+                if(valor > 2) return "Alumina Residual Máx: 2 mg/L";
+                if(valor <= 0) return "Alumina Residual Mín: 0 mg/L";
+            } catch(NumberFormatException e){
+                return "Número inválido";
+            }
+            return null;
+        }, aluminaResidualLayout));
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+        // Alcalinidade
+        alcalinidade.addTextChangedListener(new SimpleTextWatcher(s -> {
+            if(s.isEmpty()) return null;
+            try {
+                double valor = Double.parseDouble(s);
+                if(valor > 300) return "Alcalinidade Máx: 300 mg/L";
+                if(valor <= 0) return "Alcalinidade Mín: 0 mg/L";
+            } catch(NumberFormatException e){
+                return "Número inválido";
+            }
+            return null;
+        }, alcalinidadeLayout));
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(s.toString().isEmpty()){
-                    volumeLayout.setError(null);
-                    return;
-                }
-
-                int valor = Integer.parseInt(s.toString());
-                if(valor > 500000){
-                    volumeLayout.setError("Volume Máximo: 500.000m³.");
-                } else if(valor <= 0){
-                    volumeLayout.setError("Volume Mínimo: 0m³.");
-                }
-                else{
-                    volumeLayout.setError(null);
+        // InputFilter para aceitar apenas números inteiros
+        InputFilter filterInteiro = (source, start, end, dest, dstart, dend) -> {
+            for (int i = start; i < end; i++) {
+                if (!Character.isDigit(source.charAt(i))) {
+                    return ""; // ignora qualquer caractere que não seja número
                 }
             }
+            return null;
+        };
 
-        });
-
-        //Alumina Residual
-        aluminaResidual.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(s.toString().isEmpty()){
-                    aluminaResidualLayout.setError(null);
-                    return;
-                }
-
-                double valor = Double.parseDouble(s.toString());
-                if(valor > 2){
-                    aluminaResidualLayout.setError("Alumina Residual Máximo: 2mg/L");
-                } else if(valor <= 0){
-                    aluminaResidualLayout.setError("Alumina Residual Mínimo: 0mg/L.");
-                }
-                else{
-                    aluminaResidualLayout.setError(null);
-                }
-            }
-
-        });
-
-        //Alcalinidade
-        alcalinidade.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(s.toString().isEmpty()){
-                    alcalinidadeLayout.setError(null);
-                    return;
-                }
-
-                int valor = Integer.parseInt(s.toString());
-                if(valor > 300){
-                    alcalinidadeLayout.setError("Alcalinidade Máxima: 300mg/L CaCO₃.");
-                } else if(valor <= 0){
-                    alcalinidadeLayout.setError("Alcalinidade Mínima: 0mg/L CaCO₃.");
-                }
-                else{
-                    alcalinidadeLayout.setError(null);
-                }
-            }
-
-        });
+        turbidez.setFilters(new InputFilter[]{filterInteiro});
+        ph.setFilters(new InputFilter[]{filterInteiro});
+        volume.setFilters(new InputFilter[]{filterInteiro});
+        aluminaResidual.setFilters(new InputFilter[]{filterInteiro});
+        alcalinidade.setFilters(new InputFilter[]{filterInteiro});
     }
 
-    //Validar Floculação
-    private static void ValidarCalculadora(TextInputEditText turbidezFloculacao, TextInputLayout turbidezLayoutFloculacao, TextInputEditText phFloculacao, TextInputLayout phLayoutFloculacao) {
-        //Turbidez
-        turbidezFloculacao.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+    private static class SimpleTextWatcher implements TextWatcher {
+        interface Validator { String validate(String s); }
+        private final Validator validator;
+        private final TextInputLayout layout;
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+        SimpleTextWatcher(Validator validator, TextInputLayout layout) {
+            this.validator = validator;
+            this.layout = layout;
+        }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(s.toString().isEmpty()){
-                    turbidezLayoutFloculacao.setError(null);
-                    return;
-                }
+        @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
-                int valor = Integer.parseInt(s.toString());
-                if(valor > 500){
-                    turbidezLayoutFloculacao.setError("Turbidez máxima: 500 NTU.");
-                } else if(valor <= 0){
-                    turbidezLayoutFloculacao.setError("Turbidez mínima 0 NTU.");
-                }
-                else{
-                    turbidezLayoutFloculacao.setError(null);
-                }
-            }
-        });
-
-        //pH
-        phFloculacao.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(s.toString().isEmpty()){
-                    phLayoutFloculacao.setError(null);
-                    return;
-                }
-
-                int valor = Integer.parseInt(s.toString());
-                if(valor > 14){
-                    phLayoutFloculacao.setError("pH máximo: 14 pH.");
-                } else if(valor <= 0){
-                    phLayoutFloculacao.setError("pH mínimo: 1 pH.");
-                }
-                else{
-                    phLayoutFloculacao.setError(null);
-                }
-            }
-
-        });
+        @Override
+        public void afterTextChanged(Editable s) {
+            String error = validator.validate(s.toString().trim());
+            layout.setError(error);
+        }
     }
+
+
+    //Validação Floculação
+    private static void ValidarCalculadora(TextInputEditText turbidezFloc, TextInputLayout turbidezLayoutFloc,
+                                           TextInputEditText phFloc, TextInputLayout phLayoutFloc) {
+
+        // Turbidez
+        turbidezFloc.addTextChangedListener(new SimpleTextWatcher(s -> {
+            if (s.isEmpty()) return null;
+            try {
+                int valor = Integer.parseInt(s);
+                if (valor > 500) return "Turbidez máxima: 500 NTU.";
+                if (valor <= 0) return "Turbidez mínima: 0 NTU.";
+            } catch (NumberFormatException e) {
+                return "Número inválido";
+            }
+            return null;
+        }, turbidezLayoutFloc));
+
+        // pH
+        phFloc.addTextChangedListener(new SimpleTextWatcher(s -> {
+            if (s.isEmpty()) return null;
+            try {
+                int valor = Integer.parseInt(s);
+                if (valor > 14) return "pH máximo: 14";
+                if (valor <= 0) return "pH mínimo: 1";
+            } catch (NumberFormatException e) {
+                return "Número inválido";
+            }
+            return null;
+        }, phLayoutFloc));
+
+        //InputFilter para aceitar apenas números inteiros
+        InputFilter filterInteiro = (source, start, end, dest, dstart, dend) -> {
+            for (int i = start; i < end; i++) {
+                if (!Character.isDigit(source.charAt(i))) {
+                    return ""; // ignora qualquer caractere que não seja número
+                }
+            }
+            return null;
+        };
+
+        turbidezFloc.setFilters(new InputFilter[]{filterInteiro});
+        phFloc.setFilters(new InputFilter[]{filterInteiro});
+    }
+
+
+
 
     //Validar Campos em Geral
     private boolean ValidarCampo(TextInputEditText editText, TextInputLayout layout) {
@@ -509,14 +536,25 @@ public class Calculadora extends Fragment {
         });
     }
 
-    private void DesmarcarCalculadora() {
-        BottomNavigationView bottomNav = getActivity().findViewById(R.id.nav_view);
-        if (bottomNav != null) {
-            bottomNav.getMenu().setGroupCheckable(0, true, false);
-            bottomNav.getMenu().findItem(R.id.navigation_calculadora).setChecked(false);
-            bottomNav.getMenu().setGroupCheckable(0, true, true);
+    private void executarCalculo(Response<CalculoResponse> response) {
+        if (response.isSuccessful() && response.body() != null) {
+            CalculoResponse resultado = response.body();
+
+            TextView txtProduto = requireView().findViewById(R.id.txtProduto);
+            TextView txtQuantidade = requireView().findViewById(R.id.txtQuantidade);
+
+            txtProduto.setText("Produto: " + resultado.getProduto());
+            txtQuantidade.setText("Quantidade: " + resultado.getQuantidade());
+
+            txtProduto.setVisibility(View.VISIBLE);
+            txtQuantidade.setVisibility(View.VISIBLE);
+        } else {
+            Toast.makeText(requireContext(), "Erro ao calcular. Verifique os dados.", Toast.LENGTH_SHORT).show();
         }
     }
+
+
+
 
 
 }
