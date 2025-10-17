@@ -1,6 +1,7 @@
 package com.vireya.hydrocore.potabilidade;
 
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +11,21 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.vireya.hydrocore.R;
+import com.vireya.hydrocore.potabilidade.model.PotabilityResponse;
+import com.vireya.hydrocore.potabilidade.model.WaterData;
+import com.vireya.hydrocore.potabilidade.repository.WaterRepository;
 
 public class Potabilidade extends Fragment {
 
     private TextView txtResultadoPotavel;
     private MaterialButton btnCalcularPotabilidade;
+
+    // Inputs como variáveis de classe
+    private TextInputEditText inputPh, inputDureza, inputSolidos, inputCloraminas,
+            inputSulfato, inputCondutividade, inputCarbono, inputTrihalometanos, inputTurbidez;
 
     public Potabilidade() {}
 
@@ -43,11 +53,125 @@ public class Potabilidade extends Fragment {
 
         txtResultadoPotavel.setVisibility(View.GONE);
 
+        configurarValidacoes(view);
+
         btnCalcularPotabilidade.setOnClickListener(v -> {
-            txtResultadoPotavel.setText("1");
-            txtResultadoPotavel.setVisibility(View.VISIBLE);
+            try {
+                WaterData data = new WaterData(
+                        Double.parseDouble(inputPh.getText().toString()),
+                        Double.parseDouble(inputDureza.getText().toString()),
+                        Double.parseDouble(inputSolidos.getText().toString()),
+                        Double.parseDouble(inputCloraminas.getText().toString()),
+                        Double.parseDouble(inputSulfato.getText().toString()),
+                        Double.parseDouble(inputCondutividade.getText().toString()),
+                        Double.parseDouble(inputCarbono.getText().toString()),
+                        Double.parseDouble(inputTrihalometanos.getText().toString()),
+                        Double.parseDouble(inputTurbidez.getText().toString())
+                );
+
+                WaterRepository repository = new WaterRepository();
+                repository.enviarParaApi(data, new WaterRepository.PotabilityCallback() {
+                    @Override
+                    public void onResult(PotabilityResponse response) {
+                        if (getActivity() != null) {
+                            getActivity().runOnUiThread(() -> {
+                                txtResultadoPotavel.setText(response.getPotability());
+                                txtResultadoPotavel.setVisibility(View.VISIBLE);
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        if (getActivity() != null) {
+                            getActivity().runOnUiThread(() -> {
+                                txtResultadoPotavel.setText(error);
+                                txtResultadoPotavel.setVisibility(View.VISIBLE);
+                            });
+                        }
+                    }
+                });
+
+            } catch (Exception e) {
+                txtResultadoPotavel.setText("Campos inválidos");
+                txtResultadoPotavel.setVisibility(View.VISIBLE);
+            }
         });
 
+
         return view;
+    }
+
+    private void configurarValidacoes(View view) {
+        // Inicializa inputs de classe
+        inputPh = view.findViewById(R.id.inputPh);
+        TextInputLayout phLayout = view.findViewById(R.id.PhLayout);
+
+        inputDureza = view.findViewById(R.id.inputDureza);
+        TextInputLayout durezaLayout = view.findViewById(R.id.durezaLayout);
+
+        inputSolidos = view.findViewById(R.id.inputSolidos);
+        TextInputLayout solidosLayout = view.findViewById(R.id.solidosLayout);
+
+        inputCloraminas = view.findViewById(R.id.inputCloraminas);
+        TextInputLayout cloraminasLayout = view.findViewById(R.id.cloraminasLayout);
+
+        inputSulfato = view.findViewById(R.id.inputSulfato);
+        TextInputLayout sulfatoLayout = view.findViewById(R.id.sulfatoLayout);
+
+        inputCondutividade = view.findViewById(R.id.inputCondutividade);
+        TextInputLayout condutividadeLayout = view.findViewById(R.id.condutividadeLayout);
+
+        inputCarbono = view.findViewById(R.id.inputCarbonoOrganico);
+        TextInputLayout carbonoLayout = view.findViewById(R.id.carbonoOrganicoLayout);
+
+        inputTrihalometanos = view.findViewById(R.id.inputTrihalometanos);
+        TextInputLayout trihaloLayout = view.findViewById(R.id.trihalometanosLayout);
+
+        inputTurbidez = view.findViewById(R.id.inputTurbidez);
+        TextInputLayout turbidezLayout = view.findViewById(R.id.turbidezLayout);
+
+        // filtro que impede digitar ponto ou vírgula
+        InputFilter filtroInteiro = (source, start, end, dest, dstart, dend) -> {
+            for (int i = start; i < end; i++) {
+                if (!Character.isDigit(source.charAt(i))) return "";
+            }
+            return null;
+        };
+
+        inputPh.setFilters(new InputFilter[]{filtroInteiro});
+        inputDureza.setFilters(new InputFilter[]{filtroInteiro});
+        inputSolidos.setFilters(new InputFilter[]{filtroInteiro});
+        inputCloraminas.setFilters(new InputFilter[]{filtroInteiro});
+        inputSulfato.setFilters(new InputFilter[]{filtroInteiro});
+        inputCondutividade.setFilters(new InputFilter[]{filtroInteiro});
+        inputCarbono.setFilters(new InputFilter[]{filtroInteiro});
+        inputTrihalometanos.setFilters(new InputFilter[]{filtroInteiro});
+        inputTurbidez.setFilters(new InputFilter[]{filtroInteiro});
+
+        // validação geral
+        validarCampo(inputPh, phLayout, 1, 14, "pH");
+        validarCampo(inputDureza, durezaLayout, 0, 500, "Dureza");
+        validarCampo(inputSolidos, solidosLayout, 0, 50000, "Sólidos");
+        validarCampo(inputCloraminas, cloraminasLayout, 0, 10, "Cloraminas");
+        validarCampo(inputSulfato, sulfatoLayout, 0, 500, "Sulfato");
+        validarCampo(inputCondutividade, condutividadeLayout, 0, 2000, "Condutividade");
+        validarCampo(inputCarbono, carbonoLayout, 0, 20, "Carbono Orgânico");
+        validarCampo(inputTrihalometanos, trihaloLayout, 0, 100, "Trihalometanos");
+        validarCampo(inputTurbidez, turbidezLayout, 0, 100, "Turbidez");
+    }
+
+    private void validarCampo(TextInputEditText campo, TextInputLayout layout, int min, int max, String nomeCampo) {
+        campo.addTextChangedListener(new SimpleTextWatcher(s -> {
+            if (s.isEmpty()) return null;
+            try {
+                int valor = Integer.parseInt(s);
+                if (valor < min) return nomeCampo + " mínimo: " + min;
+                if (valor > max) return nomeCampo + " máximo: " + max;
+            } catch (NumberFormatException e) {
+                return "Número inválido";
+            }
+            return null;
+        }, layout));
     }
 }

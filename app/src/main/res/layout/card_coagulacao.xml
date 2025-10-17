@@ -19,7 +19,6 @@
         android:clipToPadding="false"
         android:clipChildren="false">
 
-        <!-- TURBIDEZ e pH -->
         <LinearLayout
             android:id="@+id/rowTurbidezPh"
             android:layout_width="match_parent"
@@ -108,7 +107,6 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- COR e VOLUME -->
         <LinearLayout
             android:id="@+id/rowCorVolume"
             android:layout_width="match_parent"
@@ -205,7 +203,6 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- ALUMINA e ALCALINIDADE -->
         <LinearLayout
             android:id="@+id/rowAluminaAlcalinidade"
             android:layout_width="match_parent"
