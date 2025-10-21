@@ -1,24 +1,20 @@
 package com.vireya.hydrocore.relatorio;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.vireya.hydrocore.R;
+import com.vireya.hydrocore.relatorio.adapter.RelatorioAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,14 +44,18 @@ public class Relatorio extends Fragment {
         listaRelatorios.add("Janeiro 2025");
 
         adapter = new RelatorioAdapter(listaRelatorios, relatorio -> {
-            Toast.makeText(getContext(), "Abrir PDF: " + relatorio, Toast.LENGTH_SHORT).show();
-            // Aqui você abre o PdfViewerActivity
+            // Quando clicar no ícone de download
+            String[] partes = relatorio.split(" ");
+            String mesNome = partes[0];
+            int ano = Integer.parseInt(partes[1]);
+            int mes = RelatorioDownloader.converterMesParaNumero(mesNome);
+
+            Toast.makeText(getContext(), "Gerando relatório de " + relatorio, Toast.LENGTH_SHORT).show();
+            RelatorioDownloader.baixarRelatorioPdf(getContext(), mes, ano);
         });
 
         recyclerView.setAdapter(adapter);
 
-
         return view;
     }
-
 }

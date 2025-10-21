@@ -72,7 +72,7 @@ public class Estoque extends Fragment {
     }
 
     private void carregarProdutos() {
-        // 🔹 Primeiro tenta carregar da API
+        // Primeiro tenta carregar da API
         apiService.getProdutos().enqueue(new Callback<List<Produto>>() {
             @Override
             public void onResponse(Call<List<Produto>> call, Response<List<Produto>> response) {
@@ -82,7 +82,7 @@ public class Estoque extends Fragment {
                     adapter.updateList(productList);
                     updateButtonUI("Todos", productList.size());
 
-                    // 🔹 Salva no banco local (modo offline)
+                    //  Salva no banco local (modo offline)
                     Executors.newSingleThreadExecutor().execute(() -> {
                         produtoRepository.getProdutosOffline(); // apenas garante o acesso
                         produtoRepository.syncProdutos(null);   // já deleta e insere tudo

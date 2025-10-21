@@ -11,7 +11,6 @@ import com.vireya.hydrocore.R;
 
 public class Login extends AppCompatActivity {
 
-    FirebaseAuth objAuth = FirebaseAuth.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

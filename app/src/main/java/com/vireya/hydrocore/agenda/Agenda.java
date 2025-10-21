@@ -21,6 +21,7 @@ import com.vireya.hydrocore.agenda.adapter.AvisoAdapter;
 import com.vireya.hydrocore.agenda.api.ApiClient;
 import com.vireya.hydrocore.agenda.model.Aviso;
 import com.vireya.hydrocore.core.network.NotificacaoHelper;
+import com.vireya.hydrocore.core.network.RetrofitClient;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -32,8 +33,6 @@ import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Agenda extends Fragment {
 
@@ -62,7 +61,6 @@ public class Agenda extends Fragment {
         // Data inicial no cabeçalho
         selectedDateText.setText(sdfHeader.format(new Date()));
 
-        // Configurações do calendário
         compactCalendarView.setUseThreeLetterAbbreviation(true);
 
         compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
@@ -84,53 +82,59 @@ public class Agenda extends Fragment {
     }
 
     private void carregarAvisosDaApi() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://hydrocore-api-prod.onrender.com/v1/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        // Usa o RetrofitClient global com headers automáticos
+        ApiClient api = RetrofitClient.getRetrofit().create(ApiClient.class);
 
-        ApiClient apiService = retrofit.create(ApiClient.class);
-
-        apiService.getAvisos().enqueue(new Callback<List<Aviso>>() {
+        api.getAvisos().enqueue(new Callback<List<Aviso>>() {
             @Override
-            public void onResponse(Call<List<Aviso>> call, Response<List<Aviso>> response) {
+            public void onResponse(@NonNull Call<List<Aviso>> call, @NonNull Response<List<Aviso>> response) {
+                if (!isAdded()) return; // Evita crash se o fragment foi destruído
+
                 if (response.isSuccessful() && response.body() != null) {
                     listaAvisos = response.body();
+                    compactCalendarView.removeAllEvents();
 
                     for (Aviso aviso : listaAvisos) {
                         try {
                             Date data = sdf.parse(aviso.getDataOcorrencia());
+                            if (data == null) continue;
 
                             int cor;
                             switch (aviso.getIdPrioridade()) {
-                                case 1: cor = Color.RED; break;     // Alta
-                                case 2: cor = Color.YELLOW; break; // Média
-                                default: cor = Color.GREEN; break; // Baixa
+                                case 1: cor = Color.RED; break;
+                                case 2: cor = Color.YELLOW; break;
+                                default: cor = Color.GREEN; break;
                             }
 
-                            Event event = new Event(cor, data.getTime(), aviso);
-                            compactCalendarView.addEvent(event);
+                            compactCalendarView.addEvent(new Event(cor, data.getTime(), aviso));
 
-                            // 🔹 Mostra notificação local
+                            // Mostra notificação local
                             NotificacaoHelper.mostrarNotificacao(requireContext(), aviso);
 
                         } catch (ParseException e) {
-                            e.printStackTrace();
+                            Log.e("AGENDA", "Erro ao converter data: " + aviso.getDataOcorrencia(), e);
                         }
                     }
+
+                    atualizarRecycler(new Date());
+
+                } else {
+                    Log.e("AGENDA", "Erro HTTP: " + response.code());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Aviso>> call, Throwable t) {
-                Log.e("API_ERROR", "Erro ao carregar avisos", t);
+            public void onFailure(@NonNull Call<List<Aviso>> call, @NonNull Throwable t) {
+                if (!isAdded()) return;
+                Log.e("AGENDA", "Falha na API: " + t.getMessage(), t);
             }
         });
     }
 
     private void atualizarRecycler(Date dataSelecionada) {
-        List<Aviso> avisosDoDia = new ArrayList<>();
+        if (listaAvisos == null || listaAvisos.isEmpty()) return;
 
+        List<Aviso> avisosDoDia = new ArrayList<>();
         String dataFormatada = sdf.format(dataSelecionada);
 
         for (Aviso aviso : listaAvisos) {

@@ -4,33 +4,33 @@ import java.util.Date;
 
 public class Funcionario {
 
-    private int idFuncionario;
+    private int id;
     private String nome;
     private String email;
     private Date dataAdmissao;
     private Date dataNascimento;
-    private int idEta;
+    private String eta;
     private String cargo;
 
     // getters e setters
 
 
-    public Funcionario(int idFuncionario, String nome, String email, Date dataAdmissao, Date dataNascimento, int idEta, String cargo) {
-        this.idFuncionario = idFuncionario;
+    public Funcionario(int id, String nome, String email, Date dataAdmissao, Date dataNascimento, String eta, String cargo) {
+        this.id = id;
         this.nome = nome;
         this.email = email;
         this.dataAdmissao = dataAdmissao;
         this.dataNascimento = dataNascimento;
-        this.idEta = idEta;
+        this.eta = eta;
         this.cargo = cargo;
     }
 
-    public int getIdFuncionario() {
-        return idFuncionario;
+    public int getId() {
+        return id;
     }
 
-    public void setIdFuncionario(int idFuncionario) {
-        this.idFuncionario = idFuncionario;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -65,12 +65,12 @@ public class Funcionario {
         this.dataNascimento = dataNascimento;
     }
 
-    public int getIdEta() {
-        return idEta;
+    public String getEta() {
+        return eta;
     }
 
-    public void setIdEta(int idEta) {
-        this.idEta = idEta;
+    public void setEta(String eta) {
+        this.eta = eta;
     }
 
     public String getCargo() {

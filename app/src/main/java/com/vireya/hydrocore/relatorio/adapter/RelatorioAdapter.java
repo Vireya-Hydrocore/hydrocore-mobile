@@ -1,4 +1,4 @@
-package com.vireya.hydrocore.relatorio;
+package com.vireya.hydrocore.relatorio.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,15 +15,13 @@ import java.util.List;
 
 public class RelatorioAdapter extends RecyclerView.Adapter<RelatorioAdapter.RelatorioViewHolder> {
 
-    private List<String> relatorios;
-    private OnRelatorioClickListener listener;
+    private final List<String> relatorios;
+    private final OnRelatorioClickListener listener;
 
-
-    // Interface para lidar com os cliques no botão de download
+    // Interface para lidar com cliques no botão de download
     public interface OnRelatorioClickListener {
         void onRelatorioClick(String relatorio);
     }
-
 
     public RelatorioAdapter(List<String> relatorios, OnRelatorioClickListener listener) {
         this.relatorios = relatorios;
@@ -33,7 +31,6 @@ public class RelatorioAdapter extends RecyclerView.Adapter<RelatorioAdapter.Rela
     @NonNull
     @Override
     public RelatorioViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Aqui ele "cola" o item_relatorio dentro da lista
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_relatorio, parent, false);
         return new RelatorioViewHolder(view);

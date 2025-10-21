@@ -1,18 +1,18 @@
 package com.vireya.hydrocore.agenda.model;
 
 public class Aviso {
-    private int idAvisos;
+    private int id;
     private String descricao;
     private String dataOcorrencia;
-    private int idEta;
+    private String nomeEta;
     private int idPrioridade;
 
-    public int getIdAvisos() {
-        return idAvisos;
+    public int getId() {
+        return id;
     }
 
-    public void setIdAvisos(int idAvisos) {
-        this.idAvisos = idAvisos;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getDescricao() {
@@ -31,12 +31,12 @@ public class Aviso {
         this.dataOcorrencia = dataOcorrencia;
     }
 
-    public int getIdEta() {
-        return idEta;
+    public String getNomeEta() {
+        return nomeEta;
     }
 
-    public void setIdEta(int idEta) {
-        this.idEta = idEta;
+    public void setNomeEta(String nomeEta) {
+        this.nomeEta = nomeEta;
     }
 
     public int getIdPrioridade() {
