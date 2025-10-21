@@ -2,7 +2,6 @@ package com.vireya.hydrocore.tarefas.model;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
 import java.util.Date;
 
 @Entity(tableName = "tarefas")
@@ -11,20 +10,14 @@ public class Tarefa {
     private int idTarefa;
 
     private String descricao;
-
     private Date dataCriacao;
-
     private Date dataConclusao;
-
     private String status;
-
     private int idFuncionario;
-
     private String nivel;
+    private String prioridade;
 
-    // Construtor vazio para o Gson
     public Tarefa() {}
-
 
     public int getIdTarefa() { return idTarefa; }
     public String getDescricao() { return descricao; }
@@ -33,6 +26,7 @@ public class Tarefa {
     public String getStatus() { return status; }
     public int getIdFuncionario() { return idFuncionario; }
     public String getNivel() { return nivel; }
+    public String getPrioridade() { return prioridade; } // ✅ getter novo
 
     public void setIdTarefa(int idTarefa) { this.idTarefa = idTarefa; }
     public void setDescricao(String descricao) { this.descricao = descricao; }
@@ -41,6 +35,7 @@ public class Tarefa {
     public void setStatus(String status) { this.status = status; }
     public void setIdFuncionario(int idFuncionario) { this.idFuncionario = idFuncionario; }
     public void setNivel(String nivel) { this.nivel = nivel; }
+    public void setPrioridade(String prioridade) { this.prioridade = prioridade; } // ✅ setter novo
 
     public boolean isConcluida() {
         return status != null && status.equalsIgnoreCase("concluída");
@@ -53,5 +48,4 @@ public class Tarefa {
             this.status = "concluída";
         }
     }
-
 }

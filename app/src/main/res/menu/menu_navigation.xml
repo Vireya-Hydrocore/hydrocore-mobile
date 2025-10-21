@@ -40,7 +40,7 @@
 
     <item
         android:id="@+id/navigation_chatbot"
-        android:icon="@drawable/grafico"
+        android:icon="@drawable/chatbot"
         android:title="ChatBot" />
 
     <item
