@@ -65,11 +65,11 @@ public class NotificacaoHelper {
         // 🔹 Intent para abrir MainActivity e já sinalizar que veio da notificação
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra("abrirAviso", true);
-        intent.putExtra("idAviso", aviso.getIdAvisos());
+        intent.putExtra("idAviso", aviso.getId());
 
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 context,
-                aviso.getIdAvisos(), // requestCode único
+                aviso.getId(), // requestCode único
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
@@ -81,6 +81,6 @@ public class NotificacaoHelper {
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent);
 
-        notificationManager.notify(aviso.getIdAvisos(), builder.build());
+        notificationManager.notify(aviso.getId(), builder.build());
     }
 }

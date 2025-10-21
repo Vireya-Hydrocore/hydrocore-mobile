@@ -2,6 +2,7 @@ package com.vireya.hydrocore.estoque.model;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.ColumnInfo;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -9,8 +10,10 @@ import com.google.gson.annotations.SerializedName;
 public class Produto {
     @PrimaryKey(autoGenerate = true)
     private int id;
+
     @SerializedName("nomeProduto")
     private String nome;
+
     private int quantidade;
     private String status;
 

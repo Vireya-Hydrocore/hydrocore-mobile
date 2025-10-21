@@ -176,11 +176,6 @@ public class Calculadora extends Fragment {
             }
         });
 
-
-
-
-
-
         //Impedir teclado de abrir no produto químico
         cbProdutosQuimicos.setInputType(0);
         cbProdutosQuimicos.setKeyListener(null);

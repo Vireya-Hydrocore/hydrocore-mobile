@@ -73,15 +73,20 @@ public class Graficos extends Fragment {
 
         WebView webGrafico1 = view.findViewById(R.id.webGrafico1);
         WebView webGrafico2 = view.findViewById(R.id.webGrafico2);
+        WebView webGrafico3 = view.findViewById(R.id.webGrafico3);
 
         // Configura o WebView 1
         webGrafico1.getSettings().setJavaScriptEnabled(true);
         webGrafico1.setWebViewClient(new WebViewClient()); // garante abertura dentro do app
-        webGrafico1.loadUrl("https://app.powerbi.com/view?r=eyJrIjoiODlhOTZmMzUtY2VjMi00OTI4LWFiY2YtMzVjNmFhYTY3NDRhIiwidCI6ImIxNDhmMTRjLTIzOTctNDAyYy1hYjZhLTFiNDcxMTE3N2FjMCJ9dashboard1");
+        webGrafico1.loadUrl("https://app.powerbi.com/view?r=eyJrIjoiODlhOTZmMzUtY2VjMi00OTI4LWFiY2YtMzVjNmFhYTY3NDRhIiwidCI6ImIxNDhmMTRjLTIzOTctNDAyYy1hYjZhLTFiNDcxMTE3N2FjMCJ9");
 
         // Configura o WebView 2
         webGrafico2.getSettings().setJavaScriptEnabled(true);
         webGrafico2.setWebViewClient(new WebViewClient());
-        webGrafico2.loadUrl("https://meu-servidor.com/dashboard2");
+        webGrafico2.loadUrl("https://app.powerbi.com/view?r=eyJrIjoiODlhOTZmMzUtY2VjMi00OTI4LWFiY2YtMzVjNmFhYTY3NDRhIiwidCI6ImIxNDhmMTRjLTIzOTctNDAyYy1hYjZhLTFiNDcxMTE3N2FjMCJ9");
+
+        webGrafico3.getSettings().setJavaScriptEnabled(true);
+        webGrafico3.setWebViewClient(new WebViewClient());
+        webGrafico3.loadUrl("https://app.powerbi.com/view?r=eyJrIjoiODlhOTZmMzUtY2VjMi00OTI4LWFiY2YtMzVjNmFhYTY3NDRhIiwidCI6ImIxNDhmMTRjLTIzOTctNDAyYy1hYjZhLTFiNDcxMTE3N2FjMCJ9");
     }
 }
