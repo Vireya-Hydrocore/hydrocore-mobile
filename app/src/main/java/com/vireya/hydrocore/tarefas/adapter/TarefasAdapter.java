@@ -35,7 +35,7 @@ public class TarefasAdapter extends RecyclerView.Adapter<TarefasAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Tarefa tarefa = tarefas.get(position);
 
-        holder.titulo.setText(tarefa.getNivel());
+        holder.titulo.setText(tarefa.getPrioridade());
         holder.descricao.setText(tarefa.getDescricao());
 
         boolean concluido = tarefa.getStatus() != null &&

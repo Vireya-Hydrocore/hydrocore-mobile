@@ -1,24 +1,20 @@
 package com.vireya.hydrocore.calculadora;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
+
 
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -26,11 +22,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.ImageView;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.vireya.hydrocore.R;
@@ -38,8 +34,13 @@ import com.vireya.hydrocore.calculadora.api.CalculadoraApi;
 import com.vireya.hydrocore.calculadora.model.CalculoCoagulacaoRequest;
 import com.vireya.hydrocore.calculadora.model.CalculoFloculacaoRequest;
 import com.vireya.hydrocore.calculadora.model.CalculoResponse;
+import com.vireya.hydrocore.calculadora.model.ProdutoResponse;
+
+
 import com.vireya.hydrocore.core.network.RetrofitClient;
-import com.vireya.hydrocore.estoque.api.ApiService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -85,6 +86,8 @@ public class Calculadora extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        CalculadoraApi api = RetrofitClient.getRetrofit().create(CalculadoraApi.class);
 
         //region Variáveis
         View view = inflater.inflate(R.layout.fragment_calculadora, container, false);
@@ -142,14 +145,41 @@ public class Calculadora extends Fragment {
         //endregion
 
         //region Produtos
-        String[] produtos = {"Produto 1", "Produto 2", "Produto 3"};
-        ArrayAdapter<String> adapterProdutos = new ArrayAdapter<>(
-                requireContext(),
-                android.R.layout.simple_dropdown_item_1line,
-                produtos
-        );
+        Call<List<ProdutoResponse>> callListaProduto = api.listarProdutos("ETA Rio Claro");
 
-        cbProdutosQuimicos.setAdapter(adapterProdutos);
+        callListaProduto.enqueue(new Callback<List<ProdutoResponse>>() {
+            @Override
+            public void onResponse(Call<List<ProdutoResponse>> call, Response<List<ProdutoResponse>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<ProdutoResponse> lista = response.body();
+                    if (!lista.isEmpty()) {
+                        List<String> produtos = lista.get(0).getProdutos();
+
+                        ArrayAdapter<String> adapterProdutos = new ArrayAdapter<>(
+                                requireContext(),
+                                android.R.layout.simple_dropdown_item_1line,
+                                produtos
+                        );
+                        cbProdutosQuimicos.setAdapter(adapterProdutos);
+                        cbProdutosQuimicos.showDropDown();
+                    } else {
+                        Toast.makeText(requireContext(), "Nenhum produto encontrado", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "Erro: " + response.code(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ProdutoResponse>> call, Throwable t) {
+                Toast.makeText(requireContext(), "Falha na conexão: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+
+
 
         //Impedir teclado de abrir no produto químico
         cbProdutosQuimicos.setInputType(0);
@@ -233,7 +263,6 @@ public class Calculadora extends Fragment {
                 );
 
                 // Chamada da API
-                CalculadoraApi api = RetrofitClient.getRetrofit().create(CalculadoraApi.class);
                 call = api.calcularCoagulacao(request);
 
                 call.enqueue(new Callback<CalculoResponse>() {
@@ -269,7 +298,6 @@ public class Calculadora extends Fragment {
                             cbProdutosQuimicos.getText().toString()
                     );
 
-                    CalculadoraApi api = RetrofitClient.getRetrofit().create(CalculadoraApi.class);
                     call = api.calcularFloculacao(request);
                     call.enqueue(new Callback<CalculoResponse>() {
                         @Override
@@ -365,21 +393,25 @@ public class Calculadora extends Fragment {
             return null;
         }, alcalinidadeLayout));
 
-        // InputFilter para aceitar apenas números inteiros
-        InputFilter filterInteiro = (source, start, end, dest, dstart, dend) -> {
-            for (int i = start; i < end; i++) {
-                if (!Character.isDigit(source.charAt(i))) {
-                    return ""; // ignora qualquer caractere que não seja número
-                }
+        InputFilter filterDecimal = (source, start, end, dest, dstart, dend) -> {
+            String newText = dest.toString().substring(0, dstart)
+                    + source.subSequence(start, end)
+                    + dest.toString().substring(dend);
+
+            // permite apenas dígitos e um único ponto decimal
+            if (!newText.matches("\\d*\\.?\\d*")) {
+                return "";
             }
+
             return null;
         };
 
-        turbidez.setFilters(new InputFilter[]{filterInteiro});
-        ph.setFilters(new InputFilter[]{filterInteiro});
-        volume.setFilters(new InputFilter[]{filterInteiro});
-        aluminaResidual.setFilters(new InputFilter[]{filterInteiro});
-        alcalinidade.setFilters(new InputFilter[]{filterInteiro});
+        turbidez.setFilters(new InputFilter[]{filterDecimal});
+        ph.setFilters(new InputFilter[]{filterDecimal});
+        volume.setFilters(new InputFilter[]{filterDecimal});
+        aluminaResidual.setFilters(new InputFilter[]{filterDecimal});
+        alcalinidade.setFilters(new InputFilter[]{filterDecimal});
+
     }
 
     private static class SimpleTextWatcher implements TextWatcher {
@@ -433,18 +465,23 @@ public class Calculadora extends Fragment {
             return null;
         }, phLayoutFloc));
 
-        //InputFilter para aceitar apenas números inteiros
-        InputFilter filterInteiro = (source, start, end, dest, dstart, dend) -> {
-            for (int i = start; i < end; i++) {
-                if (!Character.isDigit(source.charAt(i))) {
-                    return ""; // ignora qualquer caractere que não seja número
-                }
+        InputFilter filterDecimal = (source, start, end, dest, dstart, dend) -> {
+            String newText = dest.toString().substring(0, dstart)
+                    + source.subSequence(start, end)
+                    + dest.toString().substring(dend);
+
+            // permite apenas dígitos e um único ponto decimal
+            if (!newText.matches("\\d*\\.?\\d*")) {
+                return "";
             }
+
             return null;
         };
 
-        turbidezFloc.setFilters(new InputFilter[]{filterInteiro});
-        phFloc.setFilters(new InputFilter[]{filterInteiro});
+
+        turbidezFloc.setFilters(new InputFilter[]{filterDecimal});
+        phFloc.setFilters(new InputFilter[]{filterDecimal});
+
     }
 
 

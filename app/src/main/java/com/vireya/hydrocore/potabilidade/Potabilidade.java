@@ -23,7 +23,6 @@ public class Potabilidade extends Fragment {
     private TextView txtResultadoPotavel;
     private MaterialButton btnCalcularPotabilidade;
 
-    // Inputs como variáveis de classe
     private TextInputEditText inputPh, inputDureza, inputSolidos, inputCloraminas,
             inputSulfato, inputCondutividade, inputCarbono, inputTrihalometanos, inputTurbidez;
 
@@ -131,41 +130,49 @@ public class Potabilidade extends Fragment {
         inputTurbidez = view.findViewById(R.id.inputTurbidez);
         TextInputLayout turbidezLayout = view.findViewById(R.id.turbidezLayout);
 
-        // filtro que impede digitar ponto ou vírgula
-        InputFilter filtroInteiro = (source, start, end, dest, dstart, dend) -> {
+        //Filtro
+        InputFilter filtroDecimal = (source, start, end, dest, dstart, dend) -> {
             for (int i = start; i < end; i++) {
-                if (!Character.isDigit(source.charAt(i))) return "";
+                char c = source.charAt(i);
+                if (!Character.isDigit(c) && c != '.') {
+                    return "";
+                }
+
+                if (c == '.' && dest.toString().contains(".")) {
+                    return "";
+                }
             }
             return null;
         };
 
-        inputPh.setFilters(new InputFilter[]{filtroInteiro});
-        inputDureza.setFilters(new InputFilter[]{filtroInteiro});
-        inputSolidos.setFilters(new InputFilter[]{filtroInteiro});
-        inputCloraminas.setFilters(new InputFilter[]{filtroInteiro});
-        inputSulfato.setFilters(new InputFilter[]{filtroInteiro});
-        inputCondutividade.setFilters(new InputFilter[]{filtroInteiro});
-        inputCarbono.setFilters(new InputFilter[]{filtroInteiro});
-        inputTrihalometanos.setFilters(new InputFilter[]{filtroInteiro});
-        inputTurbidez.setFilters(new InputFilter[]{filtroInteiro});
+        inputPh.setFilters(new InputFilter[]{filtroDecimal});
+        inputDureza.setFilters(new InputFilter[]{filtroDecimal});
+        inputSolidos.setFilters(new InputFilter[]{filtroDecimal});
+        inputCloraminas.setFilters(new InputFilter[]{filtroDecimal});
+        inputSulfato.setFilters(new InputFilter[]{filtroDecimal});
+        inputCondutividade.setFilters(new InputFilter[]{filtroDecimal});
+        inputCarbono.setFilters(new InputFilter[]{filtroDecimal});
+        inputTrihalometanos.setFilters(new InputFilter[]{filtroDecimal});
+        inputTurbidez.setFilters(new InputFilter[]{filtroDecimal});
 
         // validação geral
-        validarCampo(inputPh, phLayout, 1, 14, "pH");
-        validarCampo(inputDureza, durezaLayout, 0, 500, "Dureza");
-        validarCampo(inputSolidos, solidosLayout, 0, 50000, "Sólidos");
-        validarCampo(inputCloraminas, cloraminasLayout, 0, 10, "Cloraminas");
-        validarCampo(inputSulfato, sulfatoLayout, 0, 500, "Sulfato");
-        validarCampo(inputCondutividade, condutividadeLayout, 0, 2000, "Condutividade");
-        validarCampo(inputCarbono, carbonoLayout, 0, 20, "Carbono Orgânico");
-        validarCampo(inputTrihalometanos, trihaloLayout, 0, 100, "Trihalometanos");
-        validarCampo(inputTurbidez, turbidezLayout, 0, 100, "Turbidez");
+        validarCampo(inputPh, phLayout, 1.0, 14.0, "pH");
+        validarCampo(inputDureza, durezaLayout, 0.0, 500.0, "Dureza");
+        validarCampo(inputSolidos, solidosLayout, 0.0, 50000.0, "Sólidos");
+        validarCampo(inputCloraminas, cloraminasLayout, 0.0, 10.0, "Cloraminas");
+        validarCampo(inputSulfato, sulfatoLayout, 0.0, 500.0, "Sulfato");
+        validarCampo(inputCondutividade, condutividadeLayout, 0.0, 2000.0, "Condutividade");
+        validarCampo(inputCarbono, carbonoLayout, 0.0, 20.0, "Carbono Orgânico");
+        validarCampo(inputTrihalometanos, trihaloLayout, 0.0, 100.0, "Trihalometanos");
+        validarCampo(inputTurbidez, turbidezLayout, 0.0, 100.0, "Turbidez");
+
     }
 
-    private void validarCampo(TextInputEditText campo, TextInputLayout layout, int min, int max, String nomeCampo) {
+    private void validarCampo(TextInputEditText campo, TextInputLayout layout, double min, double max, String nomeCampo) {
         campo.addTextChangedListener(new SimpleTextWatcher(s -> {
             if (s.isEmpty()) return null;
             try {
-                int valor = Integer.parseInt(s);
+                double valor = Double.parseDouble(s);
                 if (valor < min) return nomeCampo + " mínimo: " + min;
                 if (valor > max) return nomeCampo + " máximo: " + max;
             } catch (NumberFormatException e) {
@@ -174,4 +181,5 @@ public class Potabilidade extends Fragment {
             return null;
         }, layout));
     }
+
 }
