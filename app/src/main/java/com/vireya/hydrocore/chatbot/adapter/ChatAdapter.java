@@ -1,4 +1,4 @@
-package com.vireya.hydrocore.chatbot;
+package com.vireya.hydrocore.chatbot.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +7,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.vireya.hydrocore.R;
+import com.vireya.hydrocore.chatbot.model.Message;
+
 import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

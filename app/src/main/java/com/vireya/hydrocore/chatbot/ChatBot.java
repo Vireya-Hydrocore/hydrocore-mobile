@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.vireya.hydrocore.R;
+import com.vireya.hydrocore.chatbot.adapter.ChatAdapter;
+import com.vireya.hydrocore.chatbot.model.Message;
 
 import org.json.JSONObject;
 
