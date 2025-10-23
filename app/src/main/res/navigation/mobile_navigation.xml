@@ -33,7 +33,7 @@
         tools:layout="@layout/fragment_estoque" />
     <fragment
         android:id="@+id/navigation_perfil"
-        android:name="com.vireya.hydrocore.ui.Perfil"
+        android:name="com.vireya.hydrocore.ui.perfil.Perfil"
         android:label="navigation_perfil"
         tools:layout="@layout/fragment_perfil" />
     <fragment

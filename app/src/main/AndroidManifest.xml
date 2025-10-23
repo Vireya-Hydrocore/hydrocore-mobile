@@ -38,16 +38,35 @@
             android:name=".entrada.EsqueceuSenha"
             android:exported="false" />
         <activity
-            android:name=".entrada.Login"
+            android:name=".entrada.EsqueceuSenha"
             android:exported="false" />
+
+        <!-- 🟩 Tela de LOGIN é agora a tela principal -->
         <activity
-            android:name=".MainActivity"
+            android:name=".entrada.LoginService"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+
+        <!-- Tela Home (chamada após login bem-sucedido) -->
+        <activity
+            android:name=".ui.Home"
+            android:exported="false" />
+
+        <!-- Mantém a MainActivity registrada, mas sem ser a inicial -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+
+        <!-- Fonts pré-carregadas -->
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
     </application>
 
 </manifest>
