@@ -9,8 +9,6 @@
     app:cardUseCompatPadding="true"
     app:cardBackgroundColor="?attr/colorSurface">
 
-
-
 <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -62,7 +60,9 @@
                         android:hint="NTU"
                         android:inputType="numberDecimal"
                         android:paddingTop="12dp"
-                        android:paddingBottom="12dp" />
+                        android:paddingBottom="12dp"
+                        android:textColor="@color/black"
+                         />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
@@ -102,7 +102,8 @@
                         android:hint="0–14"
                         android:inputType="numberDecimal"
                         android:paddingTop="12dp"
-                        android:paddingBottom="12dp" />
+                        android:paddingBottom="12dp"
+                        android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
         </LinearLayout>
@@ -198,7 +199,8 @@
                         android:hint="m³"
                         android:inputType="numberDecimal"
                         android:paddingTop="12dp"
-                        android:paddingBottom="12dp" />
+                        android:paddingBottom="12dp"
+                        android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
         </LinearLayout>
@@ -245,7 +247,9 @@
                         android:hint="mg/L"
                         android:inputType="numberDecimal"
                         android:paddingTop="12dp"
-                        android:paddingBottom="12dp" />
+                        android:paddingBottom="12dp"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/light_blue" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
@@ -285,7 +289,9 @@
                         android:hint="mg/L CaCO₃"
                         android:inputType="number"
                         android:paddingTop="12dp"
-                        android:paddingBottom="12dp" />
+                        android:paddingBottom="12dp"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/light_blue" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
         </LinearLayout>

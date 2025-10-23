@@ -56,6 +56,7 @@ dependencies {
     implementation ("com.github.sundeepk:compact-calendar-view:3.0.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation ("com.github.sundeepk:compact-calendar-view:3.0.0") {
         exclude(group = "com.android.support", module = "support-compat")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")

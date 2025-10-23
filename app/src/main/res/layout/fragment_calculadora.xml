@@ -27,18 +27,34 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            app:boxBackgroundColor="@android:color/white"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxStrokeColor="#2995B2"
             app:endIconMode="dropdown_menu"
-            app:endIconTint="@color/blue"
-            app:layout_constraintStart_toStartOf="parent"
+            app:endIconTint="#2995B2"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txtEtapa">
 
             <AutoCompleteTextView
                 android:id="@+id/cbEtapa"
-                style="@style/DropDownTexto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Selecione"
+                android:inputType="none"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:ellipsize="end"
+                android:paddingStart="16dp"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
+                android:textColor="@color/black"
                 android:textSize="16sp" />
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <include
@@ -76,7 +92,7 @@
             android:layout_height="wrap_content"
             android:text="Produtos Químicos"
             android:textColor="#2995B2"
-            android:textStyle="bold"
+            android:textStyle="normal"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/barrierCards" />
@@ -88,17 +104,32 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:visibility="gone"
+            app:boxBackgroundColor="@android:color/white"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxStrokeColor="#2995B2"
             app:endIconMode="dropdown_menu"
-            app:endIconTint="@color/blue"
+            app:endIconTint="#2995B2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txtProdutosQuimicos">
 
             <AutoCompleteTextView
                 android:id="@+id/cbProdutosQuimicos"
-                style="@style/DropDownTexto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:cursorVisible="false"
+                android:ellipsize="end"
+                android:focusable="false"
+                android:hint="Selecione"
+                android:inputType="none"
+                android:paddingStart="16dp"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
+                android:textColor="@color/black"
                 android:textSize="16sp" />
         </com.google.android.material.textfield.TextInputLayout>
 

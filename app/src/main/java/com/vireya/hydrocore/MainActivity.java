@@ -1,5 +1,7 @@
 package com.vireya.hydrocore;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.ImageView;
 
@@ -7,6 +9,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
@@ -24,6 +27,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
+
+        SharedPreferences prefs = getSharedPreferences("configuracoes", Context.MODE_PRIVATE);
+        boolean darkModeAtivo = prefs.getBoolean("modoEscuro", false);
+
+        if (darkModeAtivo) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
+        AppCompatDelegate.setDefaultNightMode(
+                prefs.getBoolean("modoEscuro", false)
+                        ? AppCompatDelegate.MODE_NIGHT_YES
+                        : AppCompatDelegate.MODE_NIGHT_NO
+        );
+
         setContentView(binding.getRoot());
 
         // NavController principal
@@ -61,6 +80,9 @@ public class MainActivity extends AppCompatActivity {
             );
             desmarcarHome();
         });
+
+
+
 
         // Bottom navigation
         BottomNavigationView navView = binding.navView;

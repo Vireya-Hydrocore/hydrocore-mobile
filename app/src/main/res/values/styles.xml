@@ -29,6 +29,8 @@
         <item name="android:paddingBottom">16dp</item>
         <item name="android:hint">Selecione</item>
         <item name="android:inputType">none</item>
+        <item name="android:textColorHint">#000000</item>
+        <item name="android:textStyle">bold</item> <!-- nem sempre funciona no hint -->
     </style>
 
     <style name="BotaoPadrao" parent="Widget.MaterialComponents.Button">

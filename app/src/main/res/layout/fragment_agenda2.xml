@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:mcv="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:mcv="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white"
     android:padding="8dp">
 
     <TextView
@@ -16,18 +15,17 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
-        android:text="Quarta-feira, 16 de Junho"
-        android:textColor="@color/black"
         android:fontFamily="@font/poppins_semibold"
-        android:letterSpacing="0.02" />
+        android:letterSpacing="0.02"
+        android:text="Quarta-feira, 16 de Junho" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="20dp"
-        app:cardElevation="6dp"
-        app:cardBackgroundColor="@color/white">
+        app:cardElevation="6dp">
 
         <com.github.sundeepk.compactcalendarview.CompactCalendarView
             android:id="@+id/compactcalendar_view"
@@ -38,19 +36,17 @@
             mcv:compactCalendarCurrentDayBackgroundColor="@color/teal_200"
             mcv:compactCalendarCurrentSelectedDayBackgroundColor="@color/greenzinho"
             mcv:compactCalendarTextColor="@color/black"
-            mcv:compactCalendarTextSize="14sp"
-            />
+            mcv:compactCalendarTextSize="14sp" />
     </androidx.cardview.widget.CardView>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Seus eventos"
-        android:textColor="@color/black"
-        android:fontFamily="@font/poppins_semibold"
-        android:textSize="16sp"
         android:layout_marginStart="16dp"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Seus eventos"
+        android:textSize="16sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/blockContainer"
@@ -58,5 +54,5 @@
         android:layout_height="wrap_content"
         android:clipToPadding="false"
         android:paddingHorizontal="12dp"
-        tools:listitem="@layout/item_schedule"/>
+        tools:listitem="@layout/item_schedule" />
 </LinearLayout>

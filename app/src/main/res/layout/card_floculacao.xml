@@ -57,7 +57,8 @@
                         android:hint="NTU"
                         android:inputType="numberDecimal"
                         android:paddingTop="12dp"
-                        android:paddingBottom="12dp" />
+                        android:paddingBottom="12dp"
+                        android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
@@ -97,7 +98,8 @@
                         android:hint="0–14"
                         android:inputType="numberDecimal"
                         android:paddingTop="12dp"
-                        android:paddingBottom="12dp" />
+                        android:paddingBottom="12dp"
+                        android:textColor="@color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
         </LinearLayout>
@@ -143,16 +145,16 @@
                         android:id="@+id/cbCor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:cursorVisible="false"
                         android:ellipsize="end"
+                        android:focusable="false"
                         android:hint="Selecione"
+                        android:inputType="none"
                         android:paddingStart="16dp"
                         android:paddingTop="14dp"
                         android:paddingBottom="14dp"
-                        android:textColor="@android:color/black"
-                        android:textSize="16sp"
-                        android:focusable="false"
-                        android:cursorVisible="false"
-                        android:inputType="none" />
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
         </LinearLayout>

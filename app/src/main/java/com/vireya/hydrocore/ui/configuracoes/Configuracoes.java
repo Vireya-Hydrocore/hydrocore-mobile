@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
@@ -72,10 +73,23 @@ public class Configuracoes extends Fragment {
 
         setupToggle(view, R.id.toggleWifi, R.id.thumbWifi,
                 () -> {
-                    wifiAtivo = !wifiAtivo;
-                    saveState("wifiAtivo", wifiAtivo);
+                    boolean modoEscuroAtivo = getSavedState("modoEscuro", false);
+                    boolean novoEstado = !modoEscuroAtivo;
+                    saveState("modoEscuro", novoEstado);
+
+                    if (novoEstado) {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    } else {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    }
+
+                    requireActivity().recreate();
                 },
-                () -> wifiAtivo);
+                () -> getSavedState("modoEscuro", false)
+        );
+
+
+
 
         setupToggle(view, R.id.toggleNotificacao, R.id.thumbBluetooth,
                 () -> {
