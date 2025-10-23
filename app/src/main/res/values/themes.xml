@@ -1,7 +1,5 @@
 <resources>
-    <!-- Tema claro -->
     <style name="AppTheme" parent="Theme.Material3.Light.NoActionBar">
-        <!-- Aqui você usa os nomes das suas cores -->
         <item name="colorPrimary">@color/md_theme_primary</item>
         <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
         <item name="colorPrimaryContainer">@color/md_theme_primaryContainer</item>
@@ -23,5 +21,6 @@
         <item name="colorOnSurface">@color/md_theme_onSurface</item>
         <item name="colorSurfaceVariant">@color/md_theme_surfaceVariant</item>
         <item name="colorOnSurfaceVariant">@color/md_theme_onSurfaceVariant</item>
+
     </style>
 </resources>
