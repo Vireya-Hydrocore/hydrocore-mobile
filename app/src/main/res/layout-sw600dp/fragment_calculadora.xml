@@ -1,0 +1,179 @@
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/txtEtapa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Etapa"
+            android:textColor="#2995B2"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputEtapa"
+            style="@style/DropDownPadrao"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:boxBackgroundColor="@android:color/white"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxStrokeColor="#2995B2"
+            app:endIconMode="dropdown_menu"
+            app:endIconTint="#2995B2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtEtapa">
+
+            <AutoCompleteTextView
+                android:id="@+id/cbEtapa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Selecione"
+                android:inputType="none"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:ellipsize="end"
+                android:paddingStart="16dp"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <include
+            android:id="@+id/cardCoagulacao"
+            layout="@layout/card_coagulacao"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/inputEtapa" />
+
+        <include
+            android:id="@+id/cardFloculacao"
+            layout="@layout/card_floculacao"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/inputEtapa" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrierCards"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="cardCoagulacao,cardFloculacao" />
+
+        <TextView
+            android:id="@+id/txtProdutosQuimicos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Produtos Químicos"
+            android:textColor="#2995B2"
+            android:textStyle="normal"
+            android:textSize="20sp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/barrierCards" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputProdutosQuimicos"
+            style="@style/DropDownPadrao"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            app:boxBackgroundColor="@android:color/white"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxStrokeColor="#2995B2"
+            app:endIconMode="dropdown_menu"
+            app:endIconTint="#2995B2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtProdutosQuimicos">
+
+            <AutoCompleteTextView
+                android:id="@+id/cbProdutosQuimicos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:cursorVisible="false"
+                android:ellipsize="end"
+                android:focusable="false"
+                android:hint="Selecione"
+                android:inputType="none"
+                android:paddingStart="16dp"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCalcularDosagem"
+            style="@style/BotaoPadraoAzul"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Calcular Dosagem"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/inputProdutosQuimicos" />
+
+        <TextView
+            android:id="@+id/txtProduto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Produto:"
+            android:textColor="@color/blue"
+            android:textSize="20dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/btnCalcularDosagem"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/txtQuantidade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Quantidade:"
+            android:textColor="@color/blue"
+            android:textSize="20dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/txtProduto"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
