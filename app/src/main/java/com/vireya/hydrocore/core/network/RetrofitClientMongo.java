@@ -6,7 +6,6 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import com.vireya.hydrocore.tarefas.api.TarefasApi;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
@@ -22,14 +21,18 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.io.IOException;
 
-public class RetrofitClient {
+public class RetrofitClientMongo {
 
-    private static final String BASE_URL = "https://hydrocore-api-prod.onrender.com/";
+    private static final String BASE_URL = "https://hydrocore-api-mongo.onrender.com/";
     private static Retrofit retrofit;
+    private static String jwtToken = null;
+    private static String fcmToken = null;
 
-    // 🔐 Credenciais fixas (você pode mudar pra pegar do login depois)
-    private static final String USER_EMAIL = "teste@email.com";
-    private static final String BEARER_TOKEN = "teste233";
+    // === Permite definir tokens depois do login ===
+    public static void setTokens(String jwt, String fcm) {
+        jwtToken = jwt;
+        fcmToken = fcm;
+    }
 
     // === GSON customizado para lidar com múltiplos formatos de data ===
     private static Gson buildGson() {
@@ -48,8 +51,7 @@ public class RetrofitClient {
                         for (SimpleDateFormat format : formats) {
                             try {
                                 return format.parse(dateStr);
-                            } catch (Exception ignored) {
-                            }
+                            } catch (Exception ignored) {}
                         }
                         System.err.println("⚠️ Não foi possível converter data: " + dateStr);
                         return null;
@@ -58,27 +60,31 @@ public class RetrofitClient {
                 .create();
     }
 
-    // === Cliente HTTP com interceptador para autenticação ===
+    // === Cliente HTTP com interceptor para JWT e FCM dinâmicos ===
     private static OkHttpClient buildClient() {
         return new OkHttpClient.Builder()
                 .addInterceptor(new Interceptor() {
                     @Override
                     public Response intercept(Chain chain) throws IOException {
                         Request original = chain.request();
+                        Request.Builder builder = original.newBuilder();
 
-                        Request.Builder builder = original.newBuilder()
-                                .header("X-User-Email", USER_EMAIL)
-                                .header("Authorization", "Bearer " + BEARER_TOKEN)
-                                .method(original.method(), original.body());
+                        // Se o usuário estiver autenticado, adiciona os cabeçalhos
+                        if (jwtToken != null && !jwtToken.isEmpty()) {
+                            builder.header("Authorization", "Bearer " + jwtToken);
+                        }
+                        if (fcmToken != null && !fcmToken.isEmpty()) {
+                            builder.header("X-FCM-Token", fcmToken);
+                        }
 
-                        Request request = builder.build();
+                        Request request = builder.method(original.method(), original.body()).build();
                         return chain.proceed(request);
                     }
                 })
                 .build();
     }
 
-    // === Instância Retrofit com Gson e client customizado ===
+    // === Instância Retrofit ===
     public static Retrofit getRetrofit() {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
@@ -90,8 +96,8 @@ public class RetrofitClient {
         return retrofit;
     }
 
-    // === Exemplo de API específica ===
-    public static TarefasApi getTarefasApi() {
-        return getRetrofit().create(TarefasApi.class);
+    // === Criação genérica de APIs ===
+    public static <T> T createApi(Class<T> apiClass) {
+        return getRetrofit().create(apiClass);
     }
 }

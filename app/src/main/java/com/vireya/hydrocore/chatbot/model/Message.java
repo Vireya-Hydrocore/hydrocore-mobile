@@ -1,4 +1,4 @@
-package com.vireya.hydrocore.chatbot;
+package com.vireya.hydrocore.chatbot.model;
 
 public class Message {
     private final String text;
