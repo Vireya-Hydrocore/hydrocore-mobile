@@ -9,6 +9,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import com.bumptech.glide.Glide;
+import com.vireya.hydrocore.entrada.LoginService;
+import com.vireya.hydrocore.entrada.model.Login;
+import com.vireya.hydrocore.ui.Home;
 
 import android.os.Handler;
 import android.widget.ImageView;

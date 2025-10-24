@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <!-- Permissões -->
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -22,47 +22,34 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup, android:label, android:icon, android:roundIcon, android:theme"
         tools:targetApi="31">
+
         <activity
             android:name=".SplashScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".entrada.RedefinirSenha"
-            android:exported="true" />
-        <activity
-            android:name=".entrada.EsqueceuSenha"
-            android:exported="false" />
-        <activity
-            android:name=".entrada.EsqueceuSenha"
-            android:exported="false" />
 
-        <!-- 🟩 Tela de LOGIN é agora a tela principal -->
         <activity
             android:name=".entrada.LoginService"
             android:exported="true"
-            android:windowSoftInputMode="adjustPan">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:windowSoftInputMode="adjustPan" />
 
-        <!-- Tela Home (chamada após login bem-sucedido) -->
         <activity
-            android:name=".ui.Home"
-            android:exported="false" />
+            android:name=".entrada.RedefinirSenha"
+            android:exported="true" />
 
-        <!-- Mantém a MainActivity registrada, mas sem ser a inicial -->
+        <activity
+            android:name=".entrada.LoginService"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name=".MainActivity"
             android:exported="false" />
 
-        <!-- Fonts pré-carregadas -->
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
