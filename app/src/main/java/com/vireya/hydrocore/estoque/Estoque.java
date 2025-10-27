@@ -1,5 +1,6 @@
 package com.vireya.hydrocore.estoque;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,11 +16,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.vireya.hydrocore.R;
+import com.vireya.hydrocore.estoque.model.ProdutoResponse;
 import com.vireya.hydrocore.estoque.adapter.ProdutoAdapter;
 import com.vireya.hydrocore.estoque.api.ApiClient;
 import com.vireya.hydrocore.estoque.api.ApiService;
 import com.vireya.hydrocore.estoque.model.Produto;
 import com.vireya.hydrocore.estoque.repository.ProdutoRepository;
+import com.vireya.hydrocore.funcionario.model.Funcionario;
+import com.vireya.hydrocore.utils.SessionManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +47,7 @@ public class Estoque extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_estoque, container, false);
 
         recyclerView = view.findViewById(R.id.recyclerView);
@@ -51,7 +56,7 @@ public class Estoque extends Fragment {
         recyclerView.setAdapter(adapter);
 
         button = view.findViewById(R.id.button);
-        apiService = ApiClient.getClient().create(ApiService.class);
+        apiService = ApiClient.getClient(requireContext()).create(ApiService.class);
 
         produtoRepository = new ProdutoRepository(requireContext());
 
@@ -72,35 +77,72 @@ public class Estoque extends Fragment {
     }
 
     private void carregarProdutos() {
-        // Primeiro tenta carregar da API
-        apiService.getProdutos().enqueue(new Callback<List<Produto>>() {
-            @Override
-            public void onResponse(Call<List<Produto>> call, Response<List<Produto>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    productList.clear();
-                    productList.addAll(response.body());
-                    adapter.updateList(productList);
-                    updateButtonUI("Todos", productList.size());
+        SessionManager session = new SessionManager(requireContext());
+        String emailFuncionario = session.getEmail();
 
-                    //  Salva no banco local (modo offline)
-                    Executors.newSingleThreadExecutor().execute(() -> {
-                        produtoRepository.getProdutosOffline(); // apenas garante o acesso
-                        produtoRepository.syncProdutos(null);   // já deleta e insere tudo
+        apiService.getFuncionarioPorEmail(emailFuncionario).enqueue(new Callback<Funcionario>() {
+            @Override
+            public void onResponse(Call<Funcionario> call, Response<Funcionario> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Funcionario funcionarioParcial = response.body();
+                    int funcionarioId = funcionarioParcial.getId();
+
+                    // Agora buscamos o funcionário completo pelo ID
+                    apiService.getFuncionarioPorId(funcionarioId).enqueue(new Callback<Funcionario>() {
+                        @Override
+                        public void onResponse(Call<Funcionario> call, Response<Funcionario> responseFull) {
+                            if (responseFull.isSuccessful() && responseFull.body() != null) {
+                                Funcionario funcionarioCompleto = responseFull.body();
+                                String eta = funcionarioCompleto.getEta();
+
+                                apiService.getProdutosPorEta(eta).enqueue(new Callback<List<ProdutoResponse>>() {
+                                    @Override
+                                    public void onResponse(Call<List<ProdutoResponse>> call, Response<List<ProdutoResponse>> responseProdutos) {
+                                        if (responseProdutos.isSuccessful() && responseProdutos.body() != null) {
+                                            productList.clear();
+                                            for (ProdutoResponse pr : responseProdutos.body()) {
+                                                for (String nomeProduto : pr.getProdutos()) {
+                                                    productList.add(new Produto(nomeProduto, 0, "Suficiente"));
+                                                }
+                                            }
+                                            adapter.updateList(productList);
+                                            updateButtonUI("Todos", productList.size());
+                                        } else {
+                                            carregarOffline("Erro ao buscar produtos");
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<List<ProdutoResponse>> call, Throwable t) {
+                                        carregarOffline("Falha ao buscar produtos: " + t.getMessage());
+                                    }
+                                });
+
+                            } else {
+                                carregarOffline("Funcionário não encontrado pelo ID");
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Funcionario> call, Throwable t) {
+                            carregarOffline("Falha ao buscar funcionário pelo ID: " + t.getMessage());
+                        }
                     });
 
                 } else {
-                    Log.e("API_DEBUG", "Erro HTTP: " + response.code());
-                    carregarOffline("Erro HTTP, exibindo dados locais");
+                    carregarOffline("Funcionário não encontrado pelo email");
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Produto>> call, Throwable t) {
-                Log.e("API_DEBUG", "Falha: " + t.getMessage());
-                carregarOffline("Falha de rede, exibindo dados locais");
+            public void onFailure(Call<Funcionario> call, Throwable t) {
+                carregarOffline("Falha ao buscar funcionário: " + t.getMessage());
             }
         });
     }
+
+
+
 
     private void carregarOffline(String mensagem) {
         Toast.makeText(getContext(), mensagem, Toast.LENGTH_SHORT).show();

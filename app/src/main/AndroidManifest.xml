@@ -47,6 +47,11 @@
             android:windowSoftInputMode="adjustPan" />
 
         <activity
+            android:name=".entrada.EsqueceuSenha"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
 
