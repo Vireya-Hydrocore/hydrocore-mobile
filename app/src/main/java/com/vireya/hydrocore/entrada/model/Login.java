@@ -2,13 +2,13 @@ package com.vireya.hydrocore.entrada.model;
 
 public class Login {
     private String email;
-    private String senha;
+    private String password;
     private String codigoEmpresa;
 //    private String token;
 
-    public Login(String email, String senha, String codigoEmpresa) {
+    public Login(String email, String password, String codigoEmpresa) {
         this.email = email;
-        this.senha = senha;
+        this.password = password;
         this.codigoEmpresa = codigoEmpresa;
     }
 
@@ -22,12 +22,12 @@ public class Login {
         this.email = email;
     }
 
-    public String getSenha() {
-        return senha;
+    public String getPassword() {
+        return password;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getCodigoEmpresa() {

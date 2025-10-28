@@ -24,7 +24,7 @@ import java.io.IOException;
 
 public class RetrofitClient {
 
-    private static final String BASE_URL = "https://hydrocore-api-prod.onrender.com/";
+    public static final String BASE_URL = "https://hydrocore-api-prod.onrender.com/";
     private static Retrofit retrofit;
 
     // 🔐 Credenciais fixas (você pode mudar pra pegar do login depois)

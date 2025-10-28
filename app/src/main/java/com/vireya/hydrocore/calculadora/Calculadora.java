@@ -388,25 +388,24 @@ public class Calculadora extends Fragment {
             return null;
         }, alcalinidadeLayout));
 
-        InputFilter filterDecimal = (source, start, end, dest, dstart, dend) -> {
+        InputFilter filterInteiro = (source, start, end, dest, dstart, dend) -> {
             String newText = dest.toString().substring(0, dstart)
                     + source.subSequence(start, end)
                     + dest.toString().substring(dend);
 
-            // permite apenas dígitos e um único ponto decimal
-            if (!newText.matches("\\d*\\.?\\d*")) {
+            // permite apenas dígitos inteiros
+            if (!newText.matches("\\d*")) {
                 return "";
             }
 
             return null;
         };
 
-        turbidez.setFilters(new InputFilter[]{filterDecimal});
-        ph.setFilters(new InputFilter[]{filterDecimal});
-        volume.setFilters(new InputFilter[]{filterDecimal});
-        aluminaResidual.setFilters(new InputFilter[]{filterDecimal});
-        alcalinidade.setFilters(new InputFilter[]{filterDecimal});
-
+        turbidez.setFilters(new InputFilter[]{filterInteiro});
+        ph.setFilters(new InputFilter[]{filterInteiro});
+        volume.setFilters(new InputFilter[]{filterInteiro});
+        aluminaResidual.setFilters(new InputFilter[]{filterInteiro});
+        alcalinidade.setFilters(new InputFilter[]{filterInteiro});
     }
 
     private static class SimpleTextWatcher implements TextWatcher {
@@ -460,22 +459,21 @@ public class Calculadora extends Fragment {
             return null;
         }, phLayoutFloc));
 
-        InputFilter filterDecimal = (source, start, end, dest, dstart, dend) -> {
+        InputFilter filterInteiro = (source, start, end, dest, dstart, dend) -> {
             String newText = dest.toString().substring(0, dstart)
                     + source.subSequence(start, end)
                     + dest.toString().substring(dend);
 
-            // permite apenas dígitos e um único ponto decimal
-            if (!newText.matches("\\d*\\.?\\d*")) {
+            if (!newText.matches("\\d*")) {
                 return "";
             }
 
             return null;
         };
 
+        turbidezFloc.setFilters(new InputFilter[]{filterInteiro});
+        phFloc.setFilters(new InputFilter[]{filterInteiro});
 
-        turbidezFloc.setFilters(new InputFilter[]{filterDecimal});
-        phFloc.setFilters(new InputFilter[]{filterDecimal});
 
     }
 

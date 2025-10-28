@@ -28,12 +28,13 @@ import com.google.android.material.imageview.ShapeableImageView;
 import com.google.gson.Gson;
 import com.vireya.hydrocore.R;
 import com.vireya.hydrocore.core.network.RetrofitClient;
+import com.vireya.hydrocore.funcionario.model.Funcionario;
 import com.vireya.hydrocore.tarefas.api.TarefasApi;
 import com.vireya.hydrocore.tarefas.model.Tarefa;
 import com.vireya.hydrocore.ui.configuracoes.api.ApiService;
-import com.vireya.hydrocore.ui.configuracoes.model.Funcionario;
 import com.vireya.hydrocore.ui.perfil.api.ApiFuncionario;
 import com.vireya.hydrocore.ui.perfil.model.Estatistica;
+import com.vireya.hydrocore.utils.SessionManager;
 
 import java.io.FileInputStream;
 import java.util.ArrayList;
@@ -97,53 +98,90 @@ public class Perfil extends Fragment {
         }
     }
 
-    // --- Estatísticas básicas de tarefas ---
     private void loadTarefasStats() {
-        TarefasApi api = RetrofitClient.getTarefasApi();
-        api.listarTarefasPorNome("Lucas Pereira").enqueue(new Callback<List<Tarefa>>() {
-            @Override
-            public void onResponse(Call<List<Tarefa>> call, Response<List<Tarefa>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    int feitas = 0, naoFeitas = 0;
-                    for (Tarefa t : response.body()) {
-                        if ("CONCLUIDA".equalsIgnoreCase(t.getStatus())) feitas++;
-                        else naoFeitas++;
-                    }
+        SessionManager session = new SessionManager(requireContext());
+        String token = "Bearer " + session.getToken();
+        String emailFuncionario = session.getEmail();
 
-                    int totais = response.body().size();
-                    tarDiariaValor.setText(String.valueOf(feitas));
-                    tarNaoFeitasValor.setText(String.valueOf(naoFeitas));
-                    tarTotaisValor.setText(String.valueOf(totais));
+        TarefasApi api = RetrofitClient.getTarefasApi();
+
+        api.getFuncionarioPorEmail(emailFuncionario).enqueue(new Callback<Funcionario>() {
+            @Override
+            public void onResponse(Call<Funcionario> call, Response<Funcionario> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Funcionario funcionario = response.body();
+                    String nomeFuncionario = funcionario.getNome();
+
+                    api.listarTarefasPorNome(nomeFuncionario, false)
+                            .enqueue(new Callback<List<Tarefa>>() {
+                                @Override
+                                public void onResponse(Call<List<Tarefa>> call, Response<List<Tarefa>> response) {
+                                    if (response.isSuccessful() && response.body() != null) {
+                                        int feitas = 0, naoFeitas = 0;
+                                        for (Tarefa t : response.body()) {
+                                            if ("CONCLUIDA".equalsIgnoreCase(t.getStatus())) {
+                                                feitas++;
+                                            } else {
+                                                naoFeitas++;
+                                            }
+                                        }
+                                        int totais = response.body().size();
+                                        tarDiariaValor.setText(String.valueOf(feitas));
+                                        tarNaoFeitasValor.setText(String.valueOf(naoFeitas));
+                                        tarTotaisValor.setText(String.valueOf(totais));
+                                    } else {
+                                        Log.e("Perfil", "Erro ao buscar tarefas: " + response.code());
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<List<Tarefa>> call, Throwable t) {
+                                    Log.e("Perfil", "Falha ao buscar tarefas: " + t.getMessage());
+                                }
+                            });
+                } else {
+                    Log.e("Perfil", "Erro ao buscar funcionário por email: " + response.code());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Tarefa>> call, Throwable t) {
-                Log.e("Perfil", "Erro ao carregar tarefas", t);
+            public void onFailure(Call<Funcionario> call, Throwable t) {
+                Log.e("Perfil", "Falha ao buscar funcionário por email: " + t.getMessage());
             }
         });
     }
+
+
+
 
     // --- Nome e cargo ---
-    public void loadFuncionarioInfo() {
-        ApiService apiService = RetrofitClient.getRetrofit().create(ApiService.class);
+    private void loadFuncionarioInfo() {
+        SessionManager session = new SessionManager(requireContext());
+        String token = "Bearer " + session.getToken();
+        String emailFuncionario = session.getEmail();
 
-        apiService.getFuncionarios().enqueue(new Callback<List<Funcionario>>() {
+        TarefasApi api = RetrofitClient.getTarefasApi();
+
+        api.getFuncionarioPorEmail(emailFuncionario).enqueue(new Callback<Funcionario>() {
             @Override
-            public void onResponse(Call<List<Funcionario>> call, Response<List<Funcionario>> response) {
-                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
-                    Funcionario funcionario = response.body().get(0);
+            public void onResponse(Call<Funcionario> call, Response<Funcionario> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Funcionario funcionario = response.body();
                     txtNome.setText(funcionario.getNome());
-                    txtCargo.setText(String.valueOf(funcionario.getCargo()));
+                    txtCargo.setText(funcionario.getCargo());
+                } else {
+                    Log.e("Perfil", "Erro ao buscar funcionário por email: " + response.code());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Funcionario>> call, Throwable t) {
-                Log.e("Perfil", "Erro ao carregar funcionário", t);
+            public void onFailure(Call<Funcionario> call, Throwable t) {
+                Log.e("Perfil", "Falha ao buscar funcionário por email: " + t.getMessage());
             }
         });
     }
+
+
 
     // --- Gráfico de produtividade ---
     private void loadGraficoProdutividade(int funcionarioId) {

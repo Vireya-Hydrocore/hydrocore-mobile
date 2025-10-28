@@ -49,7 +49,7 @@ public class SplashScreen extends AppCompatActivity {
     }
 
     public void abrirTela(){
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, LoginService.class);
         startActivity(intent);
         finish();
     }

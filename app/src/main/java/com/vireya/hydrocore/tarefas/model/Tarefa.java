@@ -26,7 +26,7 @@ public class Tarefa {
     public String getStatus() { return status; }
     public int getIdFuncionario() { return idFuncionario; }
     public String getNivel() { return nivel; }
-    public String getPrioridade() { return prioridade; } // ✅ getter novo
+    public String getPrioridade() { return prioridade; }
 
     public void setIdTarefa(int idTarefa) { this.idTarefa = idTarefa; }
     public void setDescricao(String descricao) { this.descricao = descricao; }
@@ -35,7 +35,7 @@ public class Tarefa {
     public void setStatus(String status) { this.status = status; }
     public void setIdFuncionario(int idFuncionario) { this.idFuncionario = idFuncionario; }
     public void setNivel(String nivel) { this.nivel = nivel; }
-    public void setPrioridade(String prioridade) { this.prioridade = prioridade; } // ✅ setter novo
+    public void setPrioridade(String prioridade) { this.prioridade = prioridade; }
 
     public boolean isConcluida() {
         return status != null && status.equalsIgnoreCase("concluída");

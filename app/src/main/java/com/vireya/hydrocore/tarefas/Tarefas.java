@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -17,8 +18,11 @@ import android.widget.Button;
 
 import com.vireya.hydrocore.R;
 import com.vireya.hydrocore.databinding.FragmentTarefasBinding;
+import com.vireya.hydrocore.estoque.api.ApiClient;
+import com.vireya.hydrocore.funcionario.model.Funcionario;
 import com.vireya.hydrocore.tarefas.adapter.TarefasAdapter;
 import com.vireya.hydrocore.tarefas.api.TarefasApi;
+import com.vireya.hydrocore.tarefas.api.TarefasApiClient;
 import com.vireya.hydrocore.tarefas.db.AppDatabase;
 import com.vireya.hydrocore.tarefas.model.Tarefa;
 import com.vireya.hydrocore.tarefas.repository.TarefaRepository;
@@ -81,39 +85,40 @@ public class Tarefas extends Fragment {
 
             btnNao.setOnClickListener(v1 -> dialog.dismiss());
 
+            SessionManager session = new SessionManager(requireContext());
+            String token = "Bearer " + session.getToken();
+            String email = session.getEmail();
+
 
             btnSim.setOnClickListener(v1 -> {
 
-
                 for (Tarefa t : selecionadas) {
-                    t.setStatus("concluída"); // atualiza localmente
+                    t.setStatus("concluida");
+                    t.setIdTarefa(tarefas.indexOf(t) + 1);
 
-                    // atualiza no adapter
-                    tarefasAdapter.notifyItemChanged(tarefas.indexOf(t));
 
-                    // atualiza na API
                     if (NetworkUtils.temConexao(requireContext())) {
-                        tarefasApi.atualizarStatus(
-                                new TarefasApi.AtualizarStatusRequest(t.getIdTarefa(), t.getStatus())
-                        ).enqueue(new Callback<Void>() {
-                            @Override
-                            public void onResponse(Call<Void> call, Response<Void> response) {
-                                if (!response.isSuccessful()) {
-                                    System.err.println("Erro API: " + response.code());
-                                }
-                            }
+                        tarefasApi.atualizarStatus(t.getIdTarefa(), t.getStatus())
+                                .enqueue(new Callback<Void>() {
+                                    @Override
+                                    public void onResponse(Call<Void> call, Response<Void> response) {
+                                        if (response.isSuccessful()) {
+                                            carregarTarefas();
+                                        } else {
+                                            Log.e("API", "Erro ao atualizar status: " + response.code());
+                                        }
+                                    }
 
-                            @Override
-                            public void onFailure(Call<Void> call, Throwable t) {
-                                t.printStackTrace();
-                            }
-                        });
+                                    @Override
+                                    public void onFailure(Call<Void> call, Throwable t) {
+                                        Log.e("API", "Falha na atualização: " + t.getMessage());
+                                    }
+                                });
+
                     }
                 }
                 dialog.dismiss();
             });
-
-
 
 
             dialog.show();
@@ -124,54 +129,60 @@ public class Tarefas extends Fragment {
 
 
     private void carregarTarefas() {
-        String nomeFuncionario = "Lucas Pereira";
+        SessionManager session = new SessionManager(requireContext());
+        String emailFuncionario = session.getEmail();
 
-        // Confirma que está online
-        if (!NetworkUtils.temConexao(requireContext())) {
-            // Offline: pegar do banco local
-            Executors.newSingleThreadExecutor().execute(() -> {
-                List<Tarefa> tarefasLocais = tarefaRepository.getAllTarefas();
-                requireActivity().runOnUiThread(() -> {
-                    tarefas.clear();
-                    tarefas.addAll(tarefasLocais);
-                    tarefasAdapter.notifyDataSetChanged();
-                });
-            });
-            return;
-        }
+        TarefasApi tarefasApi = TarefasApiClient.getTarefasClient(requireContext())
+                .create(TarefasApi.class);
 
-        // Online: pegar da API
-        tarefasApi.listarTarefasPorNome(nomeFuncionario)
-                .enqueue(new Callback<List<Tarefa>>() {
-                    @Override
-                    public void onResponse(Call<List<Tarefa>> call, Response<List<Tarefa>> response) {
-                        if (response.isSuccessful() && response.body() != null) {
-                            List<Tarefa> tarefasRecebidas = response.body();
+        tarefasApi.getFuncionarioPorEmail(emailFuncionario).enqueue(new Callback<Funcionario>() {
+            @Override
+            public void onResponse(Call<Funcionario> call, Response<Funcionario> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Funcionario funcionario = response.body();
+                    String nomeFuncionario = funcionario.getNome();
 
-                            // Atualiza lista do Adapter
-                            tarefas.clear();
-                            tarefas.addAll(tarefasRecebidas);
-                            tarefasAdapter.notifyDataSetChanged();
+                    tarefasApi.listarTarefasPorNome(nomeFuncionario, false)
+                            .enqueue(new Callback<List<Tarefa>>() {
+                                @Override
+                                public void onResponse(Call<List<Tarefa>> call, Response<List<Tarefa>> response) {
+                                    if (response.isSuccessful() && response.body() != null) {
+                                        List<Tarefa> tarefasRecebidas = response.body();
+                                        tarefas.clear();
+                                        tarefas.addAll(tarefasRecebidas);
+                                        tarefasAdapter.notifyDataSetChanged();
 
-                            // Salva localmente no Room
-                            Executors.newSingleThreadExecutor().execute(() -> {
-                                tarefaRepository.getTarefaDao().deleteAll();
-                                tarefaRepository.getTarefaDao().insertAll(tarefasRecebidas);
+                                        Executors.newSingleThreadExecutor().execute(() -> {
+                                            tarefaRepository.getTarefaDao().deleteAll();
+                                            tarefaRepository.getTarefaDao().insertAll(tarefasRecebidas);
+                                        });
+                                    } else {
+                                        Log.e("API", "Erro ao buscar tarefas: " + response.code());
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<List<Tarefa>> call, Throwable t) {
+                                    Log.e("API", "Falha ao buscar tarefas: " + t.getMessage());
+                                }
                             });
+                } else {
+                    Log.e("API", "Erro ao buscar funcionário por email: " + response.code());
+                }
+            }
 
-                        } else {
-                            // Loga o erro se a API não retornou sucesso
-                            Log.e("API", "Erro na resposta: " + response.code());
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<Tarefa>> call, Throwable t) {
-                        t.printStackTrace();
-                        Log.e("API", "Falha ao carregar tarefas: " + t.getMessage());
-                    }
-                });
+            @Override
+            public void onFailure(Call<Funcionario> call, Throwable t) {
+                Log.e("API", "Falha ao buscar funcionário: " + t.getMessage());
+            }
+        });
     }
+
+
+
+
+
+
 
 
     @Override
