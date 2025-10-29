@@ -1,5 +1,6 @@
 package com.vireya.hydrocore.tarefas.model;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import java.util.Date;
@@ -7,7 +8,8 @@ import java.util.Date;
 @Entity(tableName = "tarefas")
 public class Tarefa {
     @PrimaryKey(autoGenerate = true)
-    private int idTarefa;
+    @ColumnInfo(name = "idTarefa")
+    private int id;
 
     private String descricao;
     private Date dataCriacao;
@@ -19,7 +21,7 @@ public class Tarefa {
 
     public Tarefa() {}
 
-    public int getIdTarefa() { return idTarefa; }
+    public int getId() { return id; }
     public String getDescricao() { return descricao; }
     public Date getDataCriacao() { return dataCriacao; }
     public Date getDataConclusao() { return dataConclusao; }
@@ -28,7 +30,7 @@ public class Tarefa {
     public String getNivel() { return nivel; }
     public String getPrioridade() { return prioridade; }
 
-    public void setIdTarefa(int idTarefa) { this.idTarefa = idTarefa; }
+    public void setId(int id) { this.id = id; }
     public void setDescricao(String descricao) { this.descricao = descricao; }
     public void setDataCriacao(Date dataCriacao) { this.dataCriacao = dataCriacao; }
     public void setDataConclusao(Date dataConclusao) { this.dataConclusao = dataConclusao; }

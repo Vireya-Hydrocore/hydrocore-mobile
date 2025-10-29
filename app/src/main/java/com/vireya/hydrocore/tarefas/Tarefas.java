@@ -94,15 +94,16 @@ public class Tarefas extends Fragment {
 
                 for (Tarefa t : selecionadas) {
                     t.setStatus("concluida");
-                    t.setIdTarefa(tarefas.indexOf(t) + 1);
 
 
                     if (NetworkUtils.temConexao(requireContext())) {
-                        tarefasApi.atualizarStatus(t.getIdTarefa(), t.getStatus())
-                                .enqueue(new Callback<Void>() {
+                        tarefasApi.atualizarStatus(t.getId(), "concluida")
+                                .enqueue(new Callback<Tarefa>() {
                                     @Override
-                                    public void onResponse(Call<Void> call, Response<Void> response) {
-                                        if (response.isSuccessful()) {
+                                    public void onResponse(Call<Tarefa> call, Response<Tarefa> response) {
+                                        if (response.isSuccessful() && response.body() != null) {
+                                            Log.d("API", "ID: " + t.getId());
+                                            Log.d("API", "Status atualizado para: " + response.body().getStatus());
                                             carregarTarefas();
                                         } else {
                                             Log.e("API", "Erro ao atualizar status: " + response.code());
@@ -110,8 +111,8 @@ public class Tarefas extends Fragment {
                                     }
 
                                     @Override
-                                    public void onFailure(Call<Void> call, Throwable t) {
-                                        Log.e("API", "Falha na atualização: " + t.getMessage());
+                                    public void onFailure(Call<Tarefa> call, Throwable t) {
+                                        Log.e("API", "Falha ao atualizar status: " + t.getMessage());
                                     }
                                 });
 

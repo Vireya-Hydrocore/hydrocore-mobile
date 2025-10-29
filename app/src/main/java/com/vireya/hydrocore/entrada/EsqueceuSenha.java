@@ -1,5 +1,6 @@
 package com.vireya.hydrocore.entrada;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
@@ -47,8 +48,13 @@ public class EsqueceuSenha extends AppCompatActivity {
                 Toast.makeText(this, "Digite seu e-mail", Toast.LENGTH_SHORT).show();
                 return;
             }
+//
+//            enviarEmailRecuperacao(email);
 
-            enviarEmailRecuperacao(email);
+            Intent intent = new Intent(EsqueceuSenha.this, RedefinirSenha.class);
+            intent.putExtra("email_usuario", email);
+
+            startActivity(intent);
         });
     }
 

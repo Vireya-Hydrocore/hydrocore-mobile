@@ -100,7 +100,6 @@ public class Perfil extends Fragment {
 
     private void loadTarefasStats() {
         SessionManager session = new SessionManager(requireContext());
-        String token = "Bearer " + session.getToken();
         String emailFuncionario = session.getEmail();
 
         TarefasApi api = RetrofitClient.getTarefasApi();
@@ -112,14 +111,16 @@ public class Perfil extends Fragment {
                     Funcionario funcionario = response.body();
                     String nomeFuncionario = funcionario.getNome();
 
-                    api.listarTarefasPorNome(nomeFuncionario, false)
+                    api.listarTarefasPorNome(nomeFuncionario, true)
                             .enqueue(new Callback<List<Tarefa>>() {
                                 @Override
                                 public void onResponse(Call<List<Tarefa>> call, Response<List<Tarefa>> response) {
                                     if (response.isSuccessful() && response.body() != null) {
                                         int feitas = 0, naoFeitas = 0;
                                         for (Tarefa t : response.body()) {
-                                            if ("CONCLUIDA".equalsIgnoreCase(t.getStatus())) {
+                                            Log.d("Perfil", "Tarefa: " + t.getStatus());
+
+                                            if ("concluída".equalsIgnoreCase(t.getStatus())) {
                                                 feitas++;
                                             } else {
                                                 naoFeitas++;
