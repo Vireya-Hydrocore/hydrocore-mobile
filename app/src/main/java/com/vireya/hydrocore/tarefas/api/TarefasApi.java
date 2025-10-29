@@ -21,8 +21,13 @@ public interface TarefasApi {
             @Query("tarefasConcluidas") boolean tarefasConcluidas
     );
 
+    @GET("v1/tarefas/listar-nome/{nome}")
+    Call<List<Tarefa>> listarTarefasPorNome(
+            @Path("nome") String nomeFuncionario
+    );
+
     @PATCH("v1/tarefas/atualizar-status")
-    Call<Void> atualizarStatus(
+    Call<Tarefa> atualizarStatus(
             @Header("idTarefa") int idTarefa,
             @Header("status") String status
     );

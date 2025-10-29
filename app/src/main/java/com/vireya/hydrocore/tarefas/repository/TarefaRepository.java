@@ -16,6 +16,8 @@ public class TarefaRepository {
         this.tarefasApi = tarefasApi;
     }
 
+
+
     public List<Tarefa> getAllTarefas() {
         return tarefaDao.getAll();
     }

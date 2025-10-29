@@ -84,9 +84,10 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            app:cardBackgroundColor="@android:color/white"
             app:cardCornerRadius="16dp"
-            app:cardElevation="8dp"
-            app:cardBackgroundColor="@android:color/white">
+            app:cardElevation="8dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -98,10 +99,10 @@
                     android:id="@+id/tvTitleCard3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_semibold"
                     android:gravity="center"
                     android:text="Agosto 2025"
                     android:textColor="@color/blue"
-                    android:fontFamily="@font/poppins_semibold"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
