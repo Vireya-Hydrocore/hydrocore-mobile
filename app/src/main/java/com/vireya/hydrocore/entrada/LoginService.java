@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,8 @@ public class LoginService extends AppCompatActivity {
     private TextView esqueceuSenhaEditText;
     private Button entrarButton;
 
+    private ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +52,8 @@ public class LoginService extends AppCompatActivity {
         senhaEditText = findViewById(R.id.senhaInput);
         codigoEmpresaEditText = findViewById(R.id.codigoInput);
         entrarButton = findViewById(R.id.entrar);
+
+
 
         // TextView
         esqueceuSenhaEditText = findViewById(R.id.txtEsqueceuSenha);
@@ -66,6 +71,9 @@ public class LoginService extends AppCompatActivity {
         esqueceuSenhaEditText.setOnClickListener(v ->
                 startActivity(new Intent(LoginService.this, EsqueceuSenha.class))
         );
+
+        progressBar = findViewById(R.id.progressBar);
+
     }
 
     private boolean validarCampos(String email, String senha, String codigoEmpresa) {
@@ -96,9 +104,17 @@ public class LoginService extends AppCompatActivity {
         ApiService apiService = RetrofitClientMongo.createApi(ApiService.class);
         Login request = new Login(email, password, codigoEmpresa);
 
+        // Mostra o loading
+        entrarButton.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+
         apiService.login(request).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                // Esconde o loading
+                entrarButton.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+
                 if(response.isSuccessful() && response.body() != null) {
                     try {
                         String jsonString = response.body().string();
@@ -106,16 +122,10 @@ public class LoginService extends AppCompatActivity {
                         String token = json.getString("token");
                         String chaveApi = json.getString("chaveApi");
 
-                        // Cria LoginResponse
-                        LoginResponse loginResponse = new LoginResponse(token, chaveApi);
-
-                        // Salva na sessão
                         SessionManager sessionManager = new SessionManager(LoginService.this);
                         sessionManager.saveSession(token, chaveApi, email);
 
                         Toast.makeText(LoginService.this, "Login realizado com sucesso!", Toast.LENGTH_SHORT).show();
-
-                        // Vai pra próxima tela
                         startActivity(new Intent(LoginService.this, MainActivity.class));
                         finish();
 
@@ -131,6 +141,8 @@ public class LoginService extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                entrarButton.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
                 Toast.makeText(LoginService.this, "Falha ao conectar com o servidor", Toast.LENGTH_SHORT).show();
                 Log.e("LOGIN", "Erro: " + t.getMessage());
             }

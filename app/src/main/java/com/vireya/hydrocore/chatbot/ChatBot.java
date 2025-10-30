@@ -88,7 +88,6 @@ public class ChatBot extends Fragment {
         adapter.notifyItemInserted(messages.size() - 1);
         recyclerView.scrollToPosition(messages.size() - 1);
 
-        // Recupera dados salvos da sessão
         SessionManager session = new SessionManager(requireContext());
         String apiKey = session.getApiKey();
         String email = session.getEmail();
@@ -97,7 +96,6 @@ public class ChatBot extends Fragment {
         try {
             json.put("user_message", text);
             json.put("api_key", apiKey);
-            // NÃO colocar email aqui
         } catch (Exception e) {
             e.printStackTrace();
         }

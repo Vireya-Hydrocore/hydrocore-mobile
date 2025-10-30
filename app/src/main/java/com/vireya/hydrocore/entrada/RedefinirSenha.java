@@ -1,9 +1,5 @@
 package com.vireya.hydrocore.entrada;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -12,32 +8,87 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.vireya.hydrocore.R;
+import com.vireya.hydrocore.entrada.api.ApiService;
+import com.vireya.hydrocore.core.network.RetrofitClientMongo;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RedefinirSenha extends AppCompatActivity {
+
+    private EditText novaSenhaInput, confirmaSenhaInput;
+    private Button redefinirButton;
+    private String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_redefinir_senha);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.redefinir), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        String email = getIntent().getStringExtra("email_usuario");
+        email = getIntent().getStringExtra("email_usuario");
 
-        Log.d("EMAIL", email);
+        novaSenhaInput = findViewById(R.id.senhaInput);
+        confirmaSenhaInput = findViewById(R.id.senhaInput2);
+        redefinirButton = findViewById(R.id.redefinir);
 
+
+        redefinirButton.setOnClickListener(v -> redefinirSenha());
+    }
+
+    private void redefinirSenha() {
+        String novaSenha = novaSenhaInput.getText().toString().trim();
+        String confirmaSenha = confirmaSenhaInput.getText().toString().trim();
+
+        if (novaSenha.isEmpty() || confirmaSenha.isEmpty()) {
+            Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!novaSenha.equals(confirmaSenha)) {
+            Toast.makeText(this, "As senhas não coincidem", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ApiService apiService = RetrofitClientMongo.createApi(ApiService.class);
+
+        Map<String, String> body = new HashMap<>();
+        body.put("email", email);
+        body.put("novaSenha", novaSenha);
+        body.put("confirmaSenha", confirmaSenha);
+
+        apiService.resetPassword(body).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(RedefinirSenha.this, "Senha redefinida com sucesso!", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(RedefinirSenha.this, "Erro ao redefinir senha: " + response.code(), Toast.LENGTH_LONG).show();
+                    Log.e("RESET_SENHA", "Erro: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(RedefinirSenha.this, "Falha de conexão: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                Log.e("RESET_SENHA", "Falha: " + t.getMessage());
+            }
+        });
     }
 }
