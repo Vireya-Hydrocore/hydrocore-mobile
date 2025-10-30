@@ -6,6 +6,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.vireya.hydrocore.relatorio.api.RelatorioApi;
 import com.vireya.hydrocore.tarefas.api.TarefasApi;
 
 import java.lang.reflect.Type;
@@ -88,6 +89,9 @@ public class RetrofitClient {
                     .build();
         }
         return retrofit;
+    }
+    public static RelatorioApi getRelatorioApi() {
+        return getRetrofit().create(RelatorioApi.class);
     }
 
     // === Exemplo de API específica ===

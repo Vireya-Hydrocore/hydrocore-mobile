@@ -65,8 +65,8 @@ dependencies {
     implementation ("androidx.room:room-runtime:2.6.1")
     annotationProcessor ("androidx.room:room-compiler:2.6.1")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
-//    implementation ("com.google.firebase:firebase-messaging:24.0.0")
-//    implementation ("com.google.firebase:firebase-analytics")
+    implementation ("com.google.firebase:firebase-messaging:24.0.0")
+    implementation ("com.itextpdf:itext7-core:8.0.3")
 
     }
 }

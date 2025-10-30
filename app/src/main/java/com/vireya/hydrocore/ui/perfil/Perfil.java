@@ -1,20 +1,28 @@
 package com.vireya.hydrocore.ui.perfil;
 
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -28,15 +36,16 @@ import com.google.android.material.imageview.ShapeableImageView;
 import com.google.gson.Gson;
 import com.vireya.hydrocore.R;
 import com.vireya.hydrocore.core.network.RetrofitClient;
-import com.vireya.hydrocore.funcionario.model.Funcionario;
 import com.vireya.hydrocore.tarefas.api.TarefasApi;
 import com.vireya.hydrocore.tarefas.model.Tarefa;
 import com.vireya.hydrocore.ui.configuracoes.api.ApiService;
+import com.vireya.hydrocore.ui.configuracoes.model.Funcionario;
 import com.vireya.hydrocore.ui.perfil.api.ApiFuncionario;
 import com.vireya.hydrocore.ui.perfil.model.Estatistica;
-import com.vireya.hydrocore.utils.SessionManager;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,16 +55,18 @@ import retrofit2.Response;
 
 public class Perfil extends Fragment {
 
-    private TextView tarDiariaValor, tarNaoFeitasValor, tarTotaisValor, txtNome, txtCargo;
+    private static final int REQUEST_CAMERA = 100;
+    private static final int REQUEST_GALLERY = 101;
+
     private ShapeableImageView imgPerfil;
+    private ImageView btnEditarFoto;
+    private TextView tarDiariaValor, tarNaoFeitasValor, tarTotaisValor, txtNome, txtCargo;
     private LineChart graficoProdutividade;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Usamos ScrollView para permitir rolagem caso o gráfico ocupe mais espaço
-        ScrollView scrollView = (ScrollView) inflater.inflate(R.layout.fragment_perfil, container, false);
-        return scrollView;
+        return inflater.inflate(R.layout.fragment_perfil, container, false);
     }
 
     @Override
@@ -63,6 +74,7 @@ public class Perfil extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         imgPerfil = view.findViewById(R.id.imgPerfil);
+        btnEditarFoto = view.findViewById(R.id.btnEditarFoto);
         tarDiariaValor = view.findViewById(R.id.tarDiariaValor);
         tarNaoFeitasValor = view.findViewById(R.id.tarNaoFeitasValor);
         tarTotaisValor = view.findViewById(R.id.tarTotaisValor);
@@ -70,19 +82,111 @@ public class Perfil extends Fragment {
         txtCargo = view.findViewById(R.id.txtCargo);
         graficoProdutividade = view.findViewById(R.id.graficoProdutividade);
 
+        checkPermissions();
+        loadProfileImage();
+        loadFuncionarioInfo();
+        loadTarefasStats();
+        loadGraficoProdutividade(1);
+
+        btnEditarFoto.setOnClickListener(v -> showImageOptions());
+
         LinearLayout layoutNaoFeitas = view.findViewById(R.id.layoutNaoFeitas);
         layoutNaoFeitas.setOnClickListener(v -> {
             BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
             bottomNavigationView.setSelectedItemId(R.id.navigation_tarefas);
         });
-
-        loadProfileImage();
-        loadFuncionarioInfo();
-        loadTarefasStats();
-        loadGraficoProdutividade(1);
     }
 
-    // --- Imagem do perfil local ---
+    private void showImageOptions() {
+        String[] options = {"Visualizar foto", "Tirar foto", "Escolher da galeria"};
+
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Foto de Perfil")
+                .setItems(options, (dialog, which) -> {
+                    if (which == 0) visualizarFoto();
+                    else if (which == 1) openCamera();
+                    else openGallery();
+                }).show();
+    }
+
+    private void visualizarFoto() {
+        imgPerfil.setDrawingCacheEnabled(true);
+        Bitmap bitmap = imgPerfil.getDrawingCache();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        ImageView imageView = new ImageView(requireContext());
+        imageView.setImageBitmap(bitmap);
+        builder.setView(imageView);
+        builder.setPositiveButton("Fechar", null);
+        builder.show();
+    }
+
+    private void openCamera() {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (cameraIntent.resolveActivity(requireActivity().getPackageManager()) != null) {
+            startActivityForResult(cameraIntent, REQUEST_CAMERA);
+        }
+    }
+
+    private void openGallery() {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryIntent, REQUEST_GALLERY);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == requireActivity().RESULT_OK && data != null) {
+            if (requestCode == REQUEST_CAMERA) {
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                imgPerfil.setImageBitmap(imageBitmap);
+                saveImageToInternalStorage(imageBitmap);
+
+            } else if (requestCode == REQUEST_GALLERY) {
+                Uri selectedImage = data.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), selectedImage);
+                    imgPerfil.setImageBitmap(bitmap);
+                    saveImageToInternalStorage(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void checkPermissions() {
+        if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+            requestPermissions(
+                    new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.READ_EXTERNAL_STORAGE},
+                    200
+            );
+        }
+    }
+
+    private void saveImageToInternalStorage(Bitmap bitmap) {
+        try {
+            String filename = "profile_image.png";
+            FileOutputStream fos = requireContext().openFileOutput(filename, android.content.Context.MODE_PRIVATE);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.close();
+
+            requireContext()
+                    .getSharedPreferences("configuracoes", android.content.Context.MODE_PRIVATE)
+                    .edit()
+                    .putString("profileImage", filename)
+                    .apply();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(requireContext(), "Erro ao salvar imagem", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void loadProfileImage() {
         String filename = requireContext()
                 .getSharedPreferences("configuracoes", android.content.Context.MODE_PRIVATE)
@@ -93,98 +197,57 @@ public class Perfil extends Fragment {
                 Bitmap bitmap = BitmapFactory.decodeStream(fis);
                 imgPerfil.setImageBitmap(bitmap);
             } catch (Exception e) {
-                Log.e("Perfil", "Erro ao carregar imagem do perfil", e);
+                e.printStackTrace();
             }
         }
     }
 
-    private void loadTarefasStats() {
-        SessionManager session = new SessionManager(requireContext());
-        String emailFuncionario = session.getEmail();
-
+private void loadTarefasStats() {
         TarefasApi api = RetrofitClient.getTarefasApi();
-
-        api.getFuncionarioPorEmail(emailFuncionario).enqueue(new Callback<Funcionario>() {
+        api.listarTarefasPorNome("Lucas Pereira").enqueue(new Callback<List<Tarefa>>() {
             @Override
-            public void onResponse(Call<Funcionario> call, Response<Funcionario> response) {
+            public void onResponse(Call<List<Tarefa>> call, Response<List<Tarefa>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Funcionario funcionario = response.body();
-                    String nomeFuncionario = funcionario.getNome();
+                    int feitas = 0, naoFeitas = 0;
+                    for (Tarefa t : response.body()) {
+                        if ("CONCLUIDA".equalsIgnoreCase(t.getStatus())) feitas++;
+                        else naoFeitas++;
+                    }
 
-                    api.listarTarefasPorNome(nomeFuncionario, true)
-                            .enqueue(new Callback<List<Tarefa>>() {
-                                @Override
-                                public void onResponse(Call<List<Tarefa>> call, Response<List<Tarefa>> response) {
-                                    if (response.isSuccessful() && response.body() != null) {
-                                        int feitas = 0, naoFeitas = 0;
-                                        for (Tarefa t : response.body()) {
-                                            Log.d("Perfil", "Tarefa: " + t.getStatus());
-
-                                            if ("concluída".equalsIgnoreCase(t.getStatus())) {
-                                                feitas++;
-                                            } else {
-                                                naoFeitas++;
-                                            }
-                                        }
-                                        int totais = response.body().size();
-                                        tarDiariaValor.setText(String.valueOf(feitas));
-                                        tarNaoFeitasValor.setText(String.valueOf(naoFeitas));
-                                        tarTotaisValor.setText(String.valueOf(totais));
-                                    } else {
-                                        Log.e("Perfil", "Erro ao buscar tarefas: " + response.code());
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(Call<List<Tarefa>> call, Throwable t) {
-                                    Log.e("Perfil", "Falha ao buscar tarefas: " + t.getMessage());
-                                }
-                            });
-                } else {
-                    Log.e("Perfil", "Erro ao buscar funcionário por email: " + response.code());
+                    int totais = response.body().size();
+                    tarDiariaValor.setText(String.valueOf(feitas));
+                    tarNaoFeitasValor.setText(String.valueOf(naoFeitas));
+                    tarTotaisValor.setText(String.valueOf(totais));
                 }
             }
 
             @Override
-            public void onFailure(Call<Funcionario> call, Throwable t) {
-                Log.e("Perfil", "Falha ao buscar funcionário por email: " + t.getMessage());
+            public void onFailure(Call<List<Tarefa>> call, Throwable t) {
+                Log.e("Perfil", "Erro ao carregar tarefas", t);
             }
         });
     }
 
+    public void loadFuncionarioInfo() {
+        ApiService apiService = RetrofitClient.getRetrofit().create(ApiService.class);
 
-
-
-    // --- Nome e cargo ---
-    private void loadFuncionarioInfo() {
-        SessionManager session = new SessionManager(requireContext());
-        String token = "Bearer " + session.getToken();
-        String emailFuncionario = session.getEmail();
-
-        TarefasApi api = RetrofitClient.getTarefasApi();
-
-        api.getFuncionarioPorEmail(emailFuncionario).enqueue(new Callback<Funcionario>() {
+        apiService.getFuncionarios().enqueue(new Callback<List<Funcionario>>() {
             @Override
-            public void onResponse(Call<Funcionario> call, Response<Funcionario> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    Funcionario funcionario = response.body();
+            public void onResponse(Call<List<Funcionario>> call, Response<List<Funcionario>> response) {
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    Funcionario funcionario = response.body().get(0);
                     txtNome.setText(funcionario.getNome());
-                    txtCargo.setText(funcionario.getCargo());
-                } else {
-                    Log.e("Perfil", "Erro ao buscar funcionário por email: " + response.code());
+                    txtCargo.setText(String.valueOf(funcionario.getCargo()));
                 }
             }
 
             @Override
-            public void onFailure(Call<Funcionario> call, Throwable t) {
-                Log.e("Perfil", "Falha ao buscar funcionário por email: " + t.getMessage());
+            public void onFailure(Call<List<Funcionario>> call, Throwable t) {
+                Log.e("Perfil", "Erro ao carregar funcionário", t);
             }
         });
     }
 
-
-
-    // --- Gráfico de produtividade ---
     private void loadGraficoProdutividade(int funcionarioId) {
         ApiFuncionario apiService = RetrofitClient.getRetrofit().create(ApiFuncionario.class);
 
@@ -193,24 +256,15 @@ public class Perfil extends Fragment {
             public void onResponse(Call<Estatistica> call, Response<Estatistica> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Estatistica dados = response.body();
-                    Log.d("GRAFICO_API", "Resumo recebido: " + new Gson().toJson(dados));
-
-                    if (dados.getTarefasFeitas() == 0 && dados.getTarefasTotais() == 0) {
-                        Log.w("GRAFICO_API", "Nenhum dado real. Usando valores simulados.");
-                        dados = new Estatistica(4, 8, 2, 10);
-                    }
-
                     atualizarGrafico(dados);
                 } else {
                     Log.e("GRAFICO_API", "Erro: " + response.code());
-                    atualizarGrafico(new Estatistica(4, 8, 2, 10)); // fallback
                 }
             }
 
             @Override
             public void onFailure(Call<Estatistica> call, Throwable t) {
                 Log.e("GRAFICO_API", "Falha na API: " + t.getMessage());
-                atualizarGrafico(new Estatistica(4, 8, 2, 10)); // fallback
             }
         });
     }

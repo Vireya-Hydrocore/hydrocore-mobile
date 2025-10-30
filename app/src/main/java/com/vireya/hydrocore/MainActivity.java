@@ -3,6 +3,7 @@ package com.vireya.hydrocore;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -16,6 +17,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.vireya.hydrocore.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -81,8 +83,14 @@ public class MainActivity extends AppCompatActivity {
             desmarcarHome();
         });
 
-
-
+        FirebaseMessaging.getInstance().subscribeToTopic("avisos-gerais")
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("FCM", "Inscrito no tópico avisos-gerais!");
+                    } else {
+                        Log.e("FCM", "Falha ao se inscrever no tópico");
+                    }
+                });
 
         // Bottom navigation
         BottomNavigationView navView = binding.navView;

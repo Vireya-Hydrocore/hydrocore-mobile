@@ -28,32 +28,28 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <activity
             android:name=".entrada.LoginService"
-            android:exported="true"
+            android:exported="false"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".entrada.RedefinirSenha"
-            android:exported="true" />
-
-        <activity
-            android:name=".entrada.LoginService"
-            android:exported="true"
-            android:windowSoftInputMode="adjustPan" />
+            android:exported="false" />
 
         <activity
             android:name=".entrada.EsqueceuSenha"
-            android:exported="true"
+            android:exported="false"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".MainActivity"
-            android:exported="false" />
+            android:exported="true" />
 
         <meta-data
             android:name="preloaded_fonts"
