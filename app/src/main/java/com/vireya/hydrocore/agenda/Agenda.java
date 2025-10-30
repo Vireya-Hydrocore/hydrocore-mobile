@@ -20,7 +20,6 @@ import com.vireya.hydrocore.R;
 import com.vireya.hydrocore.agenda.adapter.AvisoAdapter;
 import com.vireya.hydrocore.agenda.api.ApiClient;
 import com.vireya.hydrocore.agenda.model.Aviso;
-import com.vireya.hydrocore.core.network.NotificacaoHelper;
 import com.vireya.hydrocore.core.network.RetrofitClient;
 
 import java.text.ParseException;
@@ -109,7 +108,6 @@ public class Agenda extends Fragment {
                             compactCalendarView.addEvent(new Event(cor, data.getTime(), aviso));
 
                             // Mostra notificação local
-                            NotificacaoHelper.mostrarNotificacao(requireContext(), aviso);
 
                         } catch (ParseException e) {
                             Log.e("AGENDA", "Erro ao converter data: " + aviso.getDataOcorrencia(), e);

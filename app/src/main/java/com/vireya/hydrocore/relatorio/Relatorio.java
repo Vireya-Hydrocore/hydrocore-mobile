@@ -1,6 +1,9 @@
 package com.vireya.hydrocore.relatorio;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -9,21 +12,24 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.vireya.hydrocore.R;
 import com.vireya.hydrocore.relatorio.adapter.RelatorioAdapter;
+import com.vireya.hydrocore.relatorio.api.RelatorioApi;
+import com.vireya.hydrocore.relatorio.model.RelatorioResumo;
+import com.vireya.hydrocore.core.network.RetrofitClient;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Relatorio extends Fragment {
 
     private RecyclerView recyclerView;
     private RelatorioAdapter adapter;
-    private List<String> listaRelatorios;
+    private RelatorioApi api;
+    private long idEta = 1L;
 
     @Nullable
     @Override
@@ -35,27 +41,30 @@ public class Relatorio extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerViewRelatorios);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        listaRelatorios = new ArrayList<>();
-        listaRelatorios.add("Junho 2025");
-        listaRelatorios.add("Maio 2025");
-        listaRelatorios.add("Abril 2025");
-        listaRelatorios.add("Março 2025");
-        listaRelatorios.add("Fevereiro 2025");
-        listaRelatorios.add("Janeiro 2025");
+        api = RetrofitClient.getRetrofit().create(RelatorioApi.class);
 
-        adapter = new RelatorioAdapter(listaRelatorios, relatorio -> {
-            // Quando clicar no ícone de download
-            String[] partes = relatorio.split(" ");
-            String mesNome = partes[0];
-            int ano = Integer.parseInt(partes[1]);
-            int mes = RelatorioDownloader.converterMesParaNumero(mesNome);
-
-            Toast.makeText(getContext(), "Gerando relatório de " + relatorio, Toast.LENGTH_SHORT).show();
-            RelatorioDownloader.baixarRelatorioPdf(getContext(), mes, ano);
-        });
-
-        recyclerView.setAdapter(adapter);
+        carregarRelatorios();
 
         return view;
+    }
+
+    private void carregarRelatorios() {
+        api.listarRelatoriosPorEta(idEta).enqueue(new Callback<List<RelatorioResumo>>() {
+            @Override
+            public void onResponse(Call<List<RelatorioResumo>> call, Response<List<RelatorioResumo>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<RelatorioResumo> lista = response.body();
+                    adapter = new RelatorioAdapter(lista, api);
+                    recyclerView.setAdapter(adapter);
+                } else {
+                    Toast.makeText(getContext(), "Nenhum relatório encontrado", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<RelatorioResumo>> call, Throwable t) {
+                Toast.makeText(getContext(), "Erro ao carregar relatórios", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
