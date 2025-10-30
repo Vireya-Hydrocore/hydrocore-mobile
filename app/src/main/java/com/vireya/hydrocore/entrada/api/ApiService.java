@@ -17,4 +17,8 @@ public interface ApiService {
     @POST("auth/forgot-password")
     Call<ResponseBody> forgotPassword(@Body Map<String, String> body);
 
+    @POST("auth/reset-password")
+    Call<ResponseBody> resetPassword(@Body Map<String, String> body);
+
+
 }
