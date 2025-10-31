@@ -172,10 +172,10 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Inforamação de login"
                 android:layout_weight="1"
+                android:fontFamily="@font/poppins"
                 android:paddingStart="15dp"
-                android:fontFamily="@font/poppins" />
+                android:text="Informação de login" />
 
             <ImageView
                 android:id="@+id/arrow_info"

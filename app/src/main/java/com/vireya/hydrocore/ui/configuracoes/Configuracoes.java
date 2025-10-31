@@ -111,7 +111,7 @@ public class Configuracoes extends Fragment {
             return;
         }
 
-        ApiService apiService = RetrofitClient.getRetrofit().create(ApiService.class);
+        ApiService apiService = RetrofitClient.getRetrofit(getContext()).create(ApiService.class);
         Call<Funcionario> call = apiService.getFuncionarioByEmail(email); // e-mail enviado no header
 
         Log.d("CONFIGURACOES", "Buscando funcionário com e-mail: " + email);

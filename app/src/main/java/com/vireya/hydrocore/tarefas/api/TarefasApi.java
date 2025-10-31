@@ -31,4 +31,5 @@ public interface TarefasApi {
             @Header("idTarefa") int idTarefa,
             @Header("status") String status
     );
+
 }

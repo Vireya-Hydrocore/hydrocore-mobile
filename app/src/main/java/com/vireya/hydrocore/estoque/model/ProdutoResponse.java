@@ -4,8 +4,8 @@ import java.util.List;
 
 public class ProdutoResponse {
     private int id;
-    private List<String> produtos;
+    private List<Produto> produtos;
 
     public int getId() { return id; }
-    public List<String> getProdutos() { return produtos; }
+    public List<Produto> getProdutos() { return produtos; }
 }

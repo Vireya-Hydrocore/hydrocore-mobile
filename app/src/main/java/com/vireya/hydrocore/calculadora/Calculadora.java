@@ -23,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -87,7 +88,7 @@ public class Calculadora extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        CalculadoraApi api = RetrofitClient.getRetrofit().create(CalculadoraApi.class);
+        CalculadoraApi api = RetrofitClient.getRetrofit(getContext()).create(CalculadoraApi.class);
 
         //region Variáveis
         View view = inflater.inflate(R.layout.fragment_calculadora, container, false);
@@ -143,6 +144,9 @@ public class Calculadora extends Fragment {
         cbCorCoagulacao.setAdapter(adapterCores);
         cbCorFloculacao.setAdapter(adapterCores);
         //endregion
+
+        ProgressBar progressBar = view.findViewById(R.id.progress_calculo);
+
 
         //region Produtos
         Call<List<ProdutoResponse>> callListaProduto = api.listarProdutos("ETA Rio Claro");
@@ -227,6 +231,9 @@ public class Calculadora extends Fragment {
             boolean valido = false;
             Call<CalculoResponse> call = null;
 
+            progressBar.setVisibility(View.VISIBLE);
+            btnCalcularDosagem.setEnabled(false);
+
             if (etapaSelecionada.equals("Coagulação")) {
 
                 // Validação
@@ -263,6 +270,8 @@ public class Calculadora extends Fragment {
                 call.enqueue(new Callback<CalculoResponse>() {
                     @Override
                     public void onResponse(Call<CalculoResponse> call, Response<CalculoResponse> response) {
+                        progressBar.setVisibility(View.GONE);
+                        btnCalcularDosagem.setEnabled(true);
                         executarCalculo(response);
                     }
 
@@ -297,6 +306,8 @@ public class Calculadora extends Fragment {
                     call.enqueue(new Callback<CalculoResponse>() {
                         @Override
                         public void onResponse(Call<CalculoResponse> call, Response<CalculoResponse> response) {
+                            progressBar.setVisibility(View.GONE);
+                            btnCalcularDosagem.setEnabled(true);
                             executarCalculo(response);
                         }
 
