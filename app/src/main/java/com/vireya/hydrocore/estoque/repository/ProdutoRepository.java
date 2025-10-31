@@ -65,7 +65,6 @@ public class ProdutoRepository {
                                                 try {
                                                     produtoDao.deleteAll();
 
-                                                    // Converter ProdutoResponse -> Produto
                                                     List<Produto> produtosParaBanco = new ArrayList<>();
                                                     for (ProdutoResponse pr : responseProdutos.body()) {
                                                         for (String nomeProduto : pr.getProdutos()) {

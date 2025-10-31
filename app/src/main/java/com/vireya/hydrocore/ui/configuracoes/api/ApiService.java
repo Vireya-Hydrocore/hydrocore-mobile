@@ -6,6 +6,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -15,5 +16,6 @@ public interface ApiService {
     Call<List<Funcionario>> getFuncionarios();
 
     @GET("v1/funcionario/email")
-    Call<Funcionario> getFuncionarioByEmail(@Path("email") String email);
+    Call<Funcionario> getFuncionarioByEmail(@Header("email") String email);
+
 }

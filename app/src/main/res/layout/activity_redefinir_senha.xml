@@ -110,15 +110,14 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-
         <Button
             android:id="@+id/redefinir"
             android:layout_width="355dp"
             android:layout_height="57dp"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="16dp"
             android:backgroundTint="@color/blue"
             android:fontFamily="@font/poppins_semibold"
-            android:text="Redefinir senha"
+            android:text="Redefinir Senha"
             android:textAllCaps="false"
             app:cornerRadius="8dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -126,34 +125,7 @@
             app:layout_constraintTop_toBottomOf="@+id/inputArea" />
 
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="24dp"
-            app:layout_constraintTop_toBottomOf="@+id/redefinir"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
 
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_medium"
-                android:text="Não tem uma conta? "
-                android:textColor="@color/black"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_medium"
-                android:text="Crie uma!"
-                android:textColor="@color/blue"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

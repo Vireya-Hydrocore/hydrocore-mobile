@@ -133,6 +133,8 @@ public class Tarefas extends Fragment {
         SessionManager session = new SessionManager(requireContext());
         String emailFuncionario = session.getEmail();
 
+        binding.progressBar.setVisibility(View.VISIBLE); // Mostra o círculo
+
         TarefasApi tarefasApi = TarefasApiClient.getTarefasClient(requireContext())
                 .create(TarefasApi.class);
 
@@ -147,6 +149,8 @@ public class Tarefas extends Fragment {
                             .enqueue(new Callback<List<Tarefa>>() {
                                 @Override
                                 public void onResponse(Call<List<Tarefa>> call, Response<List<Tarefa>> response) {
+                                    binding.progressBar.setVisibility(View.GONE); // Esconde o círculo
+
                                     if (response.isSuccessful() && response.body() != null) {
                                         List<Tarefa> tarefasRecebidas = response.body();
                                         tarefas.clear();
@@ -164,26 +168,23 @@ public class Tarefas extends Fragment {
 
                                 @Override
                                 public void onFailure(Call<List<Tarefa>> call, Throwable t) {
+                                    binding.progressBar.setVisibility(View.GONE);
                                     Log.e("API", "Falha ao buscar tarefas: " + t.getMessage());
                                 }
                             });
                 } else {
+                    binding.progressBar.setVisibility(View.GONE);
                     Log.e("API", "Erro ao buscar funcionário por email: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<Funcionario> call, Throwable t) {
+                binding.progressBar.setVisibility(View.GONE);
                 Log.e("API", "Falha ao buscar funcionário: " + t.getMessage());
             }
         });
     }
-
-
-
-
-
-
 
 
     @Override

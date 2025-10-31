@@ -71,4 +71,11 @@
         android:paddingBottom="100dp"
         tools:listitem="@layout/item_produto" />
 
+    <ProgressBar
+        android:id="@+id/progressBarEstoque"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:visibility="gone"
+        android:layout_gravity="center" />
+
 </LinearLayout>

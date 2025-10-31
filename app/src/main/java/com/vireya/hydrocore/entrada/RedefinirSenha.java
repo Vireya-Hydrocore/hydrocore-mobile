@@ -1,5 +1,6 @@
 package com.vireya.hydrocore.entrada;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -12,6 +13,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.vireya.hydrocore.MainActivity;
 import com.vireya.hydrocore.R;
 import com.vireya.hydrocore.entrada.api.ApiService;
 import com.vireya.hydrocore.core.network.RetrofitClientMongo;
@@ -35,12 +37,6 @@ public class RedefinirSenha extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_redefinir_senha);
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.redefinir), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
         email = getIntent().getStringExtra("email_usuario");
 
@@ -78,6 +74,8 @@ public class RedefinirSenha extends AppCompatActivity {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(RedefinirSenha.this, "Senha redefinida com sucesso!", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(RedefinirSenha.this, LoginService.class));
+                    finish();
                 } else {
                     Toast.makeText(RedefinirSenha.this, "Erro ao redefinir senha: " + response.code(), Toast.LENGTH_LONG).show();
                     Log.e("RESET_SENHA", "Erro: " + response.code());
