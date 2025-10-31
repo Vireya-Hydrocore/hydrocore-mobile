@@ -9,7 +9,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 
-public interface ApiService {
+public interface ApiClient {
 
     @POST("auth/login")
     Call<ResponseBody> login(@Body Login login);
