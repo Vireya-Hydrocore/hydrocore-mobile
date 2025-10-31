@@ -42,6 +42,7 @@ import com.vireya.hydrocore.ui.configuracoes.api.ApiService;
 import com.vireya.hydrocore.ui.configuracoes.model.Funcionario;
 import com.vireya.hydrocore.ui.perfil.api.ApiFuncionario;
 import com.vireya.hydrocore.ui.perfil.model.Estatistica;
+import com.vireya.hydrocore.utils.SessionManager;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -231,22 +232,31 @@ private void loadTarefasStats() {
     public void loadFuncionarioInfo() {
         ApiService apiService = RetrofitClient.getRetrofit().create(ApiService.class);
 
-        apiService.getFuncionarios().enqueue(new Callback<List<Funcionario>>() {
+        // pega o e-mail da sessão
+        SessionManager session = new SessionManager(requireContext());
+        String email = session.getEmail();
+
+        apiService.getFuncionarioByEmail(email).enqueue(new Callback<Funcionario>() {
             @Override
-            public void onResponse(Call<List<Funcionario>> call, Response<List<Funcionario>> response) {
-                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
-                    Funcionario funcionario = response.body().get(0);
+            public void onResponse(Call<Funcionario> call, Response<Funcionario> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Funcionario funcionario = response.body();
+                    Log.d("FUNCIONARIO", funcionario.getNome());
+                    Log.d("FUNCIONARIO", funcionario.getCargo());
                     txtNome.setText(funcionario.getNome());
-                    txtCargo.setText(String.valueOf(funcionario.getCargo()));
+                    txtCargo.setText(funcionario.getCargo());
+                } else {
+                    Log.e("Perfil", "Funcionário não encontrado. Código: " + response.code());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Funcionario>> call, Throwable t) {
+            public void onFailure(Call<Funcionario> call, Throwable t) {
                 Log.e("Perfil", "Erro ao carregar funcionário", t);
             }
         });
     }
+
 
     private void loadGraficoProdutividade(int funcionarioId) {
         ApiFuncionario apiService = RetrofitClient.getRetrofit().create(ApiFuncionario.class);

@@ -22,8 +22,8 @@ public class ApiClient {
             OkHttpClient client = new OkHttpClient.Builder()
                     .addInterceptor((Interceptor.Chain chain) -> {
                         Request request = chain.request().newBuilder()
-                                .addHeader("Authorization", "Bearer teste233")
-                                .addHeader("X-User-Email", "teste@email.com")
+                                .addHeader("Authorization", "Bearer " + session.getToken())
+                                .addHeader("X-User-Email", session.getEmail())
                                 .build();
                         return chain.proceed(request);
 
