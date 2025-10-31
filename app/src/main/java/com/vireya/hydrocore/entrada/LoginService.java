@@ -16,9 +16,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.vireya.hydrocore.MainActivity;
 import com.vireya.hydrocore.R;
 import com.vireya.hydrocore.core.network.RetrofitClientMongo;
-import com.vireya.hydrocore.entrada.api.ApiService;
+import com.vireya.hydrocore.entrada.api.ApiClient;
 import com.vireya.hydrocore.entrada.model.Login;
-import com.vireya.hydrocore.entrada.model.LoginResponse;
 import com.vireya.hydrocore.utils.SessionManager;
 
 import org.json.JSONObject;
@@ -101,14 +100,14 @@ public class LoginService extends AppCompatActivity {
     }
 
     private void realizarLogin(String email, String password, String codigoEmpresa) {
-        ApiService apiService = RetrofitClientMongo.createApi(ApiService.class);
+        ApiClient apiClient = RetrofitClientMongo.createApi(ApiClient.class);
         Login request = new Login(email, password, codigoEmpresa);
 
         // Mostra o loading
         entrarButton.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
 
-        apiService.login(request).enqueue(new Callback<ResponseBody>() {
+        apiClient.login(request).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 // Esconde o loading

@@ -14,7 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.textfield.TextInputEditText;
 import com.vireya.hydrocore.R;
 import com.vireya.hydrocore.core.network.RetrofitClientMongo;
-import com.vireya.hydrocore.entrada.api.ApiService;
+import com.vireya.hydrocore.entrada.api.ApiClient;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -59,12 +59,12 @@ public class EsqueceuSenha extends AppCompatActivity {
     }
 
     private void enviarEmailRecuperacao(String email) {
-        ApiService apiService = RetrofitClientMongo.createApi(ApiService.class);
+        ApiClient apiClient = RetrofitClientMongo.createApi(ApiClient.class);
 
         Map<String, String> body = new HashMap<>();
         body.put("email", email);
 
-        Call<ResponseBody> call = apiService.forgotPassword(body);
+        Call<ResponseBody> call = apiClient.forgotPassword(body);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
