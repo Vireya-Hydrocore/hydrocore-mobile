@@ -18,11 +18,9 @@ import android.widget.Button;
 
 import com.vireya.hydrocore.R;
 import com.vireya.hydrocore.databinding.FragmentTarefasBinding;
-import com.vireya.hydrocore.estoque.api.ApiClient;
 import com.vireya.hydrocore.funcionario.model.Funcionario;
 import com.vireya.hydrocore.tarefas.adapter.TarefasAdapter;
 import com.vireya.hydrocore.tarefas.api.TarefasApi;
-import com.vireya.hydrocore.tarefas.api.TarefasApiClient;
 import com.vireya.hydrocore.tarefas.db.AppDatabase;
 import com.vireya.hydrocore.tarefas.model.Tarefa;
 import com.vireya.hydrocore.tarefas.repository.TarefaRepository;
@@ -64,7 +62,7 @@ public class Tarefas extends Fragment {
         binding.rvTarefas.setAdapter(tarefasAdapter);
 
         AppDatabase db = AppDatabase.getInstance(requireContext());
-        tarefasApi = RetrofitClient.getTarefasApi();
+        tarefasApi = RetrofitClient.getTarefasApi(getContext());
         tarefaRepository = new TarefaRepository(db.getTarefaDao(), tarefasApi);
 
         carregarTarefas();
@@ -84,11 +82,6 @@ public class Tarefas extends Fragment {
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
             btnNao.setOnClickListener(v1 -> dialog.dismiss());
-
-            SessionManager session = new SessionManager(requireContext());
-            String token = "Bearer " + session.getToken();
-            String email = session.getEmail();
-
 
             btnSim.setOnClickListener(v1 -> {
 
@@ -133,10 +126,9 @@ public class Tarefas extends Fragment {
         SessionManager session = new SessionManager(requireContext());
         String emailFuncionario = session.getEmail();
 
-        binding.progressBar.setVisibility(View.VISIBLE); // Mostra o círculo
+        binding.progressBar.setVisibility(View.VISIBLE);
 
-        TarefasApi tarefasApi = TarefasApiClient.getTarefasClient(requireContext())
-                .create(TarefasApi.class);
+        TarefasApi tarefasApi = RetrofitClient.getTarefasApi(getContext());
 
         tarefasApi.getFuncionarioPorEmail(emailFuncionario).enqueue(new Callback<Funcionario>() {
             @Override

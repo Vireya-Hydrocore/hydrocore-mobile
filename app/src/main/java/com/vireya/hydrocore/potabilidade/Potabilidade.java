@@ -5,6 +5,7 @@ import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,9 @@ public class Potabilidade extends Fragment {
 
     private TextView txtResultadoPotavel;
     private MaterialButton btnCalcularPotabilidade;
+
+    private ProgressBar progressBar;
+
 
     private TextInputEditText inputPh, inputDureza, inputSolidos, inputCloraminas,
             inputSulfato, inputCondutividade, inputCarbono, inputTrihalometanos, inputTurbidez;
@@ -51,11 +55,16 @@ public class Potabilidade extends Fragment {
         btnCalcularPotabilidade = view.findViewById(R.id.btnCalcularPotabilidade);
 
         txtResultadoPotavel.setVisibility(View.GONE);
+        progressBar = view.findViewById(R.id.progressBarPotabilidade);
+
 
         configurarValidacoes(view);
 
         btnCalcularPotabilidade.setOnClickListener(v -> {
             try {
+                progressBar.setVisibility(View.VISIBLE);
+                txtResultadoPotavel.setVisibility(View.GONE);
+
                 WaterData data = new WaterData(
                         Double.parseDouble(inputPh.getText().toString()),
                         Double.parseDouble(inputDureza.getText().toString()),
@@ -74,6 +83,7 @@ public class Potabilidade extends Fragment {
                     public void onResult(PotabilityResponse response) {
                         if (getActivity() != null) {
                             getActivity().runOnUiThread(() -> {
+                                progressBar.setVisibility(View.GONE);
                                 txtResultadoPotavel.setText(response.getPotability());
                                 txtResultadoPotavel.setVisibility(View.VISIBLE);
                             });
@@ -84,6 +94,7 @@ public class Potabilidade extends Fragment {
                     public void onError(String error) {
                         if (getActivity() != null) {
                             getActivity().runOnUiThread(() -> {
+                                progressBar.setVisibility(View.GONE);
                                 txtResultadoPotavel.setText(error);
                                 txtResultadoPotavel.setVisibility(View.VISIBLE);
                             });
@@ -92,10 +103,12 @@ public class Potabilidade extends Fragment {
                 });
 
             } catch (Exception e) {
+                progressBar.setVisibility(View.GONE);
                 txtResultadoPotavel.setText("Campos inválidos");
                 txtResultadoPotavel.setVisibility(View.VISIBLE);
             }
         });
+
 
 
         return view;

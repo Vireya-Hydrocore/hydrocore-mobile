@@ -1,5 +1,7 @@
 package com.vireya.hydrocore.core.network;
 
+import android.content.Context;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -8,6 +10,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.vireya.hydrocore.relatorio.api.RelatorioApi;
 import com.vireya.hydrocore.tarefas.api.TarefasApi;
+import com.vireya.hydrocore.utils.SessionManager;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
@@ -27,10 +30,6 @@ public class RetrofitClient {
 
     public static final String BASE_URL = "https://hydrocore-api-prod.onrender.com/";
     private static Retrofit retrofit;
-
-    // 🔐 Credenciais fixas (você pode mudar pra pegar do login depois)
-    private static final String USER_EMAIL = "teste@email.com";
-    private static final String BEARER_TOKEN = "teste233";
 
     // === GSON customizado para lidar com múltiplos formatos de data ===
     private static Gson buildGson() {
@@ -60,7 +59,9 @@ public class RetrofitClient {
     }
 
     // === Cliente HTTP com interceptador para autenticação ===
-    private static OkHttpClient buildClient() {
+    private static OkHttpClient buildClient(Context context) {
+        SessionManager session = new SessionManager(context);
+
         return new OkHttpClient.Builder()
                 .addInterceptor(new Interceptor() {
                     @Override
@@ -68,8 +69,8 @@ public class RetrofitClient {
                         Request original = chain.request();
 
                         Request.Builder builder = original.newBuilder()
-                                .header("X-User-Email", USER_EMAIL)
-                                .header("Authorization", "Bearer " + BEARER_TOKEN)
+                                .header("X-User-Email", session.getEmail())
+                                .header("Authorization", "Bearer " + session.getToken())
                                 .method(original.method(), original.body());
 
                         Request request = builder.build();
@@ -80,22 +81,22 @@ public class RetrofitClient {
     }
 
     // === Instância Retrofit com Gson e client customizado ===
-    public static Retrofit getRetrofit() {
+    public static Retrofit getRetrofit(Context context) {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create(buildGson()))
-                    .client(buildClient())
+                    .client(buildClient(context))
                     .build();
         }
         return retrofit;
     }
-    public static RelatorioApi getRelatorioApi() {
-        return getRetrofit().create(RelatorioApi.class);
+    public static RelatorioApi getRelatorioApi(Context context) {
+        return getRetrofit(context).create(RelatorioApi.class);
     }
 
     // === Exemplo de API específica ===
-    public static TarefasApi getTarefasApi() {
-        return getRetrofit().create(TarefasApi.class);
+    public static TarefasApi getTarefasApi(Context context) {
+        return getRetrofit(context).create(TarefasApi.class);
     }
 }

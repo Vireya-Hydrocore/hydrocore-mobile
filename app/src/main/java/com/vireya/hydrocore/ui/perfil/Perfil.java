@@ -86,7 +86,6 @@ public class Perfil extends Fragment {
         checkPermissions();
         loadProfileImage();
         loadFuncionarioInfo();
-        loadTarefasStats();
         loadGraficoProdutividade(1);
 
         btnEditarFoto.setOnClickListener(v -> showImageOptions());
@@ -203,34 +202,44 @@ public class Perfil extends Fragment {
         }
     }
 
-private void loadTarefasStats() {
-        TarefasApi api = RetrofitClient.getTarefasApi();
-        api.listarTarefasPorNome("Lucas Pereira").enqueue(new Callback<List<Tarefa>>() {
+    private void loadTarefasStats(String nomeFuncionario) {
+        TarefasApi api = RetrofitClient.getTarefasApi(getContext());
+
+        api.listarTarefasPorNome(nomeFuncionario, true).enqueue(new Callback<List<Tarefa>>() {
             @Override
             public void onResponse(Call<List<Tarefa>> call, Response<List<Tarefa>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    int feitas = 0, naoFeitas = 0;
-                    for (Tarefa t : response.body()) {
-                        if ("CONCLUIDA".equalsIgnoreCase(t.getStatus())) feitas++;
+                    List<Tarefa> tarefas = response.body();
+
+                    int feitas = 0;
+                    int naoFeitas = 0;
+
+                    for (Tarefa t : tarefas) {
+                        Log.d("STATUS", t.getStatus());
+                        if ("concluída".equalsIgnoreCase(t.getStatus())) feitas++;
                         else naoFeitas++;
                     }
 
-                    int totais = response.body().size();
                     tarDiariaValor.setText(String.valueOf(feitas));
                     tarNaoFeitasValor.setText(String.valueOf(naoFeitas));
-                    tarTotaisValor.setText(String.valueOf(totais));
+                    tarTotaisValor.setText(String.valueOf(tarefas.size()));
+                } else {
+                    Log.e("TAREFAS", "Erro na resposta: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<List<Tarefa>> call, Throwable t) {
-                Log.e("Perfil", "Erro ao carregar tarefas", t);
+                Log.e("TAREFAS", "Falha na API", t);
             }
         });
     }
 
+
+
+
     public void loadFuncionarioInfo() {
-        ApiService apiService = RetrofitClient.getRetrofit().create(ApiService.class);
+        ApiService apiService = RetrofitClient.getRetrofit(getContext()).create(ApiService.class);
 
         // pega o e-mail da sessão
         SessionManager session = new SessionManager(requireContext());
@@ -245,6 +254,9 @@ private void loadTarefasStats() {
                     Log.d("FUNCIONARIO", funcionario.getCargo());
                     txtNome.setText(funcionario.getNome());
                     txtCargo.setText(funcionario.getCargo());
+
+                    loadTarefasStats(funcionario.getNome());
+
                 } else {
                     Log.e("Perfil", "Funcionário não encontrado. Código: " + response.code());
                 }
@@ -259,7 +271,7 @@ private void loadTarefasStats() {
 
 
     private void loadGraficoProdutividade(int funcionarioId) {
-        ApiFuncionario apiService = RetrofitClient.getRetrofit().create(ApiFuncionario.class);
+        ApiFuncionario apiService = RetrofitClient.getRetrofit(getContext()).create(ApiFuncionario.class);
 
         apiService.getResumoTarefas(funcionarioId).enqueue(new Callback<Estatistica>() {
             @Override
