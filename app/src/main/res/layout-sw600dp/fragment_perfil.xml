@@ -5,16 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
+    android:fitsSystemWindows="true"
     tools:context=".ui.perfil.Perfil">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="48dp">
 
         <View
             android:id="@+id/fundoAzul"
             android:layout_width="match_parent"
-            android:layout_height="220dp"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.25"
             android:background="@drawable/degrade_fundo_perfil"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -28,6 +31,10 @@
             android:textColor="@color/colorOnCustomColor1"
             android:textSize="20sp"
             android:textStyle="bold"
+            android:shadowColor="#80000000"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -41,25 +48,52 @@
             android:text="Cargo"
             android:textColor="#FFFFFF"
             android:textSize="14sp"
+            android:shadowColor="#80000000"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtNome" />
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/imgPerfil"
-            android:layout_width="140dp"
-            android:layout_height="140dp"
+        <FrameLayout
+            android:id="@+id/containerImagemPerfil"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="9dp"
-            android:elevation="6dp"
-            android:padding="4dp"
-            android:scaleType="centerCrop"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtCargo"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtCargo"
-            app:shapeAppearanceOverlay="@style/CircularShapeAppearance"
-            app:srcCompat="@drawable/perfil_default"
-            app:strokeColor="@color/teal_700"
-            app:strokeWidth="4dp" />
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imgPerfil"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:elevation="6dp"
+                android:padding="4dp"
+                android:scaleType="centerCrop"
+                android:clipToOutline="true"
+                app:shapeAppearanceOverlay="@style/CircularShapeAppearance"
+                app:srcCompat="@drawable/perfil_default"
+                app:strokeColor="@color/teal_700"
+                app:strokeWidth="4dp" />
+
+            <ImageButton
+                android:id="@+id/btnEditarFoto"
+                android:layout_width="wrap_content"
+                android:layout_height="46dp"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="6dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:backgroundTint="@color/teal_700"
+                android:contentDescription="Editar foto"
+                android:elevation="6dp"
+                android:padding="6dp"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/ic_edit_24"
+                app:tint="@android:color/white" />
+
+        </FrameLayout>
 
         <LinearLayout
             android:id="@+id/cardStats"
@@ -74,9 +108,8 @@
             android:padding="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imgPerfil">
+            app:layout_constraintTop_toBottomOf="@+id/containerImagemPerfil">
 
-            <!-- Feitas -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -88,7 +121,7 @@
                     android:id="@+id/tarDiariaValor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="10"
+                    android:text="0"
                     android:textColor="@color/teal_700"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -107,23 +140,19 @@
                 android:layout_height="40dp"
                 android:background="#3FBFD8" />
 
-            <!-- Não Feitas -->
             <LinearLayout
                 android:id="@+id/layoutNaoFeitas"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:orientation="vertical"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground">
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tarNaoFeitasValor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="5"
+                    android:text="0"
                     android:textColor="@color/teal_700"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -142,7 +171,6 @@
                 android:layout_height="40dp"
                 android:background="#3FBFD8" />
 
-            <!-- Totais -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -154,7 +182,7 @@
                     android:id="@+id/tarTotaisValor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="15"
+                    android:text="0"
                     android:textColor="@color/teal_700"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -182,7 +210,6 @@
             app:layout_constraintTop_toBottomOf="@id/cardStats"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
