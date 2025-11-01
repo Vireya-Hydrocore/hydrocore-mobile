@@ -19,6 +19,4 @@ public interface ApiClient {
 
     @POST("auth/reset-password")
     Call<ResponseBody> resetPassword(@Body Map<String, String> body);
-
-
 }
