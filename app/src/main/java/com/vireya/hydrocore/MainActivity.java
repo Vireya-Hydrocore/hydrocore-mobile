@@ -86,9 +86,9 @@ public class MainActivity extends AppCompatActivity {
         FirebaseMessaging.getInstance().subscribeToTopic("avisos-gerais")
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Log.d("FCM", "Inscrito no tópico avisos-gerais!");
+                        Log.d("FCM_TOPIC", "✅ Inscrito no tópico avisos-gerais");
                     } else {
-                        Log.e("FCM", "Falha ao se inscrever no tópico");
+                        Log.e("FCM_TOPIC", "❌ Falha ao inscrever no tópico avisos-gerais", task.getException());
                     }
                 });
 
