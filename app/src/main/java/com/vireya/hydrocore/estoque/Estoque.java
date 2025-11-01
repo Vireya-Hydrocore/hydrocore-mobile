@@ -23,8 +23,6 @@ import com.vireya.hydrocore.estoque.repository.ProdutoRepository;
 import com.vireya.hydrocore.funcionario.model.Funcionario;
 import com.vireya.hydrocore.utils.SessionManager;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -83,7 +81,6 @@ public class Estoque extends Fragment {
 
         progressBar.setVisibility(View.VISIBLE);
 
-        // 1️⃣ Buscar funcionário parcial (id, nome, cargo)
         apiService.getFuncionarioPorEmail(emailFuncionario).enqueue(new Callback<Funcionario>() {
             @Override
             public void onResponse(Call<Funcionario> call, Response<Funcionario> response) {
@@ -91,7 +88,6 @@ public class Estoque extends Fragment {
                     Funcionario funcionarioParcial = response.body();
                     int funcionarioId = funcionarioParcial.getId();
 
-                    // 2️⃣ Buscar funcionário completo (com ETA)
                     apiService.getFuncionarioPorId(funcionarioId).enqueue(new Callback<Funcionario>() {
                         @Override
                         public void onResponse(Call<Funcionario> call, Response<Funcionario> responseFull) {
@@ -106,43 +102,30 @@ public class Estoque extends Fragment {
                                 }
 
                                 Log.d("ESTOQUE_DEBUG", "ETA obtida: " + eta);
-                                Log.d("ESTOQUE_DEBUG", "ETA enviada (sem codificação): " + eta);
 
-                                try {
-                                    // 🔒 Codifica corretamente para evitar erro de charset
-                                    String encodedEta = URLEncoder.encode(eta, StandardCharsets.UTF_8.toString())
-                                            .replace("+", "%20");
-                                    Log.d("ESTOQUE_DEBUG", "ETA enviada (codificada): " + encodedEta);
+                                apiService.getProdutosPorEta(eta).enqueue(new Callback<List<Produto>>() {
+                                    @Override
+                                    public void onResponse(Call<List<Produto>> call, Response<List<Produto>> responseProdutos) {
+                                        progressBar.setVisibility(View.GONE);
 
-                                    // 3️⃣ Buscar produtos por ETA
-                                    apiService.getProdutosPorEta(encodedEta).enqueue(new Callback<List<Produto>>() {
-                                        @Override
-                                        public void onResponse(Call<List<Produto>> call, Response<List<Produto>> responseProdutos) {
-                                            progressBar.setVisibility(View.GONE);
-
-                                            if (responseProdutos.isSuccessful() && responseProdutos.body() != null) {
-                                                productList.clear();
-                                                productList.addAll(responseProdutos.body());
-                                                adapter.updateList(productList);
-                                                updateButtonUI("Todos", productList.size());
-                                            } else {
-                                                Log.e("ESTOQUE_DEBUG", "Erro ao buscar produtos: " + responseProdutos.code());
-                                                carregarOffline("Nenhum produto encontrado para a ETA " + eta);
-                                            }
+                                        if (responseProdutos.isSuccessful() && responseProdutos.body() != null) {
+                                            productList.clear();
+                                            productList.addAll(responseProdutos.body());
+                                            adapter.updateList(productList);
+                                            updateButtonUI("Todos", productList.size());
+                                        } else {
+                                            Log.e("ESTOQUE_DEBUG", "Erro ao buscar produtos: " + responseProdutos.code());
+                                            carregarOffline("Nenhum produto encontrado para a ETA " + eta);
                                         }
+                                    }
 
-                                        @Override
-                                        public void onFailure(Call<List<Produto>> call, Throwable t) {
-                                            progressBar.setVisibility(View.GONE);
-                                            Log.e("ESTOQUE_DEBUG", "Falha ao buscar produtos", t);
-                                            carregarOffline("Falha ao buscar produtos: " + t.getMessage());
-                                        }
-                                    });
-                                } catch (Exception e) {
-                                    progressBar.setVisibility(View.GONE);
-                                    Log.e("ESTOQUE_DEBUG", "Erro ao codificar nome da ETA", e);
-                                    carregarOffline("Erro ao preparar o nome da ETA.");
-                                }
+                                    @Override
+                                    public void onFailure(Call<List<Produto>> call, Throwable t) {
+                                        progressBar.setVisibility(View.GONE);
+                                        Log.e("ESTOQUE_DEBUG", "Falha ao buscar produtos", t);
+                                        carregarOffline("Falha ao buscar produtos: " + t.getMessage());
+                                    }
+                                });
 
                             } else {
                                 progressBar.setVisibility(View.GONE);

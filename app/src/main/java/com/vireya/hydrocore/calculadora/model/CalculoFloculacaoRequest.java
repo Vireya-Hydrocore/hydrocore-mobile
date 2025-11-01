@@ -7,7 +7,6 @@ public class CalculoFloculacaoRequest {
     private String cor;
     private String produtoQuimico;
 
-    // Construtor
     public CalculoFloculacaoRequest(double turbidez, double ph, String cor, String produtoQuimico) {
         this.turbidez = turbidez;
         this.ph = ph;
@@ -15,7 +14,6 @@ public class CalculoFloculacaoRequest {
         this.produtoQuimico = produtoQuimico;
     }
 
-    // Getters e Setters
     public double getTurbidez() {
         return turbidez;
     }

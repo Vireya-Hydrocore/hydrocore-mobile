@@ -33,7 +33,6 @@ public class RetrofitClient {
     private static Retrofit retrofit;
     private static final String TAG = "RETROFIT_DEBUG";
 
-    // === GSON customizado para lidar com múltiplos formatos de data ===
     private static Gson buildGson() {
         return new GsonBuilder()
                 .registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
@@ -54,21 +53,19 @@ public class RetrofitClient {
                                 return format.parse(dateStr);
                             } catch (Exception ignored) {}
                         }
-                        System.err.println("⚠️ Não foi possível converter data: " + dateStr);
+                        System.err.println("Não foi possível converter data: " + dateStr);
                         return null;
                     }
                 })
                 .create();
     }
 
-    // === Utilitário para limpar acentos (evita erro "Unexpected char 0xe3") ===
     private static String limparAcentos(String texto) {
         if (texto == null) return null;
         return Normalizer.normalize(texto, Normalizer.Form.NFD)
                 .replaceAll("[^\\p{ASCII}]", "");
     }
 
-    // === Cliente HTTP com interceptador para autenticação e ETA ===
     private static OkHttpClient buildClient(Context context) {
         SessionManager
                 session = new SessionManager(context);
@@ -79,10 +76,9 @@ public class RetrofitClient {
                     public Response intercept(Chain chain) throws IOException {
                         Request original = chain.request();
 
-                        // Captura a ETA salva (se houver)
-                        String eta = session.getEta(); // 🔹 você precisa garantir que salva isso no SessionManager
+                        String eta = session.getEta();
                         if (eta != null) {
-                            eta = limparAcentos(eta); // remove acentos e caracteres especiais
+                            eta = limparAcentos(eta);
                         }
 
                         Log.d(TAG, "ETA enviada no header: " + eta);
@@ -91,7 +87,6 @@ public class RetrofitClient {
                                 .header("X-User-Email", session.getEmail())
                                 .header("Authorization", "Bearer " + session.getToken());
 
-                        // Adiciona o header da ETA somente se existir
                         if (eta != null && !eta.isEmpty()) {
                             builder.header("nome", eta);
                         }
@@ -106,7 +101,6 @@ public class RetrofitClient {
                 .build();
     }
 
-    // === Instância Retrofit com Gson e client customizado ===
     public static Retrofit getRetrofit(Context context) {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
@@ -118,7 +112,6 @@ public class RetrofitClient {
         return retrofit;
     }
 
-    // === APIs específicas ===
     public static RelatorioApi getRelatorioApi(Context context) {
         return getRetrofit(context).create(RelatorioApi.class);
     }
