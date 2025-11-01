@@ -65,7 +65,6 @@ public class RelatorioAdapter extends RecyclerView.Adapter<RelatorioAdapter.Rela
                 return;
             }
 
-            // Pega o último token como ano
             String anoStr = partes[partes.length - 1];
             StringBuilder mesBuilder = new StringBuilder();
             for (int i = 0; i < partes.length - 1; i++) {
@@ -91,7 +90,6 @@ public class RelatorioAdapter extends RecyclerView.Adapter<RelatorioAdapter.Rela
 
             Log.d(TAG, "Preparando chamada detalhado — mesNome: '" + mesNome + "', mesNumero: " + mesNumero + ", ano: " + ano);
 
-            // Chamada atualizada: agora recebe uma lista
             Call<List<RelatorioDetalhado>> call = api.buscarRelatorioPorMesAno(mesNumero, ano);
             try {
                 if (call != null && call.request() != null && call.request().url() != null) {

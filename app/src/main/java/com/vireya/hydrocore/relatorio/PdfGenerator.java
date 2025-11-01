@@ -70,7 +70,6 @@ public class PdfGenerator {
 
         document.finishPage(page);
 
-        // Salva o PDF em "Downloads"
         File downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         if (!downloads.exists()) downloads.mkdirs();
         File file = new File(downloads, "Relatorio_" + safe(relatorio.getNome()) + "_" + relatorio.getId() + ".pdf");
@@ -82,7 +81,6 @@ public class PdfGenerator {
 
             Toast.makeText(context, "PDF salvo em Downloads", Toast.LENGTH_SHORT).show();
 
-            // Abre o PDF automaticamente
             Uri uri = FileProvider.getUriForFile(context,
                     context.getPackageName() + ".provider", file);
 
@@ -92,7 +90,6 @@ public class PdfGenerator {
 
             context.startActivity(openIntent);
 
-            // Notificação para abrir o PDF depois
             showPdfNotification(context, uri, file.getName());
 
         } catch (IOException e) {

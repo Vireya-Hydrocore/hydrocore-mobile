@@ -27,13 +27,11 @@ public class SessionManager {
         editor.apply();
     }
 
-    // 🔹 Salvar ID do funcionário
     public void setIdFuncionario(int idFuncionario) {
         editor.putInt(KEY_ID_FUNCIONARIO, idFuncionario);
         editor.apply();
     }
 
-    // 🔹 Obter ID do funcionário
     public int getIdFuncionario() {
         return prefs.getInt(KEY_ID_FUNCIONARIO, -1);
     }
@@ -50,7 +48,6 @@ public class SessionManager {
         return prefs.getString(KEY_EMAIL, null);
     }
 
-    // 🔹 Salvar e recuperar ETA
     public void setEta(String eta) {
         editor.putString(KEY_ETA, eta);
         editor.apply();

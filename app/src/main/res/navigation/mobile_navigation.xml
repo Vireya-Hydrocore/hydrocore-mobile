@@ -9,7 +9,13 @@
         android:id="@+id/navigation_home"
         android:name="com.vireya.hydrocore.ui.Home"
         android:label="navigation_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/action_home_to_agenda"
+            app:destination="@id/navigation_agenda" />
+    </fragment>
+
     <fragment
         android:id="@+id/navigation_calculadora"
         android:name="com.vireya.hydrocore.calculadora.Calculadora"
@@ -21,36 +27,43 @@
         android:name="com.vireya.hydrocore.potabilidade.Potabilidade"
         android:label="navigation_potabilidade"
         tools:layout="@layout/fragment_potabilidade" />
+
     <fragment
         android:id="@+id/navigation_tarefas"
         android:name="com.vireya.hydrocore.tarefas.Tarefas"
         android:label="fragment_tarefas"
         tools:layout="@layout/fragment_tarefas" />
+
     <fragment
         android:id="@+id/navigation_estoque"
         android:name="com.vireya.hydrocore.estoque.Estoque"
         android:label="navigation_estoque"
         tools:layout="@layout/fragment_estoque" />
+
     <fragment
         android:id="@+id/navigation_perfil"
         android:name="com.vireya.hydrocore.ui.perfil.Perfil"
         android:label="navigation_perfil"
         tools:layout="@layout/fragment_perfil" />
+
     <fragment
         android:id="@+id/navigation_configuracoes"
         android:name="com.vireya.hydrocore.ui.configuracoes.Configuracoes"
         android:label="fragment_configuracoes"
         tools:layout="@layout/fragment_configuracoes" />
+
     <fragment
         android:id="@+id/navigation_relatorio"
         android:name="com.vireya.hydrocore.relatorio.Relatorio"
         android:label="navigation_relatorio"
         tools:layout="@layout/fragment_relatorio" />
+
     <fragment
         android:id="@+id/navigation_agenda"
         android:name="com.vireya.hydrocore.agenda.Agenda"
         android:label="fragment_agenda2"
         tools:layout="@layout/fragment_agenda2" />
+
     <fragment
         android:id="@+id/informacoesConfig"
         android:name="com.vireya.hydrocore.ui.configuracoes.InformacoesConfig"
@@ -62,6 +75,4 @@
         android:name="com.vireya.hydrocore.chatbot.ChatBot"
         android:label="navigation_chatbot"
         tools:layout="@layout/fragment_chat_bot" />
-
-
 </navigation>
