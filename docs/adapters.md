@@ -23,7 +23,7 @@ Segue o padrão de projeto [Adapter Pattern](https://refactoring.guru/pt-br/desi
 - Amarelo ---> Prioridade Média
 - Verde ---> Prioridade Baixa
 
-### ChatAdapter(../app/src/main/java/com/vireya/hydrocore/chatbot/adapter/ChatAdapter.java)
+### [ChatAdapter](../app/src/main/java/com/vireya/hydrocore/chatbot/adapter/ChatAdapter.java)
 
 #### Pacote: com.vireya.hydrocore.chatbot.adapter
 #### Função: Exibe as mensagens entre o usuário e o chatbot.
@@ -37,7 +37,8 @@ Utiliza dois tipos de ViewHolder (UserViewHolder e BotViewHolder) para exibir me
 - getItemViewType() ---> Identifica se a mensagem é do usuário ou do bot.
 - onBindViewHolder() ---> Atribui o texto da mensagem ao tipo correto de ViewHolder.
 
-## ProdutoAdapter
+## [ProdutoAdapter](../app/src/main/java/com/vireya/hydrocore/estoque/adapter/ProdutoAdapter.java)
+
 #### Pacote: com.vireya.hydrocore.estoque.adapter
 #### Função: Exibe a lista de produtos no estoque.
 #### Modelo utilizado: Produto
@@ -54,7 +55,7 @@ Utiliza dois tipos de ViewHolder (UserViewHolder e BotViewHolder) para exibir me
 - updateList(List<Produto>): Atualiza a lista de produtos exibida.
 - onBindViewHolder(): Define nome, quantidade e cor da barra de status.
 
-## RelatorioAdapter
+## [RelatorioAdapter](../app/src/main/java/com/vireya/hydrocore/relatorio/adapter/RelatorioAdapter.java)
 
 #### Pacote: com.vireya.hydrocore.relatorio.adapter
 #### Função: Lista relatórios e permite buscar detalhes ou baixar informações.
@@ -70,7 +71,8 @@ Utiliza dois tipos de ViewHolder (UserViewHolder e BotViewHolder) para exibir me
 - onBindViewHolder() ---> Configura o botão de download e executa a requisição à API.
 - Callback Retrofit ---> Exibe mensagem com nome e cidade do relatório.
 
-## TarefasAdapter
+## [TarefasAdapter](../app/src/main/java/com/vireya/hydrocore/tarefas/adapter/TarefasAdapter.java)
+
 
 #### Pacote: com.vireya.hydrocore.tarefas.adapter
 #### Função: Gerencia a exibição e marcação de tarefas concluídas.
