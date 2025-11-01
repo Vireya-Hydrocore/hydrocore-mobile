@@ -24,6 +24,7 @@
             android:focusable="true">
 
             <LinearLayout
+                android:id="@+id/avisosGerais"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -101,21 +102,20 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Gráficos"
-                        android:textColor="@android:color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="Este é um exemplo de conteúdo que se adapta ao tamanho da tela. O CardView cresce conforme o texto e mantém margens em qualquer dispositivo."
-                        android:textColor="#555"
-                        android:textSize="14sp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+
+                            <WebView
+                                android:id="@+id/webGrafico1"
+                                android:layout_width="match_parent"
+                                android:layout_height="220dp"
+                                android:layout_marginTop="12dp" />
+                        </LinearLayout>
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

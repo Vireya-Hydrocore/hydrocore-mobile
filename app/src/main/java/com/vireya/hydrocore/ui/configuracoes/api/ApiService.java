@@ -1,6 +1,7 @@
 package com.vireya.hydrocore.ui.configuracoes.api;
 
-import com.vireya.hydrocore.ui.configuracoes.model.Funcionario;
+
+import com.vireya.hydrocore.funcionario.model.Funcionario;
 
 import java.util.List;
 

@@ -1,66 +1,55 @@
 package com.vireya.hydrocore.ui;
 
 import android.os.Bundle;
-
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.vireya.hydrocore.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Home#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class Home extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private WebView webGrafico1;
+    private LinearLayout avisosGerais;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public Home() {
-        // Required empty public constructor
-    }
-
-    public static Home newInstance(String param1, String param2) {
-        Home fragment = new Home();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
+        // infla o layout correto
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        // inicializa os elementos da view
+        webGrafico1 = view.findViewById(R.id.webGrafico1);
+        avisosGerais = view.findViewById(R.id.avisosGerais);
+
+        // configuração do WebView
+        if (webGrafico1 != null) {
+            WebSettings webSettings = webGrafico1.getSettings();
+            webSettings.setJavaScriptEnabled(true);
+            webGrafico1.setWebViewClient(new WebViewClient());
+            // aqui você pode carregar sua URL ou gráfico
+            webGrafico1.loadUrl("https://app.powerbi.com/view?r=eyJrIjoiODlhOTZmMzUtY2VjMi00OTI4LWFiY2YtMzVjNmFhYTY3NDRhIiwidCI6ImIxNDhmMTRjLTIzOTctNDAyYy1hYjZhLTFiNDcxMTE3N2FjMCJ9"); // substitua pelo gráfico real
+        }
+
+        // exemplo: clique no card de avisos
+        if (avisosGerais != null) {
+            avisosGerais.setOnClickListener(v ->
+                    // exemplo de ação: abrir outra tela ou mostrar detalhes
+                    System.out.println("Avisos gerais clicado")
+            );
+        }
 
         return view;
     }
-
 }

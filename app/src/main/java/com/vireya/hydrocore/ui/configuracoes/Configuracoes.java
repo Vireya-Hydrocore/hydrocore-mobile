@@ -2,6 +2,8 @@ package com.vireya.hydrocore.ui.configuracoes;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,11 +19,15 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.google.android.material.imageview.ShapeableImageView;
 import com.vireya.hydrocore.R;
 import com.vireya.hydrocore.core.network.RetrofitClient;
+import com.vireya.hydrocore.funcionario.model.Funcionario;
 import com.vireya.hydrocore.ui.configuracoes.api.ApiService;
-import com.vireya.hydrocore.ui.configuracoes.model.Funcionario;
+
 import com.vireya.hydrocore.utils.SessionManager;
+
+import java.io.FileInputStream;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,6 +40,7 @@ public class Configuracoes extends Fragment {
 
     private TextView nomeFuncionario;
     private TextView cargoFuncionario;
+    private ShapeableImageView imgProfile;
 
     public Configuracoes() { }
 
@@ -49,36 +56,31 @@ public class Configuracoes extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Referências aos TextViews
         nomeFuncionario = view.findViewById(R.id.txtFuncionario);
         cargoFuncionario = view.findViewById(R.id.txtCargo);
+        imgProfile = view.findViewById(R.id.imgProfile);
 
-        // Carrega os dados do funcionário logado
         carregarDadosFuncionario();
+        carregarImagemPerfil(); // 👈 NOVO
 
-        // Estados salvos dos toggles
         notificacaoAtivo = getSavedState("notificacaoAtivo", true);
         offlineAtivo = getSavedState("offlineAtivo", false);
 
-        // Configura modo escuro
+        // TOGGLE DO MODO ESCURO
         setupToggle(view, R.id.toggleWifi, R.id.thumbWifi,
                 () -> {
                     boolean modoEscuroAtivo = getSavedState("modoEscuro", false);
                     boolean novoEstado = !modoEscuroAtivo;
                     saveState("modoEscuro", novoEstado);
-
-                    if (novoEstado) {
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    } else {
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    }
-
+                    AppCompatDelegate.setDefaultNightMode(
+                            novoEstado ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
+                    );
                     requireActivity().recreate();
                 },
                 () -> getSavedState("modoEscuro", false)
         );
 
-        // Configura notificações
+        // TOGGLE NOTIFICAÇÃO
         setupToggle(view, R.id.toggleNotificacao, R.id.thumbBluetooth,
                 () -> {
                     notificacaoAtivo = !notificacaoAtivo;
@@ -86,7 +88,7 @@ public class Configuracoes extends Fragment {
                 },
                 () -> notificacaoAtivo);
 
-        // Configura modo offline
+        // TOGGLE OFFLINE
         setupToggle(view, R.id.toggleOffline, R.id.thumbOffline,
                 () -> {
                     offlineAtivo = !offlineAtivo;
@@ -94,27 +96,48 @@ public class Configuracoes extends Fragment {
                 },
                 () -> offlineAtivo);
 
+        // Clique no layout da foto → vai para o Perfil
+        LinearLayout layoutFotoPerfil = view.findViewById(R.id.layoutFotoPerfilConfig);
+        layoutFotoPerfil.setOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+            navController.navigate(R.id.navigation_perfil);
+        });
+
         // Navegação para informações
         LinearLayout layoutInfo = view.findViewById(R.id.layoutInfo);
         layoutInfo.setOnClickListener(v -> showInformations());
     }
 
+    private void carregarImagemPerfil() {
+        String filename = requireContext()
+                .getSharedPreferences("configuracoes", Context.MODE_PRIVATE)
+                .getString("profileImage", null);
+
+        if (filename != null) {
+            try (FileInputStream fis = requireContext().openFileInput(filename)) {
+                Bitmap bitmap = BitmapFactory.decodeStream(fis);
+                imgProfile.setImageBitmap(bitmap);
+            } catch (Exception e) {
+                e.printStackTrace();
+                imgProfile.setImageResource(R.drawable.perfil_default);
+            }
+        } else {
+            imgProfile.setImageResource(R.drawable.perfil_default);
+        }
+    }
+
     private void carregarDadosFuncionario() {
-        // Usa SessionManager para pegar o e-mail salvo do login
         SessionManager sessionManager = new SessionManager(requireContext());
         String email = sessionManager.getEmail();
 
         if (email == null || email.isEmpty()) {
             nomeFuncionario.setText("Usuário desconhecido");
             cargoFuncionario.setText("Sem cargo");
-            Log.e("CONFIGURACOES", "Nenhum e-mail encontrado na sessão.");
             return;
         }
 
         ApiService apiService = RetrofitClient.getRetrofit(getContext()).create(ApiService.class);
-        Call<Funcionario> call = apiService.getFuncionarioByEmail(email); // e-mail enviado no header
-
-        Log.d("CONFIGURACOES", "Buscando funcionário com e-mail: " + email);
+        Call<Funcionario> call = apiService.getFuncionarioByEmail(email);
 
         call.enqueue(new Callback<Funcionario>() {
             @Override
@@ -123,11 +146,9 @@ public class Configuracoes extends Fragment {
                     Funcionario funcionario = response.body();
                     nomeFuncionario.setText(funcionario.getNome());
                     cargoFuncionario.setText(funcionario.getCargo());
-                    Log.d("CONFIGURACOES", "Funcionário carregado: " + funcionario.getNome());
                 } else {
                     nomeFuncionario.setText("Erro ao carregar");
                     cargoFuncionario.setText("Tente novamente");
-                    Log.e("CONFIGURACOES", "Erro na resposta: " + response.code());
                 }
             }
 
@@ -135,7 +156,6 @@ public class Configuracoes extends Fragment {
             public void onFailure(Call<Funcionario> call, Throwable t) {
                 nomeFuncionario.setText("Falha de conexão");
                 cargoFuncionario.setText("Offline");
-                Log.e("CONFIGURACOES", "Falha na requisição", t);
             }
         });
     }
@@ -149,15 +169,14 @@ public class Configuracoes extends Fragment {
         );
     }
 
+    // ======== TOGGLES ================
     private void setupToggle(@NonNull View parentView, int toggleId, int thumbId,
                              Runnable toggleStateCallback, StateCallback isActiveCallback) {
-
         LinearLayout toggle = parentView.findViewById(toggleId);
         View thumb = parentView.findViewById(thumbId);
 
         toggle.post(() -> {
             final int deslocamento = toggle.getWidth() - thumb.getWidth() - 12;
-
             boolean ativo = isActiveCallback.isActive();
             thumb.setTranslationX(ativo ? deslocamento : 0f);
             toggle.setBackgroundResource(
@@ -167,7 +186,6 @@ public class Configuracoes extends Fragment {
             toggle.setOnClickListener(v -> {
                 toggleStateCallback.run();
                 boolean novoEstado = isActiveCallback.isActive();
-
                 moverThumb(thumb, novoEstado, deslocamento);
                 toggle.setBackgroundResource(
                         novoEstado ? R.drawable.toggle_background : R.drawable.toggle_background_off
@@ -177,7 +195,7 @@ public class Configuracoes extends Fragment {
     }
 
     private void moverThumb(View thumb, boolean ativo, int deslocamento) {
-        float destino = ativo ? (float) deslocamento : 0f;
+        float destino = ativo ? deslocamento : 0f;
         ObjectAnimator animator = ObjectAnimator.ofFloat(thumb, "translationX", destino);
         animator.setDuration(200);
         animator.start();

@@ -16,8 +16,9 @@ import androidx.navigation.Navigation;
 import com.vireya.hydrocore.R;
 import com.vireya.hydrocore.entrada.EsqueceuSenha;
 import com.vireya.hydrocore.core.network.RetrofitClient;
+import com.vireya.hydrocore.funcionario.model.Funcionario;
 import com.vireya.hydrocore.ui.configuracoes.api.ApiService;
-import com.vireya.hydrocore.ui.configuracoes.model.Funcionario;
+
 import com.vireya.hydrocore.utils.SessionManager;
 
 import retrofit2.Call;

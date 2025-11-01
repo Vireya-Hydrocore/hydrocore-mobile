@@ -1,6 +1,7 @@
 package com.vireya.hydrocore.core.network;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -12,7 +13,9 @@ import com.vireya.hydrocore.relatorio.api.RelatorioApi;
 import com.vireya.hydrocore.tarefas.api.TarefasApi;
 import com.vireya.hydrocore.utils.SessionManager;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
+import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -24,12 +27,11 @@ import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import java.io.IOException;
-
 public class RetrofitClient {
 
     public static final String BASE_URL = "https://hydrocore-api-prod.onrender.com/";
     private static Retrofit retrofit;
+    private static final String TAG = "RETROFIT_DEBUG";
 
     // === GSON customizado para lidar com múltiplos formatos de data ===
     private static Gson buildGson() {
@@ -38,7 +40,9 @@ public class RetrofitClient {
                     private final SimpleDateFormat[] formats = new SimpleDateFormat[]{
                             new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX", Locale.getDefault()),
                             new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX", Locale.getDefault()),
-                            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+                            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()),
+                            new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()) //
+
                     };
 
                     @Override
@@ -48,8 +52,7 @@ public class RetrofitClient {
                         for (SimpleDateFormat format : formats) {
                             try {
                                 return format.parse(dateStr);
-                            } catch (Exception ignored) {
-                            }
+                            } catch (Exception ignored) {}
                         }
                         System.err.println("⚠️ Não foi possível converter data: " + dateStr);
                         return null;
@@ -58,9 +61,17 @@ public class RetrofitClient {
                 .create();
     }
 
-    // === Cliente HTTP com interceptador para autenticação ===
+    // === Utilitário para limpar acentos (evita erro "Unexpected char 0xe3") ===
+    private static String limparAcentos(String texto) {
+        if (texto == null) return null;
+        return Normalizer.normalize(texto, Normalizer.Form.NFD)
+                .replaceAll("[^\\p{ASCII}]", "");
+    }
+
+    // === Cliente HTTP com interceptador para autenticação e ETA ===
     private static OkHttpClient buildClient(Context context) {
-        SessionManager session = new SessionManager(context);
+        SessionManager
+                session = new SessionManager(context);
 
         return new OkHttpClient.Builder()
                 .addInterceptor(new Interceptor() {
@@ -68,12 +79,27 @@ public class RetrofitClient {
                     public Response intercept(Chain chain) throws IOException {
                         Request original = chain.request();
 
+                        // Captura a ETA salva (se houver)
+                        String eta = session.getEta(); // 🔹 você precisa garantir que salva isso no SessionManager
+                        if (eta != null) {
+                            eta = limparAcentos(eta); // remove acentos e caracteres especiais
+                        }
+
+                        Log.d(TAG, "ETA enviada no header: " + eta);
+
                         Request.Builder builder = original.newBuilder()
                                 .header("X-User-Email", session.getEmail())
-                                .header("Authorization", "Bearer " + session.getToken())
-                                .method(original.method(), original.body());
+                                .header("Authorization", "Bearer " + session.getToken());
 
-                        Request request = builder.build();
+                        // Adiciona o header da ETA somente se existir
+                        if (eta != null && !eta.isEmpty()) {
+                            builder.header("nome", eta);
+                        }
+
+                        Request request = builder
+                                .method(original.method(), original.body())
+                                .build();
+
                         return chain.proceed(request);
                     }
                 })
@@ -91,11 +117,12 @@ public class RetrofitClient {
         }
         return retrofit;
     }
+
+    // === APIs específicas ===
     public static RelatorioApi getRelatorioApi(Context context) {
         return getRetrofit(context).create(RelatorioApi.class);
     }
 
-    // === Exemplo de API específica ===
     public static TarefasApi getTarefasApi(Context context) {
         return getRetrofit(context).create(TarefasApi.class);
     }

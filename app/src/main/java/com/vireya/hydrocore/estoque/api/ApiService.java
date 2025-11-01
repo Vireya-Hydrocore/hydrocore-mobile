@@ -20,6 +20,6 @@ public interface ApiService {
     Call<Funcionario> getFuncionarioPorId(@Path("id") int id);
 
     @GET("/v1/estoque/listar")
-    Call<List<Produto>> getProdutosPorEta(@Header("nome") String eta);
+        Call<List<Produto>> getProdutosPorEta(@Header("nome") String eta);
 
 }

@@ -34,11 +34,6 @@
         android:title="Relatório" />
 
     <item
-        android:id="@+id/navigation_graficos"
-        android:icon="@drawable/grafico"
-        android:title="Gráficos" />
-
-    <item
         android:id="@+id/navigation_chatbot"
         android:icon="@drawable/chatbot"
         android:title="ChatBot" />
