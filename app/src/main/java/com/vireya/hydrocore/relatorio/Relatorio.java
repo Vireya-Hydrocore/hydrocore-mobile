@@ -53,7 +53,6 @@ public class Relatorio extends Fragment {
         apiService = RetrofitClient.getRetrofit(getContext()).create(ApiService.class);
 
 
-        // Pega o e-mail salvo na sessão
         SessionManager sessionManager = new SessionManager(requireContext());
         String email = sessionManager.getEmail();
 
@@ -66,7 +65,6 @@ public class Relatorio extends Fragment {
         return view;
     }
 
-    // 1️⃣ Buscar o funcionário pelo e-mail
     private void buscarFuncionarioPorEmail(String email) {
         apiService.getFuncionarioByEmail(email).enqueue(new Callback<Funcionario>() {
             @Override
@@ -86,7 +84,6 @@ public class Relatorio extends Fragment {
         });
     }
 
-    // 2️⃣ Buscar o ID da ETA usando o ID do funcionário
     private void buscarIdEtaDoFuncionario() {
         funcionarioApi.getFuncionarioById(idFuncionario).enqueue(new Callback<Funcionario>() {
             @Override
@@ -106,7 +103,6 @@ public class Relatorio extends Fragment {
         });
     }
 
-    // 3️⃣ Buscar relatórios pela ETA
     private void carregarRelatorios() {
         relatorioApi.listarRelatoriosPorEta(idEta).enqueue(new Callback<List<RelatorioResumo>>() {
             @Override
