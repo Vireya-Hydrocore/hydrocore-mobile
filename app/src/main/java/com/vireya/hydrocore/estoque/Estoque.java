@@ -2,6 +2,7 @@ package com.vireya.hydrocore.estoque;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,8 @@ import com.vireya.hydrocore.estoque.repository.ProdutoRepository;
 import com.vireya.hydrocore.funcionario.model.Funcionario;
 import com.vireya.hydrocore.utils.SessionManager;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -34,7 +37,7 @@ public class Estoque extends Fragment {
 
     private RecyclerView recyclerView;
     private ProdutoAdapter adapter;
-    private List<Produto> productList = new ArrayList<>();
+    private final List<Produto> productList = new ArrayList<>();
     private ApiService apiService;
     private ProdutoRepository produtoRepository;
     private Button button;
@@ -56,18 +59,12 @@ public class Estoque extends Fragment {
         apiService = RetrofitClient.getRetrofit(requireContext()).create(ApiService.class);
         produtoRepository = new ProdutoRepository(requireContext());
 
-        // Use a view inflada para o progressBar
         View progressBar = view.findViewById(R.id.progressBarEstoque);
-
         carregarProdutos(progressBar);
 
         TabLayout tabLayout = view.findViewById(R.id.tabLayout);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                filterList(tab.getPosition());
-            }
-
+            @Override public void onTabSelected(TabLayout.Tab tab) { filterList(tab.getPosition()); }
             @Override public void onTabUnselected(TabLayout.Tab tab) {}
             @Override public void onTabReselected(TabLayout.Tab tab) {}
         });
@@ -75,13 +72,18 @@ public class Estoque extends Fragment {
         return view;
     }
 
-
     private void carregarProdutos(View progressBar) {
         SessionManager session = new SessionManager(requireContext());
         String emailFuncionario = session.getEmail();
 
+        if (emailFuncionario == null || emailFuncionario.isEmpty()) {
+            Toast.makeText(getContext(), "Email do funcionário não encontrado na sessão.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         progressBar.setVisibility(View.VISIBLE);
 
+        // 1️⃣ Buscar funcionário parcial (id, nome, cargo)
         apiService.getFuncionarioPorEmail(emailFuncionario).enqueue(new Callback<Funcionario>() {
             @Override
             public void onResponse(Call<Funcionario> call, Response<Funcionario> response) {
@@ -89,7 +91,7 @@ public class Estoque extends Fragment {
                     Funcionario funcionarioParcial = response.body();
                     int funcionarioId = funcionarioParcial.getId();
 
-
+                    // 2️⃣ Buscar funcionário completo (com ETA)
                     apiService.getFuncionarioPorId(funcionarioId).enqueue(new Callback<Funcionario>() {
                         @Override
                         public void onResponse(Call<Funcionario> call, Response<Funcionario> responseFull) {
@@ -97,43 +99,67 @@ public class Estoque extends Fragment {
                                 Funcionario funcionarioCompleto = responseFull.body();
                                 String eta = funcionarioCompleto.getEta();
 
-                                apiService.getProdutosPorEta(eta).enqueue(new Callback<List<Produto>>() {
-                                    @Override
-                                    public void onResponse(Call<List<Produto>> call, Response<List<Produto>> responseProdutos) {
-                                        progressBar.setVisibility(View.GONE);
+                                if (eta == null || eta.isEmpty()) {
+                                    progressBar.setVisibility(View.GONE);
+                                    carregarOffline("Funcionário não possui ETA associada.");
+                                    return;
+                                }
 
-                                        if (responseProdutos.isSuccessful() && responseProdutos.body() != null) {
-                                            productList.clear();
-                                            productList.addAll(responseProdutos.body());
-                                            adapter.updateList(productList);
-                                            updateButtonUI("Todos", productList.size());
-                                        } else {
-                                            carregarOffline("Erro ao buscar produtos");
+                                Log.d("ESTOQUE_DEBUG", "ETA obtida: " + eta);
+                                Log.d("ESTOQUE_DEBUG", "ETA enviada (sem codificação): " + eta);
+
+                                try {
+                                    // 🔒 Codifica corretamente para evitar erro de charset
+                                    String encodedEta = URLEncoder.encode(eta, StandardCharsets.UTF_8.toString())
+                                            .replace("+", "%20");
+                                    Log.d("ESTOQUE_DEBUG", "ETA enviada (codificada): " + encodedEta);
+
+                                    // 3️⃣ Buscar produtos por ETA
+                                    apiService.getProdutosPorEta(encodedEta).enqueue(new Callback<List<Produto>>() {
+                                        @Override
+                                        public void onResponse(Call<List<Produto>> call, Response<List<Produto>> responseProdutos) {
+                                            progressBar.setVisibility(View.GONE);
+
+                                            if (responseProdutos.isSuccessful() && responseProdutos.body() != null) {
+                                                productList.clear();
+                                                productList.addAll(responseProdutos.body());
+                                                adapter.updateList(productList);
+                                                updateButtonUI("Todos", productList.size());
+                                            } else {
+                                                Log.e("ESTOQUE_DEBUG", "Erro ao buscar produtos: " + responseProdutos.code());
+                                                carregarOffline("Nenhum produto encontrado para a ETA " + eta);
+                                            }
                                         }
-                                    }
 
-                                    @Override
-                                    public void onFailure(Call<List<Produto>> call, Throwable t) {
-                                        progressBar.setVisibility(View.GONE);
-                                        carregarOffline("Falha ao buscar produtos: " + t.getMessage());
-                                    }
-                                });
+                                        @Override
+                                        public void onFailure(Call<List<Produto>> call, Throwable t) {
+                                            progressBar.setVisibility(View.GONE);
+                                            Log.e("ESTOQUE_DEBUG", "Falha ao buscar produtos", t);
+                                            carregarOffline("Falha ao buscar produtos: " + t.getMessage());
+                                        }
+                                    });
+                                } catch (Exception e) {
+                                    progressBar.setVisibility(View.GONE);
+                                    Log.e("ESTOQUE_DEBUG", "Erro ao codificar nome da ETA", e);
+                                    carregarOffline("Erro ao preparar o nome da ETA.");
+                                }
 
                             } else {
                                 progressBar.setVisibility(View.GONE);
-                                carregarOffline("Funcionário não encontrado pelo ID");
+                                carregarOffline("Não foi possível obter dados completos do funcionário.");
                             }
                         }
 
                         @Override
                         public void onFailure(Call<Funcionario> call, Throwable t) {
                             progressBar.setVisibility(View.GONE);
-                            carregarOffline("Falha ao buscar funcionário pelo ID: " + t.getMessage());
+                            carregarOffline("Falha ao buscar funcionário completo: " + t.getMessage());
                         }
                     });
+
                 } else {
                     progressBar.setVisibility(View.GONE);
-                    carregarOffline("Funcionário não encontrado pelo email");
+                    carregarOffline("Funcionário não encontrado pelo e-mail.");
                 }
             }
 
@@ -144,10 +170,6 @@ public class Estoque extends Fragment {
             }
         });
     }
-
-
-
-
 
     private void carregarOffline(String mensagem) {
         Toast.makeText(getContext(), mensagem, Toast.LENGTH_SHORT).show();
@@ -165,39 +187,35 @@ public class Estoque extends Fragment {
 
     private void filterList(int position) {
         List<Produto> filteredList = new ArrayList<>();
-        String status = "";
+        String status;
 
         switch (position) {
-            case 0:
-                adapter.updateList(productList);
-                status = "Todos";
-                break;
             case 1:
                 for (Produto p : productList)
                     if ("Suficiente".equals(p.getStatus())) filteredList.add(p);
-                adapter.updateList(filteredList);
                 status = "Suficiente";
                 break;
             case 2:
                 for (Produto p : productList)
                     if ("Próximo ao fim".equals(p.getStatus())) filteredList.add(p);
-                adapter.updateList(filteredList);
                 status = "Próximo ao fim";
                 break;
             case 3:
                 for (Produto p : productList)
                     if ("Insuficiente".equals(p.getStatus())) filteredList.add(p);
-                adapter.updateList(filteredList);
                 status = "Insuficiente";
                 break;
+            default:
+                filteredList.addAll(productList);
+                status = "Todos";
         }
 
-        updateButtonUI(status, adapter.getItemCount());
+        adapter.updateList(filteredList);
+        updateButtonUI(status, filteredList.size());
     }
 
     private void updateButtonUI(String status, int count) {
         if (button == null) return;
-
         button.setText(count + " produtos");
 
         switch (status) {

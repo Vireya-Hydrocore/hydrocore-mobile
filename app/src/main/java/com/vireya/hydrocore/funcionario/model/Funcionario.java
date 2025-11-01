@@ -7,6 +7,7 @@ public class Funcionario {
     private String dataAdmissao;
     private String dataNascimento;
     private String eta;
+    private int idEta;
     private String cargo;
 
     public int getId() { return id; }
@@ -16,4 +17,7 @@ public class Funcionario {
     public String getDataNascimento() { return dataNascimento; }
     public String getEta() { return eta; }
     public String getCargo() { return cargo; }
+    public int getIdEta() { return idEta; }
+
+
 }

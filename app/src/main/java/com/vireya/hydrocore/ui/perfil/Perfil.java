@@ -36,10 +36,10 @@ import com.google.android.material.imageview.ShapeableImageView;
 import com.google.gson.Gson;
 import com.vireya.hydrocore.R;
 import com.vireya.hydrocore.core.network.RetrofitClient;
+import com.vireya.hydrocore.funcionario.model.Funcionario;
 import com.vireya.hydrocore.tarefas.api.TarefasApi;
 import com.vireya.hydrocore.tarefas.model.Tarefa;
 import com.vireya.hydrocore.ui.configuracoes.api.ApiService;
-import com.vireya.hydrocore.ui.configuracoes.model.Funcionario;
 import com.vireya.hydrocore.ui.perfil.api.ApiFuncionario;
 import com.vireya.hydrocore.ui.perfil.model.Estatistica;
 import com.vireya.hydrocore.utils.SessionManager;
@@ -198,9 +198,13 @@ public class Perfil extends Fragment {
                 imgPerfil.setImageBitmap(bitmap);
             } catch (Exception e) {
                 e.printStackTrace();
+                imgPerfil.setImageResource(R.drawable.perfil_default);
             }
+        } else {
+            imgPerfil.setImageResource(R.drawable.perfil_default);
         }
     }
+
 
     private void loadTarefasStats(String nomeFuncionario) {
         TarefasApi api = RetrofitClient.getTarefasApi(getContext());
@@ -307,9 +311,9 @@ public class Perfil extends Fragment {
         }
 
         if (produtividadeDiaria == 0 && eficienciaTotal == 0 && taxaFalha == 0) {
-            produtividadeDiaria = 50f;
-            eficienciaTotal = 70f;
-            taxaFalha = 15f;
+            graficoProdutividade.setVisibility(View.GONE);
+            Toast.makeText(getContext(), "Sem dados disponíveis para gerar o gráfico.", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         List<Entry> entries = new ArrayList<>();

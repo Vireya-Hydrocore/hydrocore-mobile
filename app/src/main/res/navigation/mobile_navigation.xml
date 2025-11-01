@@ -37,11 +37,6 @@
         android:label="navigation_perfil"
         tools:layout="@layout/fragment_perfil" />
     <fragment
-        android:id="@+id/navigation_graficos"
-        android:name="com.vireya.hydrocore.graficos.Graficos"
-        android:label="fragment_graficos"
-        tools:layout="@layout/fragment_graficos" />
-    <fragment
         android:id="@+id/navigation_configuracoes"
         android:name="com.vireya.hydrocore.ui.configuracoes.Configuracoes"
         android:label="fragment_configuracoes"
@@ -61,11 +56,6 @@
         android:name="com.vireya.hydrocore.ui.configuracoes.InformacoesConfig"
         android:label="fragment_design_info"
         tools:layout="@layout/fragment_design_info" />
-    <fragment
-        android:id="@+id/graficos"
-        android:name="com.vireya.hydrocore.graficos.Graficos"
-        android:label="fragment_graficos"
-        tools:layout="@layout/fragment_graficos" />
 
     <fragment
         android:id="@+id/navigation_chatbot"
