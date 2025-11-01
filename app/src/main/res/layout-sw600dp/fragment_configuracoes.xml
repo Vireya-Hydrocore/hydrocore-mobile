@@ -8,18 +8,19 @@
     tools:context=".ui.configuracoes.Configuracoes">
 
     <LinearLayout
+        android:id="@+id/layoutFotoPerfilConfig"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="16dp"
-        android:layout_gravity="center_vertical">
+        android:layout_gravity="center_vertical"
+        android:clickable="true"
+        android:focusable="true">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgProfile"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:clickable="true"
-            android:focusable="true"
             android:scaleType="centerCrop"
             android:src="@drawable/perfil_default"
             app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full" />
@@ -30,14 +31,13 @@
             android:orientation="vertical"
             android:layout_weight="1"
             android:paddingStart="15dp"
-            android:paddingTop="8dp"
-            >
+            android:paddingTop="8dp">
 
             <TextView
                 android:id="@+id/txtFuncionario"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Joana Aparecida"
+                android:text=""
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -45,13 +45,10 @@
                 android:id="@+id/txtCargo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Operator"
+                android:text=""
                 android:textColor="#888"
                 android:textSize="14sp" />
-
-
         </LinearLayout>
-
     </LinearLayout>
 
     <LinearLayout

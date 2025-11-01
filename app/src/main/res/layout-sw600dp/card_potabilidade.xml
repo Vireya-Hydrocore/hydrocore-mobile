@@ -421,9 +421,8 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCalcularPotabilidade"
             style="@style/BotaoPadraoAzul"
-            android:layout_width="355dp"
+            android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginLeft="180dp"
             android:layout_marginTop="16dp"
             android:text="Calcular Potabilidade"
             android:visibility="visible" />
