@@ -9,13 +9,9 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.vireya.hydrocore.MainActivity;
 import com.vireya.hydrocore.R;
-import com.vireya.hydrocore.entrada.api.ApiService;
+import com.vireya.hydrocore.entrada.api.ApiClient;
 import com.vireya.hydrocore.core.network.RetrofitClientMongo;
 
 import java.util.HashMap;
@@ -62,14 +58,14 @@ public class RedefinirSenha extends AppCompatActivity {
             return;
         }
 
-        ApiService apiService = RetrofitClientMongo.createApi(ApiService.class);
+        ApiClient apiClient = RetrofitClientMongo.createApi(ApiClient.class);
 
         Map<String, String> body = new HashMap<>();
         body.put("email", email);
         body.put("novaSenha", novaSenha);
         body.put("confirmaSenha", confirmaSenha);
 
-        apiService.resetPassword(body).enqueue(new Callback<ResponseBody>() {
+        apiClient.resetPassword(body).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {

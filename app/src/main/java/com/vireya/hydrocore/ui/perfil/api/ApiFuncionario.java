@@ -10,4 +10,5 @@ public interface ApiFuncionario {
     @GET("v1/funcionario/{id}/resumo-tarefas")
     Call<Estatistica> getResumoTarefas(@Path("id") int idFuncionario);
 
+
 }

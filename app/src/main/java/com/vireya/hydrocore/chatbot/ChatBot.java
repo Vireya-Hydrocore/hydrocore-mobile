@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,6 +44,9 @@ public class ChatBot extends Fragment {
     private EditText etMessage;
     private Button btnSend;
     private ChatAdapter adapter;
+
+    private ProgressBar progressBar;
+
     private ArrayList<Message> messages = new ArrayList<>();
 
     private static final String API_URL = "https://chatbotvireyafim.onrender.com/chat";
@@ -66,6 +70,9 @@ public class ChatBot extends Fragment {
         adapter = new ChatAdapter(messages);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
+
+        progressBar = view.findViewById(R.id.progressBar);
+
 
         btnSend.setOnClickListener(v -> {
             String text = etMessage.getText().toString().trim();
@@ -118,15 +125,19 @@ public class ChatBot extends Fragment {
                 .post(body)
                 .build();
 
+        showProgress(true);
+
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                showProgress(false);
                 e.printStackTrace();
                 addBotMessage("Erro ao conectar com o servidor. Tente novamente.");
             }
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                showProgress(false);
                 if (response.isSuccessful() && response.body() != null) {
                     String responseBody = response.body().string();
                     try {
@@ -153,4 +164,12 @@ public class ChatBot extends Fragment {
             recyclerView.scrollToPosition(messages.size() - 1);
         });
     }
+
+    private void showProgress(boolean show) {
+        new Handler(Looper.getMainLooper()).post(() -> {
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            btnSend.setEnabled(!show);
+        });
+    }
+
 }

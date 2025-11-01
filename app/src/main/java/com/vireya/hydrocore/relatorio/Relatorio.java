@@ -41,7 +41,7 @@ public class Relatorio extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerViewRelatorios);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        api = RetrofitClient.getRetrofit().create(RelatorioApi.class);
+        api = RetrofitClient.getRetrofit(getContext()).create(RelatorioApi.class);
 
         carregarRelatorios();
 

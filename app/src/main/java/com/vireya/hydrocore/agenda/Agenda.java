@@ -82,7 +82,7 @@ public class Agenda extends Fragment {
 
     private void carregarAvisosDaApi() {
         // Usa o RetrofitClient global com headers automáticos
-        ApiClient api = RetrofitClient.getRetrofit().create(ApiClient.class);
+        ApiClient api = RetrofitClient.getRetrofit(getContext()).create(ApiClient.class);
 
         api.getAvisos().enqueue(new Callback<List<Aviso>>() {
             @Override

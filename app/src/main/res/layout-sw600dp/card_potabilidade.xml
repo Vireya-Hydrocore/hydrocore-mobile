@@ -60,7 +60,8 @@
                         android:hint="pH"
                         android:inputType="numberDecimal"
                         android:paddingTop="12dp"
-                        android:paddingBottom="12dp" />
+                        android:paddingBottom="12dp"
+                        android:textColor="#040404" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
@@ -100,7 +101,8 @@
                         android:hint="mg/L"
                         android:inputType="numberDecimal"
                         android:paddingTop="12dp"
-                        android:paddingBottom="12dp" />
+                        android:paddingBottom="12dp"
+                        android:textColor="#070707" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
         </LinearLayout>
@@ -148,7 +150,8 @@
                         android:hint="mg/L"
                         android:inputType="numberDecimal"
                         android:paddingTop="12dp"
-                        android:paddingBottom="12dp" />
+                        android:paddingBottom="12dp"
+                        android:textColor="#0D0D0D" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
@@ -188,7 +191,8 @@
                         android:hint="mg/L"
                         android:inputType="numberDecimal"
                         android:paddingTop="12dp"
-                        android:paddingBottom="12dp" />
+                        android:paddingBottom="12dp"
+                        android:textColor="#090909" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
         </LinearLayout>
@@ -236,7 +240,8 @@
                         android:hint="mg/L"
                         android:inputType="numberDecimal"
                         android:paddingTop="12dp"
-                        android:paddingBottom="12dp" />
+                        android:paddingBottom="12dp"
+                        android:textColor="#161616" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
@@ -276,7 +281,8 @@
                         android:hint="µS/cm"
                         android:inputType="numberDecimal"
                         android:paddingTop="12dp"
-                        android:paddingBottom="12dp" />
+                        android:paddingBottom="12dp"
+                        android:textColor="#090909" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
         </LinearLayout>
@@ -324,7 +330,8 @@
                         android:hint="mg/L"
                         android:inputType="numberDecimal"
                         android:paddingTop="12dp"
-                        android:paddingBottom="12dp" />
+                        android:paddingBottom="12dp"
+                        android:textColor="#090909" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
@@ -364,7 +371,8 @@
                         android:hint="µg/L"
                         android:inputType="numberDecimal"
                         android:paddingTop="12dp"
-                        android:paddingBottom="12dp" />
+                        android:paddingBottom="12dp"
+                        android:textColor="#070707" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
         </LinearLayout>
@@ -405,7 +413,8 @@
                     android:hint="NTU"
                     android:inputType="numberDecimal"
                     android:paddingTop="12dp"
-                    android:paddingBottom="12dp" />
+                    android:paddingBottom="12dp"
+                    android:textColor="#0B0B0B" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -432,4 +441,16 @@
             android:textStyle="bold"
             android:visibility="gone" />
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBarPotabilidade"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:indeterminate="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"/>
+
 </androidx.cardview.widget.CardView>

@@ -17,24 +17,12 @@ import retrofit2.http.Query;
 
 public interface CalculadoraApi {
 
-    @Headers({
-            "Authorization: Bearer teste233",
-            "X-User-Email: teste@email.com"
-    })
     @POST("v1/calculadora/coagulacao")
     Call<CalculoResponse> calcularCoagulacao(@Body CalculoCoagulacaoRequest request);
 
-    @Headers({
-            "Authorization: Bearer teste233",
-            "X-User-Email: teste@email.com"
-    })
     @POST("v1/calculadora/floculacao")
     Call<CalculoResponse> calcularFloculacao(@Body CalculoFloculacaoRequest request);
 
-    @Headers({
-            "Authorization: Bearer teste233",
-            "X-User-Email: teste@email.com"
-    })
     @GET("v1/estoque/listar/produtos")
     Call<List<ProdutoResponse>> listarProdutos(@Header("nome") String etaNome);
 
