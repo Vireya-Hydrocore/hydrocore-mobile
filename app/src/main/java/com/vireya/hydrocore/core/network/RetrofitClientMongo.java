@@ -28,13 +28,11 @@ public class RetrofitClientMongo {
     private static String jwtToken = null;
     private static String fcmToken = null;
 
-    // === Permite definir tokens depois do login ===
     public static void setTokens(String jwt, String fcm) {
         jwtToken = jwt;
         fcmToken = fcm;
     }
 
-    // === GSON customizado para lidar com múltiplos formatos de data ===
     private static Gson buildGson() {
         return new GsonBuilder()
                 .registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
@@ -60,7 +58,6 @@ public class RetrofitClientMongo {
                 .create();
     }
 
-    // === Cliente HTTP com interceptor para JWT e FCM dinâmicos ===
     private static OkHttpClient buildClient() {
         return new OkHttpClient.Builder()
                 .addInterceptor(new Interceptor() {
@@ -69,7 +66,6 @@ public class RetrofitClientMongo {
                         Request original = chain.request();
                         Request.Builder builder = original.newBuilder();
 
-                        // Se o usuário estiver autenticado, adiciona os cabeçalhos
                         if (jwtToken != null && !jwtToken.isEmpty()) {
                             builder.header("Authorization", "Bearer " + jwtToken);
                         }
@@ -84,7 +80,6 @@ public class RetrofitClientMongo {
                 .build();
     }
 
-    // === Instância Retrofit ===
     public static Retrofit getRetrofit() {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
@@ -96,7 +91,6 @@ public class RetrofitClientMongo {
         return retrofit;
     }
 
-    // === Criação genérica de APIs ===
     public static <T> T createApi(Class<T> apiClass) {
         return getRetrofit().create(apiClass);
     }

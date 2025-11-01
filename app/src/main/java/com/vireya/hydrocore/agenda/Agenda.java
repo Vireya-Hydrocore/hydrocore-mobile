@@ -81,13 +81,12 @@ public class Agenda extends Fragment {
     }
 
     private void carregarAvisosDaApi() {
-        // Usa o RetrofitClient global com headers automáticos
         ApiClient api = RetrofitClient.getRetrofit(getContext()).create(ApiClient.class);
 
         api.getAvisos().enqueue(new Callback<List<Aviso>>() {
             @Override
             public void onResponse(@NonNull Call<List<Aviso>> call, @NonNull Response<List<Aviso>> response) {
-                if (!isAdded()) return; // Evita crash se o fragment foi destruído
+                if (!isAdded()) return;
 
                 if (response.isSuccessful() && response.body() != null) {
                     listaAvisos = response.body();
@@ -107,7 +106,6 @@ public class Agenda extends Fragment {
 
                             compactCalendarView.addEvent(new Event(cor, data.getTime(), aviso));
 
-                            // Mostra notificação local
 
                         } catch (ParseException e) {
                             Log.e("AGENDA", "Erro ao converter data: " + aviso.getDataOcorrencia(), e);

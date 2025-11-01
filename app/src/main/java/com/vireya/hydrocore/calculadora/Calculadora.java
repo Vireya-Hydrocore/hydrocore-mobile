@@ -78,7 +78,6 @@ public class Calculadora extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         cbEtapa = view.findViewById(R.id.cbEtapa);
 
-        //ComboBox
         gerarComboEtapa(view, cbEtapa);
     }
 
@@ -327,7 +326,7 @@ public class Calculadora extends Fragment {
         return view;
     }
 
-    //Validação Coagulação
+    // Validação Coagulação
     private static void ValidarCalculadora(TextInputEditText turbidez, TextInputLayout turbidezLayout,
                                            TextInputEditText ph, TextInputLayout phLayout,
                                            TextInputEditText volume, TextInputLayout volumeLayout,

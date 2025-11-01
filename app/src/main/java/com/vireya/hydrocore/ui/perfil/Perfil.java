@@ -63,6 +63,7 @@ public class Perfil extends Fragment {
     private ImageView btnEditarFoto;
     private TextView tarDiariaValor, tarNaoFeitasValor, tarTotaisValor, txtNome, txtCargo;
     private LineChart graficoProdutividade;
+    private ApiFuncionario funcionario;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -86,7 +87,7 @@ public class Perfil extends Fragment {
         checkPermissions();
         loadProfileImage();
         loadFuncionarioInfo();
-        loadGraficoProdutividade(1);
+
 
         btnEditarFoto.setOnClickListener(v -> showImageOptions());
 
@@ -242,10 +243,10 @@ public class Perfil extends Fragment {
 
 
 
-    public void loadFuncionarioInfo() {
+    private void loadFuncionarioInfo() {
         ApiService apiService = RetrofitClient.getRetrofit(getContext()).create(ApiService.class);
 
-        // pega o e-mail da sessão
+        // Pega o e-mail da sessão
         SessionManager session = new SessionManager(requireContext());
         String email = session.getEmail();
 
@@ -254,12 +255,23 @@ public class Perfil extends Fragment {
             public void onResponse(Call<Funcionario> call, Response<Funcionario> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Funcionario funcionario = response.body();
-                    Log.d("FUNCIONARIO", funcionario.getNome());
-                    Log.d("FUNCIONARIO", funcionario.getCargo());
+
+                    Log.d("FUNCIONARIO", "Nome: " + funcionario.getNome());
+                    Log.d("FUNCIONARIO", "Cargo: " + funcionario.getCargo());
+                    Log.d("FUNCIONARIO", "ID: " + funcionario.getId());
+
                     txtNome.setText(funcionario.getNome());
                     txtCargo.setText(funcionario.getCargo());
 
+                    // Atualiza os cards de tarefas
                     loadTarefasStats(funcionario.getNome());
+
+                    // 👉 Chama o gráfico passando o ID certo
+                    if (funcionario.getId() != 0) {
+                        loadGraficoProdutividade(funcionario.getId());
+                    } else {
+                        Log.e("Perfil", "ID do funcionário retornou 0 — verifique o backend");
+                    }
 
                 } else {
                     Log.e("Perfil", "Funcionário não encontrado. Código: " + response.code());
@@ -304,10 +316,16 @@ public class Perfil extends Fragment {
 
         if (dados.getTarefasParaHoje() > 0)
             produtividadeDiaria = (float) dados.getTarefasFeitas() / dados.getTarefasParaHoje() * 100f;
+        System.out.println(dados.getTarefasFeitas());
+        System.out.println(dados.getTarefasParaHoje());
+        System.out.println("produtividade diaria " +produtividadeDiaria);
 
         if (dados.getTarefasTotais() > 0) {
             eficienciaTotal = (float) dados.getTarefasFeitas() / dados.getTarefasTotais() * 100f;
             taxaFalha = (float) dados.getTarefasNaoRealizadas() / dados.getTarefasTotais() * 100f;
+        System.out.println("eficiencia total "+eficienciaTotal);
+        System.out.println("taxa" + taxaFalha);
+
         }
 
         if (produtividadeDiaria == 0 && eficienciaTotal == 0 && taxaFalha == 0) {
