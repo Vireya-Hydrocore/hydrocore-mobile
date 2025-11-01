@@ -1,13 +1,19 @@
 package com.vireya.hydrocore.core.network;
 
+import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
+
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.vireya.hydrocore.MainActivity;
@@ -17,6 +23,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+        SharedPreferences prefs = getSharedPreferences("configuracoes", Context.MODE_PRIVATE);
+        boolean notificacaoAtivo = prefs.getBoolean("notificacaoAtivo", true);
+
+        if (!notificacaoAtivo) {
+            return;
+        }
+
         if (remoteMessage.getNotification() != null) {
             String title = remoteMessage.getNotification().getTitle();
             String body = remoteMessage.getNotification().getBody();
@@ -35,6 +48,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     "Avisos Gerais",
                     NotificationManager.IMPORTANCE_HIGH
             );
+            channel.setDescription("Canal para notificações de avisos gerais do Hydrocore");
             notificationManager.createNotificationChannel(channel);
         }
 
@@ -53,6 +67,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent);
 
-        NotificationManagerCompat.from(this).notify((int) System.currentTimeMillis(), builder.build());
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
+        NotificationManagerCompat.from(this)
+                .notify((int) System.currentTimeMillis(), builder.build());
+    }
+
+    @Override
+    public void onNewToken(String token) {
+        super.onNewToken(token);
+        android.util.Log.d("FCM_TOKEN", "Token gerado: " + token);
     }
 }
